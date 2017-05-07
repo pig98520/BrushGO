@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -33,7 +34,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_home);
         navigateionView.setNavigationItemSelectedListener(Home_Activity.this);
         play=(Button) findViewById(R.id.btn_play);
-        stop=(Button) findViewById(R.id.btn_pause);
+        stop=(Button) findViewById(R.id.btn_stop);
         next=(Button) findViewById(R.id.btn_next);
         previous=(Button) findViewById(R.id.btn_previous);
         music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
@@ -42,15 +43,24 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         play.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                music.start();
+                if(music.isPlaying()){
+                    play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
+                    music.pause();
+                }
+                else {
+                    play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
+                    music.start();
+                }
             }
         });
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                music.pause();
+                music.stop();
+                music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
             }
         });
+
     }
 
     @Override
