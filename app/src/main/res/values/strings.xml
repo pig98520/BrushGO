@@ -7,4 +7,6 @@
     <string name="signin">登入</string>
     <string name="signup">註冊</string>
     <string name="forget">忘記密碼?</string>
+    <string name="open">開啟</string>
+    <string name="close">關閉</string>
 </resources>

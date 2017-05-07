@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this,"請填入帳號和密碼。", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"請檢查帳號和密碼。", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
