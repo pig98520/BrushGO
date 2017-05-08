@@ -8,23 +8,37 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * Created by swlab on 2017/5/5.
  */
 
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-
+    private Button menu;
+    private DrawerLayout drawer;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
         processView();
+        processControl();
     }
 
     private void processView() {
-        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_setting);
+        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
+        menu=(Button) findViewById(R.id.btn_menu);
+        drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+    }
+
+    private void processControl() {
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override
@@ -46,7 +60,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Information_Activity.class);
+            intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Question)
@@ -61,7 +75,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
         }
-        DrawerLayout drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
