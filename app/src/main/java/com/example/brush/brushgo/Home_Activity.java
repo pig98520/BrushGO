@@ -3,6 +3,7 @@ package com.example.brush.brushgo;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -27,9 +31,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button stop;
     private Button next;
     private Button previous;
+    private TextView timer;
+    private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
     private NavigationView navigateionView;
+
+    private int timersec;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
@@ -45,6 +53,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         stop=(Button) findViewById(R.id.btn_stop);
         next=(Button) findViewById(R.id.btn_next);
         previous=(Button) findViewById(R.id.btn_previous);
+        timer=(TextView)findViewById(R.id.txt_timer);
         music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
     }
@@ -61,21 +70,48 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 if(music.isPlaying()){
                     play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                     music.pause();
+                    timer_pause();
                 }
                 else {
                     play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
                     music.start();
+                    timer_start();
                 }
             }
         });
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
+                timer_stop();
                 music.stop();
                 music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
             }
         });
 
+    }
+
+    private void timer_start() {
+        timersec= Integer.parseInt(timer.getText().toString());
+        countdownTimer = new CountDownTimer(timersec * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timer.setText(millisUntilFinished/1000+"");
+            }
+
+            @Override
+            public void onFinish() {
+                timer.setText("Finish~");
+            }
+        };
+        countdownTimer.start();
+    }
+    private void timer_pause() {
+        countdownTimer.cancel();
+    }
+    private void timer_stop() {
+        countdownTimer.cancel();
+        timer.setText("180");
     }
 
     @Override
