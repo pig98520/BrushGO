@@ -32,6 +32,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button next;
     private Button previous;
     private TextView timer;
+    private int defaultTime;
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
@@ -54,6 +55,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         next=(Button) findViewById(R.id.btn_next);
         previous=(Button) findViewById(R.id.btn_previous);
         timer=(TextView)findViewById(R.id.txt_timer);
+        timer.setVisibility(View.VISIBLE);
+        defaultTime=Integer.parseInt(timer.getText().toString());
         music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
     }
@@ -101,7 +104,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onFinish() {
-                timer.setText("Finish~");
+                timer.setText("時間到了唷^^");
+                timer.setVisibility(View.VISIBLE);
             }
         };
         countdownTimer.start();
@@ -111,7 +115,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
     private void timer_stop() {
         countdownTimer.cancel();
-        timer.setText("180");
+        timer.setText(defaultTime+"");
     }
 
     @Override
