@@ -9,17 +9,11 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -33,17 +27,32 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button previous;
     private TextView timer;
     private int defaultTime;
+    private int timersec;
+    private ImageView image_1;
+    private ImageView image_2;
+    private ImageView image_3;
+    private ImageView image_4;
+    private ImageView image_5;
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
     private NavigationView navigateionView;
 
-    private int timersec;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
+        setValue();
         processControl();
+    }
+
+    private void setValue() {
+        Bundle bundle=this.getIntent().getExtras();
+        if(bundle!=null)
+            defaultTime=bundle.getInt("time")*60+1;
+        else
+            defaultTime=180+1;
+        timer.setText(defaultTime+"");
     }
 
     private void processView() {
@@ -55,9 +64,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         next=(Button) findViewById(R.id.btn_next);
         previous=(Button) findViewById(R.id.btn_previous);
         timer=(TextView)findViewById(R.id.txt_timer);
-        timer.setVisibility(View.VISIBLE);
-        defaultTime=Integer.parseInt(timer.getText().toString());
-        music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
+        image_1=(ImageView)findViewById(R.id.image_1);
+        image_2=(ImageView)findViewById(R.id.image_2);
+        image_3=(ImageView)findViewById(R.id.image_3);
+        image_4=(ImageView)findViewById(R.id.image_4);
+        image_5=(ImageView)findViewById(R.id.image_5);
+        music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
     }
     private void processControl() {
@@ -73,12 +85,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 if(music.isPlaying()){
                     play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                     music.pause();
-                    timer_pause();
+                    timerPause();
                 }
                 else {
                     play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
                     music.start();
-                    timer_start();
+                    timerStart();
                 }
             }
         });
@@ -86,34 +98,44 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
-                timer_stop();
                 music.stop();
                 music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
+                timerStop();
             }
         });
 
     }
-
-    private void timer_start() {
-        timersec= Integer.parseInt(timer.getText().toString());
+    private void timerStart() {
+        timersec= Integer.parseInt(timer.getText().toString().trim());
         countdownTimer = new CountDownTimer(timersec * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
+               if(Integer.parseInt(timer.getText().toString())==defaultTime-60)
+                    image_1.setVisibility(View.VISIBLE);
+                else if (Integer.parseInt(timer.getText().toString())==defaultTime-120)
+                    image_2.setVisibility(View.VISIBLE);
+                else if (Integer.parseInt(timer.getText().toString())==defaultTime-180)
+                    image_3.setVisibility(View.VISIBLE);
+                else if (Integer.parseInt(timer.getText().toString())==defaultTime-240)
+                    image_4.setVisibility(View.VISIBLE);
+                else if (Integer.parseInt(timer.getText().toString())==defaultTime-300)
+                    image_5.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFinish() {
                 timer.setText("時間到了唷^^");
                 timer.setVisibility(View.VISIBLE);
+                music.stop();
             }
         };
         countdownTimer.start();
     }
-    private void timer_pause() {
+    private void timerPause() {
         countdownTimer.cancel();
     }
-    private void timer_stop() {
+    private void timerStop() {
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
     }

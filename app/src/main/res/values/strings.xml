@@ -9,4 +9,13 @@
     <string name="forget">忘記密碼?</string>
     <string name="open">開啟</string>
     <string name="close">關閉</string>
+    <string name="threeminutes">三分鐘</string>
+    <string name="fiveminutes">五分鐘</string>
+    <string name="fourminutes">四分鐘</string>
+    <string name="time">時間:</string>
+    <string name="remider">提醒:</string>
+    <string name="week">每一周</string>
+    <string name="oneday">每一天</string>
+    <string name="threedays">每三天</string>
+    <string name="save">儲存</string>
 </resources>

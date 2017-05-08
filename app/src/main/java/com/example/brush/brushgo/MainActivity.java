@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,11 +15,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnSignin;
-    private Button btnForget;
-    private Button btnSignup;
-    private EditText editID;
-    private EditText editPsw;
+    private Button btn_sigin;
+    private Button btn_forget;
+    private Button btn_signup;
+    private EditText edt_id;
+    private EditText edt_psw;
     private String user;
     private String psw;
     private FirebaseAuth auth= FirebaseAuth.getInstance();
@@ -33,35 +32,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void processViews() {
-        btnSignin=(Button)findViewById(R.id.btnSignIn);
-        btnSignup=(Button)findViewById(R.id.btnSignUp);
-        btnForget=(Button)findViewById(R.id.btnForget);
-        editID=(EditText)findViewById(R.id.edtID);
-        editPsw=(EditText)findViewById(R.id.edtPsw);
+        btn_sigin =(Button)findViewById(R.id.btn_signin);
+        btn_signup =(Button)findViewById(R.id.btn_signup);
+        btn_forget =(Button)findViewById(R.id.btn_forget);
+        edt_id =(EditText)findViewById(R.id.edt_id);
+        edt_psw =(EditText)findViewById(R.id.edt_psw);
     }
 
     private void processControllers() {
-        btnSignin.setOnClickListener(new View.OnClickListener() {
+        btn_sigin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                user=editID.getText().toString();
-                psw=editPsw.getText().toString();
+                user= edt_id.getText().toString();
+                psw= edt_psw.getText().toString();
                 if(user.equals("")||psw.equals(""))
                     Toast.makeText(MainActivity.this, "Please enter your ID and Password~", Toast.LENGTH_SHORT).show();
                 else
                     login(user,psw);
             }
         });
-        btnSignup.setOnClickListener(new View.OnClickListener(){
+        btn_signup.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                user=editID.getText().toString();
-                psw=editPsw.getText().toString();
+                user= edt_id.getText().toString();
+                psw= edt_psw.getText().toString();
                 if(user.equals("")||psw.equals(""))
                     Toast.makeText(MainActivity.this,  "Please enter your ID and Password~", Toast.LENGTH_SHORT).show();
                 else
                     createUser(user,psw);
             }
         });
-        btnForget.setOnClickListener(new View.OnClickListener() {
+        btn_forget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "Are you forget your password?", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent();
