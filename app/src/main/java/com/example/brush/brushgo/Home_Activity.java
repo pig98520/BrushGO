@@ -23,16 +23,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button menu;
     private Button play;
     private Button stop;
-    private Button next;
-    private Button previous;
     private TextView timer;
     private int defaultTime;
     private int timersec;
-    private ImageView image_1;
-    private ImageView image_2;
-    private ImageView image_3;
-    private ImageView image_4;
-    private ImageView image_5;
+    private int currentTime;
+    private int i;
+    private ImageView clockArray[]=new ImageView[12];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
@@ -61,17 +57,23 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
         stop=(Button) findViewById(R.id.btn_stop);
-        next=(Button) findViewById(R.id.btn_next);
-        previous=(Button) findViewById(R.id.btn_previous);
         timer=(TextView)findViewById(R.id.txt_timer);
-        image_1=(ImageView)findViewById(R.id.image_1);
-        image_2=(ImageView)findViewById(R.id.image_2);
-        image_3=(ImageView)findViewById(R.id.image_3);
-        image_4=(ImageView)findViewById(R.id.image_4);
-        image_5=(ImageView)findViewById(R.id.image_5);
         music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
+        clockArray[1]=(ImageView)findViewById(R.id.imageView_2);
+        clockArray[2]=(ImageView)findViewById(R.id.imageView_3);
+        clockArray[3]=(ImageView)findViewById(R.id.imageView_4);
+        clockArray[4]=(ImageView)findViewById(R.id.imageView_5);
+        clockArray[5]=(ImageView)findViewById(R.id.imageView_6);
+        clockArray[6]=(ImageView)findViewById(R.id.imageView_7);
+        clockArray[7]=(ImageView)findViewById(R.id.imageView_8);
+        clockArray[8]=(ImageView)findViewById(R.id.imageView_9);
+        clockArray[9]=(ImageView)findViewById(R.id.imageView_10);
+        clockArray[10]=(ImageView)findViewById(R.id.imageView_11);
+        clockArray[11]=(ImageView)findViewById(R.id.imageView_12);
     }
+
     private void processControl() {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,13 +95,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     timerStart();
                 }
             }
+
         });
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
-                music= MediaPlayer.create(Home_Activity.this,R.raw.the_place_inside);
+                music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
                 timerStop();
             }
         });
@@ -111,35 +114,42 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
-               if(Integer.parseInt(timer.getText().toString())==defaultTime-60)
-                    image_1.setVisibility(View.VISIBLE);
-                else if (Integer.parseInt(timer.getText().toString())==defaultTime-120)
-                    image_2.setVisibility(View.VISIBLE);
-                else if (Integer.parseInt(timer.getText().toString())==defaultTime-180)
-                    image_3.setVisibility(View.VISIBLE);
-                else if (Integer.parseInt(timer.getText().toString())==defaultTime-240)
-                    image_4.setVisibility(View.VISIBLE);
-                else if (Integer.parseInt(timer.getText().toString())==defaultTime-300)
-                    image_5.setVisibility(View.VISIBLE);
+                clockShow();
             }
-
             @Override
             public void onFinish() {
-                timer.setText("時間到了唷^^");
-                timer.setVisibility(View.VISIBLE);
+                timer.setText("Time's Up");
+                play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
+                music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
+                timerStop();
+                clockReset();
             }
         };
         countdownTimer.start();
     }
+
     private void timerPause() {
         countdownTimer.cancel();
     }
+
     private void timerStop() {
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
+        clockReset();
     }
 
+    private void clockShow() {
+        currentTime = Integer.parseInt(timer.getText().toString().trim()) % 12;
+                clockArray[currentTime].setVisibility(View.VISIBLE);
+    }
+
+    private void clockReset() {
+        for(i=0;i<12;i++)
+        {
+            clockArray[i].setVisibility(View.INVISIBLE);
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
