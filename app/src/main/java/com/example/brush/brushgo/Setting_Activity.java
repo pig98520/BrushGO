@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Created by swlab on 2017/5/5.
  */
@@ -26,10 +30,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private RadioButton threedays;
     private RadioButton oneweek;
     private DrawerLayout drawer;
-
     private int time;
     private int remider;
+    private FirebaseAuth auth;
     protected void onCreate(Bundle savedInstanceState) {
+        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
         processView();
@@ -39,6 +44,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
+        auth= FirebaseAuth.getInstance();
         menu=(Button) findViewById(R.id.btn_menu);
         save=(Button) findViewById(R.id.btn_save);
         threeminutes=(RadioButton)findViewById(R.id.rdb_three);
@@ -63,9 +69,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 checkTime();
                 checkRemider();
                 passValue();
+                updateUser();
             }
         });
     }
+
 
     private int checkTime() {
         if(threeminutes.isChecked())
@@ -94,6 +102,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         bundle.putInt("remider",remider);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+    private void updateUser() {
+        Firebase myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
+        Firebase userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid());
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time,remider);
+        userRef.setValue(data);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

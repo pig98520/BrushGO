@@ -68,6 +68,7 @@
             android:layout_marginBottom="253dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:visibility="invisible"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24sp"

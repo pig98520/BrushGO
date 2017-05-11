@@ -1,5 +1,6 @@
 package com.example.brush.brushgo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,9 +47,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void setValue() {
         Bundle bundle=this.getIntent().getExtras();
         if(bundle!=null)
-            defaultTime=bundle.getInt("time")*60+1;
+            defaultTime=bundle.getInt("time")*60;
         else
-            defaultTime=180+1;
+            defaultTime=180;
         timer.setText(defaultTime+"");
     }
 
@@ -118,12 +120,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
             @Override
             public void onFinish() {
-                timer.setText("Time's Up");
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
                 music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
                 timerStop();
                 clockReset();
+                timerFinish();
             }
         };
         countdownTimer.start();
@@ -139,9 +141,29 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         clockReset();
     }
 
+    private void timerFinish() {
+        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
+        finishDialog.setTitle("時間到了~");
+        finishDialog.setMessage("恭喜你刷好牙了~");
+        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        };
+        finishDialog.setNeutralButton("確定",confirmClick);
+        finishDialog.show();
+    }
+
+
     private void clockShow() {
-        currentTime = Integer.parseInt(timer.getText().toString().trim()) % 12;
-                clockArray[currentTime].setVisibility(View.VISIBLE);
+        currentTime = (Integer.parseInt(timer.getText().toString().trim())) % 12;
+        if(clockArray[currentTime].getVisibility()==View.INVISIBLE){
+            clockArray[currentTime].setVisibility(View.VISIBLE);
+        }
+        else if(clockArray[currentTime].getVisibility()==View.VISIBLE){
+            clockArray[currentTime].setVisibility(View.INVISIBLE);
+        }
     }
 
     private void clockReset() {
