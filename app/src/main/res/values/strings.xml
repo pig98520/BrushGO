@@ -18,4 +18,5 @@
     <string name="oneday">每一天</string>
     <string name="threedays">每三天</string>
     <string name="save">儲存</string>
+    <string name="googlesigin">Google登入</string>
 </resources>

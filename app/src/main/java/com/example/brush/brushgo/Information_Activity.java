@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Created by swlab on 2017/5/5.
  */
@@ -18,6 +20,7 @@ import android.widget.Button;
 public class Information_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
     private DrawerLayout drawer;
+    private FirebaseAuth auth;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
@@ -30,6 +33,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         navigateionView.setNavigationItemSelectedListener(Information_Activity.this);
         menu=(Button) findViewById(R.id.btn_menu);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        auth= FirebaseAuth.getInstance();
     }
 
     private void processControl() {
@@ -73,6 +77,13 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
+            startActivity(intent);
+        }
+        else if(id==R.id.Logout)
+        {
+            auth.signOut();
+            Intent intent=new Intent();
+            intent.setClass(this,MainActivity.class);
             startActivity(intent);
         }
         drawer.closeDrawer(GravityCompat.START);

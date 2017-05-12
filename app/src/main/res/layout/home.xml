@@ -68,7 +68,7 @@
             android:layout_marginBottom="253dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24sp"
@@ -91,8 +91,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.197"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp"
-            tools:ignore="ContentDescription" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_7"
@@ -109,7 +108,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.464"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_11"
@@ -126,7 +125,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.197"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_10"
@@ -143,7 +142,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.258"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_9"
@@ -160,7 +159,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.326"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_8"
@@ -177,7 +176,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.402"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_6"
@@ -193,7 +192,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.48"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_5"
@@ -210,7 +209,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.464"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_4"
@@ -227,7 +226,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.402"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_3"
@@ -244,7 +243,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.326"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_2"
@@ -261,7 +260,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.258"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
         <ImageView
             android:id="@+id/imageView_12"
@@ -277,7 +276,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.182"
-            app:srcCompat="@mipmap/ic_looks_one_black_24dp" />
+            app:srcCompat="@drawable/toothbrush" />
 
     </android.support.constraint.ConstraintLayout>
 
