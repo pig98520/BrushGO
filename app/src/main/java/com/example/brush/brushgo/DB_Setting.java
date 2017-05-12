@@ -3,7 +3,6 @@ package com.example.brush.brushgo;
 /**
  * Created by swlab on 2017/5/11.
  */
-
 public class DB_Setting {
     private String user;
     private int time;
