@@ -19,4 +19,7 @@
     <string name="threedays">每三天</string>
     <string name="save">儲存</string>
     <string name="googlesigin">Google登入</string>
+    <string name="clock">刷牙鬧鐘:</string>
+    <string name="morning">上午</string>
+    <string name="evening">下午</string>
 </resources>

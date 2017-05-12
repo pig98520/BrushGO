@@ -14,7 +14,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -59,6 +58,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         threedays=(RadioButton)findViewById(R.id.rdb_threedays);
         oneweek=(RadioButton)findViewById(R.id.rdb_week);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+
     }
 
     private void processControl() {
