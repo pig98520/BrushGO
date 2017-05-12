@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -23,8 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private String user;
     private String psw;
     private FirebaseAuth auth= FirebaseAuth.getInstance();
+    Firebase myFirebaseRef;
+    Firebase userRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         processViews();
@@ -94,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);
+
+                        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
+                        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
+                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),180,3);
+                        userRef.setValue(data);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

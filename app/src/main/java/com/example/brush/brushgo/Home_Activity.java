@@ -17,6 +17,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Created by swlab on 2017/5/5.
  */
@@ -30,6 +36,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int timersec;
     private int currentTime;
     private int i;
+    private FirebaseAuth auth;
+    private Firebase myFirebaseRef;
     private ImageView clockArray[]=new ImageView[12];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
@@ -37,6 +45,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private NavigationView navigateionView;
 
     protected void onCreate(Bundle savedInstanceState) {
+        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
@@ -45,12 +54,21 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setValue() {
-        Bundle bundle=this.getIntent().getExtras();
-        if(bundle!=null)
-            defaultTime=bundle.getInt("time")*60;
-        else
-            defaultTime=180;
-        timer.setText(defaultTime+"");
+        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                defaultTime=dataSnapshot.getValue(int.class);
+                if(defaultTime==0)
+                    defaultTime=180;
+                timer.setText(defaultTime+"");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     private void processView() {
@@ -62,6 +80,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        auth= FirebaseAuth.getInstance();
+        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
         clockArray[1]=(ImageView)findViewById(R.id.imageView_2);
         clockArray[2]=(ImageView)findViewById(R.id.imageView_3);
@@ -204,6 +224,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
+            startActivity(intent);
+        }
+        else if(id==R.id.Logout)
+        {
+            auth.signOut();
+            Intent intent=new Intent();
+            intent.setClass(this,MainActivity.class);
             startActivity(intent);
         }
         drawer.closeDrawer(GravityCompat.START);

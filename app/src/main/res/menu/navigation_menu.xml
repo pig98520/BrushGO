@@ -18,4 +18,7 @@
     <item android:id="@+id/Setting"
         android:title="設定"
         android:icon="@mipmap/ic_settings_black_24dp"/>
+    <item android:id="@+id/Logout"
+        android:title="登出"
+        android:icon="@mipmap/ic_person_outline_black_24dp"/>
 </menu>

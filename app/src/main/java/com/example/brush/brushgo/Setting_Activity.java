@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseApp;
@@ -33,6 +34,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private int time;
     private int remider;
     private FirebaseAuth auth;
+    private Firebase myFirebaseRef;
+    private Firebase userRef;
     protected void onCreate(Bundle savedInstanceState) {
         Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
@@ -45,6 +48,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
         auth= FirebaseAuth.getInstance();
+        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
+        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         menu=(Button) findViewById(R.id.btn_menu);
         save=(Button) findViewById(R.id.btn_save);
         threeminutes=(RadioButton)findViewById(R.id.rdb_three);
@@ -68,7 +73,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onClick(View v) {
                 checkTime();
                 checkRemider();
-                passValue();
                 updateUser();
             }
         });
@@ -95,19 +99,10 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         return remider;
     }
 
-    private void passValue() {
-        Intent intent=new Intent(Setting_Activity.this,Home_Activity.class);
-        Bundle bundle=new Bundle();
-        bundle.putInt("time",time);
-        bundle.putInt("remider",remider);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
     private void updateUser() {
-        Firebase myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
-        Firebase userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid());
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time,remider);
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider);
         userRef.setValue(data);
+        Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -140,6 +135,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
+            startActivity(intent);
+        }
+        else if(id==R.id.Logout)
+        {
+            auth.signOut();
+            Intent intent=new Intent();
+            intent.setClass(this,MainActivity.class);
             startActivity(intent);
         }
         drawer.closeDrawer(GravityCompat.START);
