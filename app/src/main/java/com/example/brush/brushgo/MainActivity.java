@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
                         userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),180,3);
+                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),180,3,"9:0","22:0");
                         userRef.setValue(data);
                     }
                 })
