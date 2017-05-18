@@ -27,6 +27,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -36,6 +38,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button menu;
     private Button play;
     private Button stop;
+    private Button change_music;
+    private Button change_color;
     private TextView timer;
     private TextView countdown;
     private ProgressBar progressBar;
@@ -43,8 +47,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int timersec;
     private int currentTime;
     private int i;
+    private SimpleDateFormat dtFormat;
+    private String nowTime;
+    private Date date;
     private FirebaseAuth auth;
-    private Firebase myFirebaseRef;
+    private Firebase readFirebaseRef;
+    private Firebase recordFirebaseRef;
     private ImageView clockArray[]=new ImageView[60];
     private String musicArray[]=new String[10];
     private CountDownTimer countdownTimer;
@@ -58,11 +66,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         Firebase.setAndroidContext(this);
         processView();
         setValue();
-        setMusic();
+        resetMusic();
         processControl();
     }
 
-    private void setMusic() {
+    private void resetMusic() {
         music=new MediaPlayer();
         try {
             music.setDataSource(musicArray[(int) (Math.random()*musicArray.length)]);
@@ -72,8 +80,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
     }
     private void setValue() {
-        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
-        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        readFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 defaultTime=dataSnapshot.getValue(int.class);
@@ -96,11 +104,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
         stop=(Button) findViewById(R.id.btn_stop);
+        change_music=(Button)findViewById(R.id.btn_changecmusic);
+        change_color=(Button)findViewById(R.id.btn_changecolor);
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         auth= FirebaseAuth.getInstance();
-        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
+        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
         clockArray[5]=(ImageView)findViewById(R.id.imageView_2);
         clockArray[10]=(ImageView)findViewById(R.id.imageView_3);
@@ -155,10 +165,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
                 timerStop();
-                setMusic();
+                resetMusic();
             }
         });
-
+        change_music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                music.stop();
+                resetMusic();
+                music.start();
+            }
+        });
     }
     private void timerStart() {
         timersec= Integer.parseInt(timer.getText().toString().trim());
@@ -174,7 +191,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onFinish() {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
-                setMusic();
+                resetMusic();
                 timerStop();
                 clockStop();
                 setProgressbar();
@@ -209,13 +226,22 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                recordData();
             }
         };
         finishDialog.setNeutralButton("確定",confirmClick);
         finishDialog.show();
     }
 
+    private void recordData() {
+        dtFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        date = new Date();
+        nowTime = dtFormat.format(date);
+        recordFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/record").child(auth.getCurrentUser().getUid());
+        DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(),nowTime);
+        recordFirebaseRef.push().setValue(data);
+        Toast.makeText(Home_Activity.this,  "使用紀錄已更新", Toast.LENGTH_SHORT).show();
+    }
 
     private void clcokStart() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
