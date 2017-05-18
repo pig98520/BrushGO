@@ -2,6 +2,7 @@ package com.example.brush.brushgo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SeekBar;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button stop;
     private TextView timer;
     private TextView countdown;
-    private SeekBar seekBar;
+    private ProgressBar progressBar;
     private int defaultTime;
     private int timersec;
     private int currentTime;
@@ -70,7 +71,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
         }
     }
-
     private void setValue() {
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -98,7 +98,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         stop=(Button) findViewById(R.id.btn_stop);
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
-        seekBar=(SeekBar)findViewById(R.id.skb_music);
+        progressBar=(ProgressBar) findViewById(R.id.progressBar);
         auth= FirebaseAuth.getInstance();
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
@@ -167,7 +167,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
                 clcokStart();
+                setProgressbar();
             }
+
             @Override
             public void onFinish() {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
@@ -175,7 +177,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 setMusic();
                 timerStop();
                 clockStop();
-                timerFinish();
+                setProgressbar();
+                finishDialog();
             }
         };
         countdownTimer.start();
@@ -189,9 +192,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
         clockStop();
+        setProgressbar();
     }
 
-    private void timerFinish() {
+    private void setProgressbar() {
+        currentTime = (Integer.parseInt(timer.getText().toString().trim()));
+        progressBar.setMax(defaultTime);
+        progressBar.setProgress(defaultTime-currentTime);
+        progressBar.getProgressDrawable().setColorFilter(Color.BLACK,android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
         finishDialog.setTitle("時間到了~");
         finishDialog.setMessage("恭喜你刷好牙了~");
