@@ -22,4 +22,5 @@
     <string name="clock">刷牙鬧鐘:</string>
     <string name="morning">AM</string>
     <string name="evening">PM</string>
+    <string name="twominutes">兩分鐘</string>
 </resources>

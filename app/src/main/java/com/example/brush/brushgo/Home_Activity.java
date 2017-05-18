@@ -15,13 +15,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -32,25 +36,39 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Button play;
     private Button stop;
     private TextView timer;
+    private TextView countdown;
+    private SeekBar seekBar;
     private int defaultTime;
     private int timersec;
     private int currentTime;
     private int i;
     private FirebaseAuth auth;
     private Firebase myFirebaseRef;
-    private ImageView clockArray[]=new ImageView[12];
+    private ImageView clockArray[]=new ImageView[60];
+    private String musicArray[]=new String[10];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
     private NavigationView navigateionView;
 
     protected void onCreate(Bundle savedInstanceState) {
-        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        Firebase.setAndroidContext(this);
         processView();
         setValue();
+        setMusic();
         processControl();
+    }
+
+    private void setMusic() {
+        music=new MediaPlayer();
+        try {
+            music.setDataSource(musicArray[(int) (Math.random()*musicArray.length)]);
+            music.prepare();
+        } catch (IOException e) {
+            Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setValue() {
@@ -74,26 +92,37 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void processView() {
         navigateionView=(NavigationView) findViewById(R.id.nav_home);
         navigateionView.setNavigationItemSelectedListener(Home_Activity.this);
+        drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
         stop=(Button) findViewById(R.id.btn_stop);
         timer=(TextView)findViewById(R.id.txt_timer);
-        music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
-        drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        countdown=(TextView)findViewById(R.id.txt_countdown);
+        seekBar=(SeekBar)findViewById(R.id.skb_music);
         auth= FirebaseAuth.getInstance();
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
-        clockArray[1]=(ImageView)findViewById(R.id.imageView_2);
-        clockArray[2]=(ImageView)findViewById(R.id.imageView_3);
-        clockArray[3]=(ImageView)findViewById(R.id.imageView_4);
-        clockArray[4]=(ImageView)findViewById(R.id.imageView_5);
-        clockArray[5]=(ImageView)findViewById(R.id.imageView_6);
-        clockArray[6]=(ImageView)findViewById(R.id.imageView_7);
-        clockArray[7]=(ImageView)findViewById(R.id.imageView_8);
-        clockArray[8]=(ImageView)findViewById(R.id.imageView_9);
-        clockArray[9]=(ImageView)findViewById(R.id.imageView_10);
-        clockArray[10]=(ImageView)findViewById(R.id.imageView_11);
-        clockArray[11]=(ImageView)findViewById(R.id.imageView_12);
+        clockArray[5]=(ImageView)findViewById(R.id.imageView_2);
+        clockArray[10]=(ImageView)findViewById(R.id.imageView_3);
+        clockArray[15]=(ImageView)findViewById(R.id.imageView_4);
+        clockArray[20]=(ImageView)findViewById(R.id.imageView_5);
+        clockArray[25]=(ImageView)findViewById(R.id.imageView_6);
+        clockArray[30]=(ImageView)findViewById(R.id.imageView_7);
+        clockArray[35]=(ImageView)findViewById(R.id.imageView_8);
+        clockArray[40]=(ImageView)findViewById(R.id.imageView_9);
+        clockArray[45]=(ImageView)findViewById(R.id.imageView_10);
+        clockArray[50]=(ImageView)findViewById(R.id.imageView_11);
+        clockArray[55]=(ImageView)findViewById(R.id.imageView_12);
+        musicArray[0]="https://goo.gl/cIfw8f";
+        musicArray[1]="https://goo.gl/aS34Wp";
+        musicArray[2]="https://goo.gl/N8dbRu";
+        musicArray[3]="https://goo.gl/Pvzkpl";
+        musicArray[4]="https://goo.gl/AgMIkP";
+        musicArray[5]="https://goo.gl/mqYySN";
+        musicArray[6]="https://goo.gl/SrFCY8";
+        musicArray[7]="https://goo.gl/dz4xE5";
+        musicArray[8]="https://goo.gl/9cvuvO";
+        musicArray[9]="https://goo.gl/FQULri";
     }
 
     private void processControl() {
@@ -112,10 +141,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     timerPause();
                 }
                 else {
-                    play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
                     music.start();
+                    play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
                     timerStart();
                 }
+
             }
 
         });
@@ -124,8 +154,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
-                music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
                 timerStop();
+                setMusic();
             }
         });
 
@@ -136,15 +166,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
-                clockShow();
+                clcokStart();
             }
             @Override
             public void onFinish() {
                 play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
                 music.stop();
-                music= MediaPlayer.create(Home_Activity.this,R.raw.eine_kleine_nachtmusik);
+                setMusic();
                 timerStop();
-                clockReset();
+                clockStop();
                 timerFinish();
             }
         };
@@ -158,7 +188,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void timerStop() {
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
-        clockReset();
+        clockStop();
     }
 
     private void timerFinish() {
@@ -176,21 +206,29 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
 
-    private void clockShow() {
-        currentTime = (Integer.parseInt(timer.getText().toString().trim())) % 12;
-        if(clockArray[currentTime].getVisibility()==View.INVISIBLE){
-            clockArray[currentTime].setVisibility(View.VISIBLE);
+    private void clcokStart() {
+        currentTime = (Integer.parseInt(timer.getText().toString().trim()));
+        if(currentTime%60%5==0) {
+            if (clockArray[currentTime % 60].getVisibility() == View.INVISIBLE) {
+                clockArray[currentTime % 60].setVisibility(View.VISIBLE);
+            } else if (clockArray[currentTime % 60].getVisibility() == View.VISIBLE) {
+                clockArray[currentTime % 60].setVisibility(View.INVISIBLE);
+            }
         }
-        else if(clockArray[currentTime].getVisibility()==View.VISIBLE){
-            clockArray[currentTime].setVisibility(View.INVISIBLE);
-        }
+        if(currentTime==defaultTime-60)
+            countdown.setText("加油!已經過了1分鐘了~");
+        else if(currentTime==defaultTime-120)
+            countdown.setText("加油!已經過了2分鐘了~");
+        else if(currentTime==defaultTime-180)
+            countdown.setText("加油!已經過了3分鐘了~");
     }
 
-    private void clockReset() {
-        for(i=0;i<12;i++)
+    private void clockStop() {
+        for(i=0;i<60;i=i+5)
         {
             clockArray[i].setVisibility(View.INVISIBLE);
         }
+        countdown.setText("");
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

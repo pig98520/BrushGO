@@ -30,9 +30,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
     private Button save;
+    private RadioButton twominutes;
     private RadioButton threeminutes;
     private RadioButton fourminutes;
-    private RadioButton fiveminutes;
     private RadioButton oneday;
     private RadioButton threedays;
     private RadioButton oneweek;
@@ -103,9 +103,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         evening=(Button) findViewById(R.id.btn_evening);
         m_alarm=(TextView) findViewById(R.id.txt_morning);
         e_alarm=(TextView) findViewById(R.id.txt_evening);
-        threeminutes=(RadioButton)findViewById(R.id.rdb_three);
-        fourminutes=(RadioButton)findViewById(R.id.rdb_four);
-        fiveminutes=(RadioButton)findViewById(R.id.rdb_five);
+        twominutes =(RadioButton)findViewById(R.id.rdb_two);
+        threeminutes =(RadioButton)findViewById(R.id.rdb_three);
+        fourminutes =(RadioButton)findViewById(R.id.rdb_four);
         oneday=(RadioButton)findViewById(R.id.rdb_oneday);
         threedays=(RadioButton)findViewById(R.id.rdb_threedays);
         oneweek=(RadioButton)findViewById(R.id.rdb_week);
@@ -169,12 +169,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     };
 
     private int checkTime() {
-        if(threeminutes.isChecked())
+        if(twominutes.isChecked())
+            time=2;
+        else if(threeminutes.isChecked())
             time=3;
         else if(fourminutes.isChecked())
             time=4;
-        else if(fiveminutes.isChecked())
-            time=5;
         return time;
     }
 
