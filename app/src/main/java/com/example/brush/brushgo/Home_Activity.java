@@ -3,10 +3,12 @@ package com.example.brush.brushgo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,11 +32,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.brush.brushgo.R.id.drawerLayout;
+
 /**
  * Created by swlab on 2017/5/5.
  */
 
 public class Home_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private ConstraintLayout layout;
     private Button menu;
     private Button play;
     private Button stop;
@@ -46,7 +51,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int defaultTime;
     private int timersec;
     private int currentTime;
-    private int i;
+    private int backgroundColor;
     private SimpleDateFormat dtFormat;
     private String nowTime;
     private Date date;
@@ -55,6 +60,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase recordFirebaseRef;
     private ImageView clockArray[]=new ImageView[60];
     private String musicArray[]=new String[10];
+    private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
@@ -98,9 +104,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void processView() {
+        layout=(ConstraintLayout)findViewById(R.id.constraintLayout);
         navigateionView=(NavigationView) findViewById(R.id.nav_home);
         navigateionView.setNavigationItemSelectedListener(Home_Activity.this);
-        drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        drawer=(DrawerLayout)findViewById(drawerLayout);
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
         stop=(Button) findViewById(R.id.btn_stop);
@@ -111,18 +118,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         auth= FirebaseAuth.getInstance();
         readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
-        clockArray[0]=(ImageView)findViewById(R.id.imageView_1);
-        clockArray[5]=(ImageView)findViewById(R.id.imageView_2);
-        clockArray[10]=(ImageView)findViewById(R.id.imageView_3);
-        clockArray[15]=(ImageView)findViewById(R.id.imageView_4);
-        clockArray[20]=(ImageView)findViewById(R.id.imageView_5);
-        clockArray[25]=(ImageView)findViewById(R.id.imageView_6);
-        clockArray[30]=(ImageView)findViewById(R.id.imageView_7);
-        clockArray[35]=(ImageView)findViewById(R.id.imageView_8);
-        clockArray[40]=(ImageView)findViewById(R.id.imageView_9);
-        clockArray[45]=(ImageView)findViewById(R.id.imageView_10);
-        clockArray[50]=(ImageView)findViewById(R.id.imageView_11);
-        clockArray[55]=(ImageView)findViewById(R.id.imageView_12);
+        clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
+        clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
+        clockArray[10]=(ImageView)findViewById(R.id.imageView_2);
+        clockArray[15]=(ImageView)findViewById(R.id.imageView_3);
+        clockArray[20]=(ImageView)findViewById(R.id.imageView_4);
+        clockArray[25]=(ImageView)findViewById(R.id.imageView_5);
+        clockArray[30]=(ImageView)findViewById(R.id.imageView_6);
+        clockArray[35]=(ImageView)findViewById(R.id.imageView_7);
+        clockArray[40]=(ImageView)findViewById(R.id.imageView_8);
+        clockArray[45]=(ImageView)findViewById(R.id.imageView_9);
+        clockArray[50]=(ImageView)findViewById(R.id.imageView_10);
+        clockArray[55]=(ImageView)findViewById(R.id.imageView_11);
         musicArray[0]="https://goo.gl/cIfw8f";
         musicArray[1]="https://goo.gl/aS34Wp";
         musicArray[2]="https://goo.gl/N8dbRu";
@@ -133,6 +140,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         musicArray[7]="https://goo.gl/dz4xE5";
         musicArray[8]="https://goo.gl/9cvuvO";
         musicArray[9]="https://goo.gl/FQULri";
+        colorArray[0]=R.color.background;
+        colorArray[1]=R.color.pink;
+        colorArray[2]=R.color.yellow;
+        colorArray[3]=R.color.purple;
     }
 
     private void processControl() {
@@ -140,32 +151,34 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
+                if(music.isPlaying()){
+                    play.setBackgroundResource(R.drawable.play_button_512);
+                    music.pause();
+                    timerPause();
+                }
             }
         });
         play.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if(music.isPlaying()){
-                    play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
+                    play.setBackgroundResource(R.drawable.play_button_512);
                     music.pause();
                     timerPause();
                 }
                 else {
                     music.start();
-                    play.setBackgroundResource(R.mipmap.ic_pause_circle_filled_black_24dp);
+                    play.setBackgroundResource(R.drawable.pause_button_512);
                     timerStart();
                 }
-
             }
 
         });
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
-                music.stop();
+                play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
-                resetMusic();
             }
         });
         change_music.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +187,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 music.stop();
                 resetMusic();
                 music.start();
+            }
+        });
+        change_color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backgroundColor = ((ColorDrawable)layout.getBackground()).getColor();
+                for(int n=0;n<(colorArray.length-1);n++) {
+                    if (backgroundColor == getResources().getColor(colorArray[n]))
+                        layout.setBackgroundResource(colorArray[n+1]);
+                }
+                if(backgroundColor == getResources().getColor(colorArray[colorArray.length-1]))
+                        layout.setBackgroundResource(colorArray[0]);
             }
         });
     }
@@ -189,12 +214,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onFinish() {
-                play.setBackgroundResource(R.mipmap.ic_play_circle_outline_black_24dp);
-                music.stop();
-                resetMusic();
+                play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
-                clockStop();
-                setProgressbar();
                 finishDialog();
             }
         };
@@ -208,6 +229,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void timerStop() {
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
+        music.stop();
+        resetMusic();
         clockStop();
         setProgressbar();
     }
@@ -261,7 +284,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void clockStop() {
-        for(i=0;i<60;i=i+5)
+        for(int i=0;i<60;i=i+5)
         {
             clockArray[i].setVisibility(View.INVISIBLE);
         }
