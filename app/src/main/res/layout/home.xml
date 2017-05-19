@@ -8,26 +8,28 @@
     android:id="@+id/drawerLayout">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <Button
             android:id="@+id/btn_play"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@mipmap/ic_play_circle_outline_black_24dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/play_button_512"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.301" />
+            app:layout_constraintVertical_bias="0.343" />
 
         <Button
             android:id="@+id/btn_changecolor"
@@ -37,7 +39,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@mipmap/ic_color_lens_black_24dp"
+            android:background="@drawable/paint_button_512"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -53,13 +55,13 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@mipmap/ic_music_note_black_24dp"
+            android:background="@drawable/shuffle_button_512"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.792" />
+            app:layout_constraintVertical_bias="0.787" />
 
         <Button
             android:id="@+id/btn_stop"
@@ -69,12 +71,12 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@mipmap/ic_stop_black_24dp"
+            android:background="@drawable/stop_button_512"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.79" />
+            app:layout_constraintVertical_bias="0.788" />
 
         <Button
             android:id="@+id/btn_menu"
@@ -94,9 +96,9 @@
 
         <TextView
             android:id="@+id/txt_timer"
-            android:layout_width="264dp"
-            android:layout_height="61dp"
-            android:layout_marginBottom="582dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="583dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:textAlignment="center"
@@ -104,9 +106,9 @@
             android:textSize="24sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.496" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <ImageView
             android:id="@+id/imageView_1"
@@ -118,7 +120,7 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.398"
+            app:layout_constraintHorizontal_bias="0.283"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -135,11 +137,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.61"
+            app:layout_constraintHorizontal_bias="0.714"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.434"
+            app:layout_constraintVertical_bias="0.583"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -152,7 +154,7 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.603"
+            app:layout_constraintHorizontal_bias="0.714"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -169,11 +171,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.68"
+            app:layout_constraintHorizontal_bias="0.83"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.261"
+            app:layout_constraintVertical_bias="0.29000002"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -186,11 +188,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.703"
+            app:layout_constraintHorizontal_bias="0.867"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.326"
+            app:layout_constraintVertical_bias="0.41000003"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -203,11 +205,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.68"
+            app:layout_constraintHorizontal_bias="0.83"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.388"
+            app:layout_constraintVertical_bias="0.515"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -220,12 +222,12 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.445"
-            app:srcCompat="@mipmap/ic_query_builder_black_24dp"
-            app:layout_constraintHorizontal_bias="0.5" />
+            app:layout_constraintVertical_bias="0.621"
+            app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
             android:id="@+id/imageView_5"
@@ -237,11 +239,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.398"
+            app:layout_constraintHorizontal_bias="0.283"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.432"
+            app:layout_constraintVertical_bias="0.583"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -254,11 +256,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.319"
+            app:layout_constraintHorizontal_bias="0.17"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.388"
+            app:layout_constraintVertical_bias="0.516"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -271,11 +273,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.296"
+            app:layout_constraintHorizontal_bias="0.129"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.326"
+            app:layout_constraintVertical_bias="0.411"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -288,11 +290,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.318"
+            app:layout_constraintHorizontal_bias="0.16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.263"
+            app:layout_constraintVertical_bias="0.29000002"
             app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <ImageView
@@ -305,12 +307,12 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            app:srcCompat="@mipmap/ic_query_builder_black_24dp"
-            app:layout_constraintHorizontal_bias="0.5" />
+            app:layout_constraintVertical_bias="0.179"
+            app:srcCompat="@mipmap/ic_query_builder_black_24dp" />
 
         <TextView
             android:id="@+id/txt_countdown"
@@ -326,26 +328,27 @@
             android:textSize="24sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.113"
-            app:layout_constraintHorizontal_bias="0.495" />
+            app:layout_constraintVertical_bias="0.112" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="184dp"
-            android:layout_height="17dp"
+            android:layout_width="297dp"
+            android:layout_height="24dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" />
+            app:layout_constraintVertical_bias="0.683" />
 
     </android.support.constraint.ConstraintLayout>
 
