@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Video_Activity extends YouTubeBaseActivity implements NavigationView.OnNavigationItemSelectedListener,YouTubePlayer.OnInitializedListener {
     private static final String API_KEY="AIzaSyAdQd34nlmp9TvVmrwWQyDIJDSke6mT_Q8";
-    private String VIDEO_ID="bL96xYJvrEY";
+    private String VIDEO_ID="lnHIgRhJctc";
     private YouTubePlayerView youTubePlayerView;
     private Button menu;
     private DrawerLayout drawer;
