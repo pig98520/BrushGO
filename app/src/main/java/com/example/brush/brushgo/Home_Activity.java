@@ -230,6 +230,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
         music.stop();
+        music.release();
         resetMusic();
         clockStop();
         setProgressbar();
