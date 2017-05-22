@@ -30,7 +30,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.example.brush.brushgo.R.id.drawerLayout;
 
@@ -57,9 +59,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Date date;
     private FirebaseAuth auth;
     private Firebase readFirebaseRef;
+    private Firebase musicFirebaseRef;
     private Firebase recordFirebaseRef;
     private ImageView clockArray[]=new ImageView[60];
     private String musicArray[]=new String[10];
+    private List<DB_Music> musicList;
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
@@ -76,9 +80,32 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processControl();
     }
 
+/*    @Override
+    protected void onStart() {
+        super.onStart();
+        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music");
+        musicFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                musicList.clear();
+                for(DataSnapshot musicSnapshot:dataSnapshot.getChildren())
+                {
+                    DB_Music question=musicSnapshot.getValue(DB_Music.class);
+                    musicList.add(question);
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }*/
+
+
     private void resetMusic() {
         music=new MediaPlayer();
         try {
+         //music.setDataSource(musicList.get((int) (Math.random()*musicList.size())).getMusic());
             music.setDataSource(musicArray[(int) (Math.random()*musicArray.length)]);
             music.prepare();
         } catch (IOException e) {
@@ -117,7 +144,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         auth= FirebaseAuth.getInstance();
-        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
         clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
         clockArray[10]=(ImageView)findViewById(R.id.imageView_2);
@@ -130,6 +156,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         clockArray[45]=(ImageView)findViewById(R.id.imageView_9);
         clockArray[50]=(ImageView)findViewById(R.id.imageView_10);
         clockArray[55]=(ImageView)findViewById(R.id.imageView_11);
+        musicList=new ArrayList<>();
         musicArray[0]="https://goo.gl/cIfw8f";
         musicArray[1]="https://goo.gl/aS34Wp";
         musicArray[2]="https://goo.gl/N8dbRu";
