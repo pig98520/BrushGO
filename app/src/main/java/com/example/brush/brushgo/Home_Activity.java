@@ -76,13 +76,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         Firebase.setAndroidContext(this);
         processView();
         setValue();
+//        setMusic();
         resetMusic();
         processControl();
     }
 
-/*    @Override
-    protected void onStart() {
-        super.onStart();
+/*    private void setMusic() {
         musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music");
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,16 +95,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                throw firebaseError.toException();
             }
         });
+        Log.i("Size",musicList.size()+"");
     }*/
-
 
     private void resetMusic() {
         music=new MediaPlayer();
         try {
-         //music.setDataSource(musicList.get((int) (Math.random()*musicList.size())).getMusic());
             music.setDataSource(musicArray[(int) (Math.random()*musicArray.length)]);
             music.prepare();
         } catch (IOException e) {
@@ -225,7 +223,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         layout.setBackgroundResource(colorArray[n+1]);
                 }
                 if(backgroundColor == getResources().getColor(colorArray[colorArray.length-1]))
-                        layout.setBackgroundResource(colorArray[0]);
+                    layout.setBackgroundResource(colorArray[0]);
             }
         });
     }
@@ -257,7 +255,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
         music.stop();
-        music.release();
         resetMusic();
         clockStop();
         setProgressbar();
@@ -361,5 +358,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        music.release();
     }
 }

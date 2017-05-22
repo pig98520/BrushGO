@@ -14,8 +14,8 @@
 
         <com.google.android.youtube.player.YouTubePlayerView
             android:id="@+id/youtube_player"
-            android:layout_width="384dp"
-            android:layout_height="216dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
