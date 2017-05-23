@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static com.example.brush.brushgo.R.id.drawerLayout;
 
@@ -62,13 +61,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase musicFirebaseRef;
     private Firebase recordFirebaseRef;
     private ImageView clockArray[]=new ImageView[60];
-    private String musicArray[]=new String[10];
-    private List<DB_Music> musicList;
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private DrawerLayout drawer;
     private NavigationView navigateionView;
+    private String musicUrl=" ";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,40 +74,34 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         Firebase.setAndroidContext(this);
         processView();
         setValue();
-//        setMusic();
-        resetMusic();
+        setMusic();
         processControl();
+        Log.i("Music",musicUrl);
     }
 
-/*    private void setMusic() {
-        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music");
+    private void setMusic() {
+        music=new MediaPlayer(); //建立一個media player
+        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+(int) (Math.random()*10)); //取得firebase網址 用亂數取得節點網址
+        
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                musicList.clear();
-                for(DataSnapshot musicSnapshot:dataSnapshot.getChildren())
-                {
-                    DB_Music question=musicSnapshot.getValue(DB_Music.class);
-                    musicList.add(question);
+                musicUrl=dataSnapshot.getValue(String.class); //取得節點內的資料
+                try {
+                    music.setDataSource(musicUrl); //設定media的路徑
+                    music.prepare();
+                } catch (IOException e) {
+                    Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                throw firebaseError.toException();
+
             }
         });
-        Log.i("Size",musicList.size()+"");
-    }*/
-
-    private void resetMusic() {
-        music=new MediaPlayer();
-        try {
-            music.setDataSource(musicArray[(int) (Math.random()*musicArray.length)]);
-            music.prepare();
-        } catch (IOException e) {
-            Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
-        }
     }
+
     private void setValue() {
         readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
         readFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -154,17 +146,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         clockArray[45]=(ImageView)findViewById(R.id.imageView_9);
         clockArray[50]=(ImageView)findViewById(R.id.imageView_10);
         clockArray[55]=(ImageView)findViewById(R.id.imageView_11);
-        musicList=new ArrayList<>();
-        musicArray[0]="https://goo.gl/cIfw8f";
-        musicArray[1]="https://goo.gl/aS34Wp";
-        musicArray[2]="https://goo.gl/N8dbRu";
-        musicArray[3]="https://goo.gl/Pvzkpl";
-        musicArray[4]="https://goo.gl/AgMIkP";
-        musicArray[5]="https://goo.gl/mqYySN";
-        musicArray[6]="https://goo.gl/SrFCY8";
-        musicArray[7]="https://goo.gl/dz4xE5";
-        musicArray[8]="https://goo.gl/9cvuvO";
-        musicArray[9]="https://goo.gl/FQULri";
         colorArray[0]=R.color.background;
         colorArray[1]=R.color.pink;
         colorArray[2]=R.color.yellow;
@@ -192,8 +173,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     timerPause();
                 }
                 else {
-                    music.start();
                     play.setBackgroundResource(R.drawable.pause_button_512);
+                    music.start();
                     timerStart();
                 }
             }
@@ -210,8 +191,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 music.stop();
-                resetMusic();
-                music.start();
+                music.release();
+                timerPause();
+                play.setBackgroundResource(R.drawable.play_button_512);
+                setMusic();
             }
         });
         change_color.setOnClickListener(new View.OnClickListener() {
@@ -255,7 +238,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
         music.stop();
-        resetMusic();
+        setMusic();
         clockStop();
         setProgressbar();
     }
