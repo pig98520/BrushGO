@@ -1,5 +1,6 @@
 package com.example.brush.brushgo;
 
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,6 +29,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -64,9 +66,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
+    private String musicUrl=" ";
+    private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
     private NavigationView navigateionView;
-    private String musicUrl=" ";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,13 +79,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setValue();
         setMusic();
         processControl();
-        Log.i("Music",musicUrl);
     }
 
     private void setMusic() {
+        if(musicIndex<10)
+            musicIndex+=1;
+        else
+            musicIndex=1;
         music=new MediaPlayer(); //建立一個media player
-        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+(int) (Math.random()*10)); //取得firebase網址 用亂數取得節點網址
-        
+        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,7 +99,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
@@ -111,6 +115,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 if(defaultTime==0)
                     defaultTime=180;
                 timer.setText(defaultTime+"");
+                if(defaultTime%60<10)
+                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
+                else
+                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
             }
 
             @Override
@@ -216,6 +224,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
+                if(millisUntilFinished/1000%60<10)
+                    countdown.setText("0"+millisUntilFinished/1000/60+"：0"+millisUntilFinished/1000%60);
+                else
+                    countdown.setText("0"+millisUntilFinished/1000/60+"："+millisUntilFinished/1000%60);
                 clcokStart();
                 setProgressbar();
             }
@@ -253,7 +265,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
         finishDialog.setTitle("時間到了~");
-        finishDialog.setMessage("恭喜你刷好牙了~");
+        finishDialog.setMessage("恭喜你刷好牙了，請按確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -283,12 +295,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 clockArray[currentTime % 60].setVisibility(View.INVISIBLE);
             }
         }
-        if(currentTime==defaultTime-60)
-            countdown.setText("加油!已經過了1分鐘了~");
-        else if(currentTime==defaultTime-120)
-            countdown.setText("加油!已經過了2分鐘了~");
-        else if(currentTime==defaultTime-180)
-            countdown.setText("加油!已經過了3分鐘了~");
     }
 
     private void clockStop() {
@@ -296,7 +302,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         {
             clockArray[i].setVisibility(View.INVISIBLE);
         }
-        countdown.setText("");
+        countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -334,10 +340,27 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         else if(id==R.id.Logout)
         {
-            auth.signOut();
-            Intent intent=new Intent();
-            intent.setClass(this,MainActivity.class);
-            startActivity(intent);
+            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
+            logoutDialog.setTitle("確定要登出?");
+            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
+            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    auth.signOut();
+                    Intent intent=new Intent();
+                    intent.setClass(Home_Activity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+            };
+            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            };
+            logoutDialog.setNeutralButton("確定",confirmClick);
+            logoutDialog.setNegativeButton("取消",cancelClick);
+            logoutDialog.show();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

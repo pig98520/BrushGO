@@ -2,12 +2,14 @@ package com.example.brush.brushgo;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -228,10 +230,27 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         }
         else if(id==R.id.Logout)
         {
-            auth.signOut();
-            Intent intent=new Intent();
-            intent.setClass(this,MainActivity.class);
-            startActivity(intent);
+            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
+            logoutDialog.setTitle("確定要登出?");
+            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
+            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    auth.signOut();
+                    Intent intent=new Intent();
+                    intent.setClass(Setting_Activity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+            };
+            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            };
+            logoutDialog.setNeutralButton("確定",confirmClick);
+            logoutDialog.setNegativeButton("取消",cancelClick);
+            logoutDialog.show();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
