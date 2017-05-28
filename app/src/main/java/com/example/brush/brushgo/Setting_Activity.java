@@ -4,8 +4,12 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,18 +48,24 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Button morning;
     private Button evening;
     private TextView m_alarm;
-    private TextView e_alarm;
-    private String m_time;
-    private String e_time;
+    private Calendar m_calendar;
+    private long m_time;
     private int m_hour;
     private int m_min;
+    private long m_millis;
+    private TextView e_alarm;
+    private Calendar e_calendar;
+    private Long e_time;
     private int e_hour;
     private int e_min;
+    private long e_millis;
+    private SimpleDateFormat formatter;
     private FirebaseAuth auth;
     private Firebase myFirebaseRef;
     private Firebase morningRef;
     private Firebase eveningRef;
     private Firebase userRef;
+    @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
         Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
@@ -69,10 +79,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
         morningRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                m_time=dataSnapshot.getValue(String.class);
-                    m_alarm.setText(m_time);
+                m_time=dataSnapshot.getValue(long.class);
+                m_calendar.setTimeInMillis(m_time);
+                m_alarm.setText("AM:"+formatter.format(m_calendar.getTime()));
             }
 
             @Override
@@ -81,10 +93,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             }
         });
         eveningRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                e_time=dataSnapshot.getValue(String.class);
-                e_alarm.setText(e_time);
+                e_time=dataSnapshot.getValue(long.class);
+                e_calendar.setTimeInMillis(e_time);
+                e_alarm.setText("PM"+formatter.format(e_calendar.getTime()));
             }
 
             @Override
@@ -93,6 +107,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             }
         });
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
@@ -105,6 +120,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         evening=(Button) findViewById(R.id.btn_evening);
         m_alarm=(TextView) findViewById(R.id.txt_morning);
         e_alarm=(TextView) findViewById(R.id.txt_evening);
+        e_calendar= Calendar.getInstance();
+        m_calendar= Calendar.getInstance();
+        formatter = new SimpleDateFormat(" HH:mm");
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
         threeminutes =(RadioButton)findViewById(R.id.rdb_three);
         fourminutes =(RadioButton)findViewById(R.id.rdb_four);
@@ -152,21 +170,31 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     }
 
     protected TimePickerDialog.OnTimeSetListener morningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             m_hour =hourOfDay;
             m_min =minute;
-            m_time=m_hour+":"+m_min;
-            m_alarm.setText(m_time);
+            m_alarm.setText(m_hour+":"+m_min);
+            m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            m_calendar.set(Calendar.MINUTE, minute);
+            m_calendar.set(Calendar.SECOND, 0);
+            m_calendar.set(Calendar.MILLISECOND, 0);
+            m_millis = m_calendar.getTimeInMillis();
         }
     };
     protected TimePickerDialog.OnTimeSetListener eveningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             e_hour =hourOfDay;
             e_min =minute;
-            e_time=e_hour+":"+e_min;
-            e_alarm.setText(e_time);
+            e_alarm.setText(e_hour+":"+e_min);
+            e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            e_calendar.set(Calendar.MINUTE, minute);
+            e_calendar.set(Calendar.SECOND, 0);
+            e_calendar.set(Calendar.MILLISECOND, 0);
+            e_millis = e_calendar.getTimeInMillis();
         }
     };
 
@@ -191,7 +219,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     }
 
     private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, m_time,e_time);
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, m_millis,e_millis);
         userRef.setValue(data);
         Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }

@@ -7,9 +7,9 @@ public class DB_Setting {
     private String user;
     private int time;
     private int remider;
-    private String morning;
-    private String evening;
-    public DB_Setting(String user, int time, int remider, String morning, String evening) {
+    private long morning;
+    private long evening;
+    public DB_Setting(String user, int time, int remider, long morning, long evening) {
         this.user = user;
         this.time = time;
         this.remider = remider;
@@ -40,19 +40,19 @@ public class DB_Setting {
         this.remider = remider;
     }
 
-    public String getMorning() {
+    public long getMorning() {
         return morning;
     }
 
-    public void setMorning(String morning) {
+    public void setMorning(long morning) {
         this.morning = morning;
     }
 
-    public String getEvening() {
+    public long getEvening() {
         return evening;
     }
 
-    public void setEvening(String evening) {
+    public void setEvening(long evening) {
         this.evening = evening;
     }
 }

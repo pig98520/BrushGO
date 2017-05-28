@@ -26,6 +26,7 @@
         <activity android:name=".Information_Activity" />
         <activity android:name=".Question_Activity" />
         <activity android:name=".Setting_Activity" />
+        <receiver android:name=".AlarmNotificationReceiver"/>
     </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 package com.example.brush.brushgo;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
@@ -71,6 +75,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private DrawerLayout drawer;
     private NavigationView navigateionView;
 
+    private Button btn_notifi;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
@@ -79,6 +85,25 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setValue();
         setMusic();
         processControl();
+        btn_notifi=(Button) findViewById(R.id.btn_notifi);
+        btn_notifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAlarm(true);
+            }
+        });
+    }
+
+    private void startAlarm(boolean isNotifi) {
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent;
+        PendingIntent pendingIntent;
+
+        if(isNotifi) {
+            myIntent = new Intent(Home_Activity.this, AlarmNotificationReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()  + 3000, pendingIntent);
+        }
     }
 
     private void setMusic() {
