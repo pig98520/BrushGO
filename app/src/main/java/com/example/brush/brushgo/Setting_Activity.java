@@ -52,14 +52,10 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Button evening;
     private TextView m_alarm;
     private Calendar m_calendar;
-    private long m_time;
-    private int m_hour;
-    private int m_min;
+    private String m_time;
     private TextView e_alarm;
     private Calendar e_calendar;
-    private Long e_time;
-    private int e_hour;
-    private int e_min;
+    private String e_time;
     private SimpleDateFormat formatter;
     private FirebaseAuth auth;
     private Firebase myFirebaseRef;
@@ -83,9 +79,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                m_time=dataSnapshot.getValue(long.class);
-                m_calendar.setTimeInMillis(m_time);
-                m_alarm.setText("AM"+formatter.format(m_calendar.getTime()));
+                m_time=dataSnapshot.getValue(String.class);
+                m_alarm.setText("AM"+m_time);
             }
 
             @Override
@@ -97,9 +92,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                e_time=dataSnapshot.getValue(long.class);
-                e_calendar.setTimeInMillis(e_time);
-                e_alarm.setText("PM"+formatter.format(e_calendar.getTime()));
+                e_time=dataSnapshot.getValue(String.class);
+                e_alarm.setText("PM"+e_time);
             }
 
             @Override
@@ -142,6 +136,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 checkTime();
@@ -166,9 +161,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     protected Dialog onCreateDialog(int id){
         if(id==1)
-            return new TimePickerDialog(Setting_Activity.this,morningTimePickerListner, m_hour, m_min,false);
+            return new TimePickerDialog(Setting_Activity.this,morningTimePickerListner, 0, 0,false);
         if(id==2)
-            return new TimePickerDialog(Setting_Activity.this,eveningTimePickerListner, e_hour, e_min,false);
+            return new TimePickerDialog(Setting_Activity.this,eveningTimePickerListner, 0,0,false);
         return null;
     }
 
@@ -176,31 +171,42 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            m_hour =hourOfDay;
-            m_min =minute;
-            m_alarm.setText("AM"+m_hour+":"+m_min);
+            view.setIs24HourView(true);
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
-            m_time = m_calendar.getTimeInMillis();
+            m_alarm.setText("AM"+formatter.format(m_calendar.getTime()));
+
+            Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
     protected TimePickerDialog.OnTimeSetListener eveningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            e_hour =hourOfDay;
-            e_min =minute;
-            e_alarm.setText("PM"+e_hour+":"+e_min);
+            view.setIs24HourView(true);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
-            e_calendar.set(Calendar.MILLISECOND, 0);
-            e_time = e_calendar.getTimeInMillis();
+            e_alarm.setText("PM"+formatter.format(e_calendar.getTime()));
+            startAlarm(true,e_calendar);
+
+            Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void startAlarm(boolean isNotifi, Calendar celandar) {
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent;
+        PendingIntent pendingIntent;
+        if(isNotifi) {
+            myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+            alarmManager.set(AlarmManager.RTC_WAKEUP,celandar.getTimeInMillis(), pendingIntent);
+        }
+    }
     private int checkTime() {
         if(twominutes.isChecked())
             time=2;
@@ -221,8 +227,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         return remider;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, m_time,e_time);
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, formatter.format(m_calendar.getTime()),formatter.format(e_calendar.getTime()));
         userRef.setValue(data);
         Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }

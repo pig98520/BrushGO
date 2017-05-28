@@ -7,15 +7,20 @@ public class DB_Setting {
     private String user;
     private int time;
     private int remider;
-    private long morning;
-    private long evening;
-    public DB_Setting(String user, int time, int remider, long morning, long evening) {
+    private String morning;
+    private String evening;
+
+    public DB_Setting(){
+
+    }
+    public DB_Setting(String user, int time, int remider, String morning, String evening) {
         this.user = user;
         this.time = time;
         this.remider = remider;
         this.morning = morning;
         this.evening = evening;
     }
+
     public String getUser() {
         return user;
     }
@@ -40,19 +45,19 @@ public class DB_Setting {
         this.remider = remider;
     }
 
-    public long getMorning() {
+    public String getMorning() {
         return morning;
     }
 
-    public void setMorning(long morning) {
+    public void setMorning(String morning) {
         this.morning = morning;
     }
 
-    public long getEvening() {
+    public String getEvening() {
         return evening;
     }
 
-    public void setEvening(long evening) {
+    public void setEvening(String evening) {
         this.evening = evening;
     }
 }
