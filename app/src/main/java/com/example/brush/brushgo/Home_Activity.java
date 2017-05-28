@@ -91,18 +91,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 startAlarm(true);
             }
-        });
+    });
     }
 
     private void startAlarm(boolean isNotifi) {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
         PendingIntent pendingIntent;
-
         if(isNotifi) {
             myIntent = new Intent(Home_Activity.this, AlarmNotificationReceiver.class);
             pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()  + 3000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()  + 10000, pendingIntent);
+            Toast.makeText(Home_Activity.this,System.currentTimeMillis()+"",Toast.LENGTH_LONG).show();
         }
     }
 

@@ -20,8 +20,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("推播測試")
-                .setContentText("推播內容")
+                .setContentTitle("刷牙時間到了~")
+                .setContentText("快點打開BrushGo來刷牙吧~")
                 .setDefaults(Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND)
                 .setContentInfo("推播資訊");
 
