@@ -171,12 +171,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            view.setIs24HourView(true);
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
             m_alarm.setText("AM"+formatter.format(m_calendar.getTime()));
+            startAlarm(m_calendar);
 
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
@@ -185,27 +185,24 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            view.setIs24HourView(true);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
             e_alarm.setText("PM"+formatter.format(e_calendar.getTime()));
-            startAlarm(true,e_calendar);
+            startAlarm(e_calendar);
 
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void startAlarm(boolean isNotifi, Calendar celandar) {
+    private void startAlarm(Calendar calendarTime) {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
         PendingIntent pendingIntent;
-        if(isNotifi) {
-            myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-            alarmManager.set(AlarmManager.RTC_WAKEUP,celandar.getTimeInMillis(), pendingIntent);
-        }
+        myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
     private int checkTime() {
         if(twominutes.isChecked())
