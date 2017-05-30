@@ -33,6 +33,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 /**
  * Created by swlab on 2017/5/5.
  */
@@ -125,7 +127,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         e_alarm=(TextView) findViewById(R.id.txt_evening);
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
-        formatter = new SimpleDateFormat(" HH:mm");
+        formatter = new SimpleDateFormat(" HH:mm", Locale.TAIWAN);
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
         threeminutes =(RadioButton)findViewById(R.id.rdb_three);
         fourminutes =(RadioButton)findViewById(R.id.rdb_four);
@@ -178,14 +180,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            m_calendar.setTimeZone(TimeZone.GMT_ZONE);
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
             m_alarm.setText("AM"+formatter.format(m_calendar.getTime()));
             startAlarm(m_calendar);
-
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
@@ -193,7 +193,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            e_calendar.setTimeZone(TimeZone.GMT_ZONE);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
