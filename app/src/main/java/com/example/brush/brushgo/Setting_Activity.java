@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.icu.text.TimeZoneFormat;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
 import android.os.Build;
@@ -127,7 +128,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         e_alarm=(TextView) findViewById(R.id.txt_evening);
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
-        formatter = new SimpleDateFormat(" HH:mm", Locale.TAIWAN);
+        formatter = new SimpleDateFormat(" HH:mm");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
         threeminutes =(RadioButton)findViewById(R.id.rdb_three);
         fourminutes =(RadioButton)findViewById(R.id.rdb_four);
@@ -180,6 +182,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            m_calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
@@ -193,6 +196,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            e_calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
