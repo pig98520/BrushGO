@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.icu.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -80,6 +81,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 m_time=dataSnapshot.getValue(String.class);
+                if(m_time==null)
+                    m_alarm.setText("AM 尚未設定");
+                else
                 m_alarm.setText("AM"+m_time);
             }
 
@@ -93,6 +97,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 e_time=dataSnapshot.getValue(String.class);
+                if(e_time==null)
+                    e_alarm.setText("PM 尚未設定");
+                else
                 e_alarm.setText("PM"+e_time);
             }
 
@@ -171,6 +178,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            m_calendar.setTimeZone(TimeZone.GMT_ZONE);
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
@@ -185,6 +193,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            e_calendar.setTimeZone(TimeZone.GMT_ZONE);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
