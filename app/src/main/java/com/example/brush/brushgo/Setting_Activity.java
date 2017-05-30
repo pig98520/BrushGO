@@ -211,6 +211,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
+        /*alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis()+ AlarmManager.INTERVAL_DAY,
+                AlarmManager.INTERVAL_DAY, pendingIntent);*/
     }
     private int checkTime() {
         if(twominutes.isChecked())
