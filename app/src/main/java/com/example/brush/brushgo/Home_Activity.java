@@ -1,7 +1,6 @@
 package com.example.brush.brushgo;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
@@ -19,7 +17,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +30,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -327,7 +323,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         {
             clockArray[i].setVisibility(View.INVISIBLE);
         }
-        countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
+        if(defaultTime%60<10)
+            countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
+        else
+            countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
