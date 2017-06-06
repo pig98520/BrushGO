@@ -7,10 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
-import android.icu.text.TimeZoneFormat;
-import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +30,11 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Locale;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+//import android.icu.text.SimpleDateFormat;
+//import android.icu.util.Calendar;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -129,7 +129,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
         formatter = new SimpleDateFormat(" HH:mm");
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        formatter.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
         threeminutes =(RadioButton)findViewById(R.id.rdb_three);
         fourminutes =(RadioButton)findViewById(R.id.rdb_four);
@@ -182,7 +182,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            m_calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            m_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
@@ -196,7 +196,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            e_calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            e_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
@@ -262,7 +262,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Setting_Activity.class);
+            intent.setClass(this,Information_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Question)

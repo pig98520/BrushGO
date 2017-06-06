@@ -145,7 +145,7 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Video_Activity.class);
+            intent.setClass(this,Information_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Question)
