@@ -53,7 +53,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private RadioGroup rg_time;
     private RadioGroup rg_reminder;
     private DrawerLayout drawer;
-    private int time=120;
+    private int time=2;
     private int remider=1;
     private Button morning;
     private Button evening;
@@ -239,9 +239,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         PendingIntent pendingIntent;
         myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-        /*alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis()+ AlarmManager.INTERVAL_DAY,
-                AlarmManager.INTERVAL_DAY, pendingIntent);*/
+//        alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis()+ AlarmManager.INTERVAL_DAY,
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
