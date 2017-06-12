@@ -187,7 +187,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
-            m_alarm.setText("AM"+formatter.format(m_calendar.getTime()));
+            m_time=formatter.format(m_calendar.getTime());
+            m_alarm.setText("AM"+m_time);
             startAlarm(m_calendar);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
@@ -200,7 +201,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
-            e_alarm.setText("PM"+formatter.format(e_calendar.getTime()));
+            e_time=formatter.format(e_calendar.getTime());
+            e_alarm.setText("PM"+e_time);
             startAlarm(e_calendar);
 
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
@@ -240,7 +242,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, formatter.format(m_calendar.getTime()),formatter.format(e_calendar.getTime()));
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, m_time,e_time);
         userRef.setValue(data);
         Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }
