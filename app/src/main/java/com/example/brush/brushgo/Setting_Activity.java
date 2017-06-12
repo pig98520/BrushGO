@@ -54,7 +54,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private RadioGroup rg_reminder;
     private DrawerLayout drawer;
     private int time=2;
-    private int remider=1;
+    private int reminder =1;
     private Button morning;
     private Button evening;
     private TextView m_alarm;
@@ -69,6 +69,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Firebase morningRef;
     private Firebase eveningRef;
     private Firebase userRef;
+    private Firebase timeRef;
+    private Firebase reminderRef;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
         Firebase.setAndroidContext(this);
@@ -82,7 +85,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void setValue() {
         morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
-        
+        timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");
+
         morningRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -115,6 +120,40 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
             }
         });
+/*        timeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                time=dataSnapshot.getValue(int.class)/3;
+                if(time==4)
+                    fourminutes.setChecked(true);
+                else if(time==3)
+                    threeminutes.setChecked(true);
+                else
+                    twominutes.setChecked(true);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        reminderRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                reminder =dataSnapshot.getValue(int.class);
+                if(reminder==7)
+                    oneweek.setChecked(true);
+                else if(time==3)
+                    threedays.setChecked(true);
+                else
+                    oneday.setChecked(true);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -168,11 +207,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                     if(oneday.isChecked())
-                        remider=1;
+                        reminder =1;
                     else if(threedays.isChecked())
-                        remider=3;
+                        reminder =3;
                     else if(oneweek.isChecked())
-                        remider=7;
+                        reminder =7;
                     updateUser();
             }
         });
@@ -246,7 +285,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60,remider, m_time,e_time);
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60, reminder, m_time,e_time);
         userRef.setValue(data);
         Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }
