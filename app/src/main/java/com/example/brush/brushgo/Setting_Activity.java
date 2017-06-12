@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,16 +44,17 @@ import java.util.Calendar;
 
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
-    private Button save;
     private RadioButton twominutes;
     private RadioButton threeminutes;
     private RadioButton fourminutes;
     private RadioButton oneday;
     private RadioButton threedays;
     private RadioButton oneweek;
+    private RadioGroup rg_time;
+    private RadioGroup rg_reminder;
     private DrawerLayout drawer;
-    private int time;
-    private int remider;
+    private int time=120;
+    private int remider=1;
     private Button morning;
     private Button evening;
     private TextView m_alarm;
@@ -79,6 +82,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void setValue() {
         morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
+        
         morningRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -121,7 +125,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         menu=(Button) findViewById(R.id.btn_menu);
-        save=(Button) findViewById(R.id.btn_save);
         morning=(Button) findViewById(R.id.btn_morning);
         evening=(Button) findViewById(R.id.btn_evening);
         m_alarm=(TextView) findViewById(R.id.txt_morning);
@@ -130,6 +133,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         m_calendar= Calendar.getInstance();
         formatter = new SimpleDateFormat(" HH:mm");
         formatter.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+        rg_time=(RadioGroup)findViewById(R.id.rg_time);
+        rg_reminder=(RadioGroup)findViewById(R.id.rg_remider);
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
         threeminutes =(RadioButton)findViewById(R.id.rdb_three);
         fourminutes =(RadioButton)findViewById(R.id.rdb_four);
@@ -146,15 +151,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 drawer.openDrawer(GravityCompat.START);
             }
         });
-        save.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                checkTime();
-                checkRemider();
-                updateUser();
-            }
-        });
         morning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +161,32 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 showDialog(2);
+            }
+        });
+        rg_reminder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                    if(oneday.isChecked())
+                        remider=1;
+                    else if(threedays.isChecked())
+                        remider=3;
+                    else if(oneweek.isChecked())
+                        remider=7;
+                    updateUser();
+            }
+        });
+        rg_time.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+            if(twominutes.isChecked())
+                time=2;
+            else if(threeminutes.isChecked())
+                time=3;
+            else if(fourminutes.isChecked())
+                time=4;
+                updateUser();
             }
         });
     }
@@ -191,6 +213,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_alarm.setText("AM"+m_time);
             startAlarm(m_calendar);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
+            updateUser();
         }
     };
     protected TimePickerDialog.OnTimeSetListener eveningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
@@ -204,8 +227,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_time=formatter.format(e_calendar.getTime());
             e_alarm.setText("PM"+e_time);
             startAlarm(e_calendar);
-
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
+            updateUser();
         }
     };
 
@@ -219,25 +242,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
         /*alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis()+ AlarmManager.INTERVAL_DAY,
                 AlarmManager.INTERVAL_DAY, pendingIntent);*/
-    }
-    private int checkTime() {
-        if(twominutes.isChecked())
-            time=2;
-        else if(threeminutes.isChecked())
-            time=3;
-        else if(fourminutes.isChecked())
-            time=4;
-        return time;
-    }
-
-    private int checkRemider() {
-        if(oneday.isChecked())
-            remider=1;
-        else if(threedays.isChecked())
-            remider=3;
-        else if(oneweek.isChecked())
-            remider=7;
-        return remider;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
