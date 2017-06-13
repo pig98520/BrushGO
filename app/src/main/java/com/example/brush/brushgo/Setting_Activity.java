@@ -57,6 +57,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private int reminder =1;
     private Button morning;
     private Button evening;
+    private Calendar now;
     private TextView m_alarm;
     private Calendar m_calendar;
     private String m_time;
@@ -168,6 +169,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         evening=(Button) findViewById(R.id.btn_evening);
         m_alarm=(TextView) findViewById(R.id.txt_morning);
         e_alarm=(TextView) findViewById(R.id.txt_evening);
+        now = Calendar.getInstance();
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
         formatter = new SimpleDateFormat(" HH:mm");
@@ -278,9 +280,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         PendingIntent pendingIntent;
         myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+        if(calendarTime.before(now)){
+            calendarTime.add(Calendar.DATE, 1);
+        }
 //        alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis()+ AlarmManager.INTERVAL_DAY,
-                AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
