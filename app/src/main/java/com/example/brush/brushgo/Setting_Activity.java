@@ -281,21 +281,22 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void morning_alarm(Calendar calendarTime) {
-
         intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        if(calendarTime.before(now)){
+        if(calendarTime.before(now))
             calendarTime.add(Calendar.DATE, 1);
-        }
+        else if(calendarTime.after(now))
+            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
        manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
     private void evening_alarm(Calendar calendarTime) {
         intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-        if(calendarTime.before(now)){
+        if(calendarTime.before(now))
             calendarTime.add(Calendar.DATE, 1);
-        }
+        else if(calendarTime.after(now))
+            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
         manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
