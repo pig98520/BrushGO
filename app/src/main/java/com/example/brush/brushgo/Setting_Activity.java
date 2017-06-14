@@ -65,6 +65,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Calendar e_calendar;
     private String e_time;
     private SimpleDateFormat formatter;
+    private AlarmManager manager;
+    private Intent intent;
+    private PendingIntent pendingIntent;
     private FirebaseAuth auth;
     private Firebase myFirebaseRef;
     private Firebase morningRef;
@@ -183,6 +186,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         threedays=(RadioButton)findViewById(R.id.rdb_threedays);
         oneweek=(RadioButton)findViewById(R.id.rdb_week);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
     }
 
     private void processControl() {
@@ -252,11 +256,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_calendar.set(Calendar.MILLISECOND, 0);
             m_time=formatter.format(m_calendar.getTime());
             m_alarm.setText("AM"+m_time);
-            startAlarm(m_calendar);
+            morning_alarm(m_calendar);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
         }
     };
+
     protected TimePickerDialog.OnTimeSetListener eveningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
@@ -265,27 +270,36 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
+            e_calendar.set(Calendar.MILLISECOND, 0);
             e_time=formatter.format(e_calendar.getTime());
             e_alarm.setText("PM"+e_time);
-            startAlarm(e_calendar);
+            evening_alarm(e_calendar);
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
         }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void startAlarm(Calendar calendarTime) {
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent;
-        PendingIntent pendingIntent;
-        myIntent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+    private void morning_alarm(Calendar calendarTime) {
+
+        intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         if(calendarTime.before(now)){
             calendarTime.add(Calendar.DATE, 1);
         }
-//        alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+       //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
+       manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+    private void evening_alarm(Calendar calendarTime) {
+        intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        if(calendarTime.before(now)){
+            calendarTime.add(Calendar.DATE, 1);
+        }
+        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateUser() {
