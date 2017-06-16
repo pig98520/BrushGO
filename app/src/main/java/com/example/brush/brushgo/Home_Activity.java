@@ -1,8 +1,6 @@
 package com.example.brush.brushgo;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -51,6 +49,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private TextView timer;
     private TextView countdown;
     private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
     private int defaultTime;
     private int timersec;
     private int currentTime;
@@ -71,8 +70,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private DrawerLayout drawer;
     private NavigationView navigateionView;
 
-    private Button btn_notifi;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
@@ -81,25 +78,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setValue();
         setMusic();
         processControl();
-        btn_notifi=(Button) findViewById(R.id.btn_notifi);
-        btn_notifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAlarm(true);
-            }
-    });
-    }
-
-    private void startAlarm(boolean isNotifi) {
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent;
-        PendingIntent pendingIntent;
-        if(isNotifi) {
-            myIntent = new Intent(Home_Activity.this, AlarmNotificationReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()  + 10000, pendingIntent);
-            Toast.makeText(Home_Activity.this,System.currentTimeMillis()+"",Toast.LENGTH_LONG).show();
-        }
     }
 
     private void setMusic() {
@@ -109,6 +87,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             musicIndex=1;
         music=new MediaPlayer(); //建立一個media player
         musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
+
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Music Loading");
+        progressDialog.setIcon(R.drawable.loading_512);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -116,13 +102,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 try {
                     music.setDataSource(musicUrl); //設定media的路徑
                     music.prepare();
+                    progressDialog.dismiss();
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
+
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                    progressDialog.dismiss();
             }
         });
     }
@@ -162,6 +150,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
+        progressDialog = new ProgressDialog(this);
         auth= FirebaseAuth.getInstance();
         clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
         clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
@@ -187,7 +176,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
                 if(music.isPlaying()){
-                    play.setBackgroundResource(R.drawable.play_button_512);
+                    play.setBackgroundResource(R.drawable.speaker_512);
                     music.pause();
                     timerPause();
                 }
@@ -197,12 +186,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if(music.isPlaying()){
-                    play.setBackgroundResource(R.drawable.play_button_512);
+                    play.setBackgroundResource(R.drawable.speaker_512);
                     music.pause();
                     timerPause();
                 }
                 else {
-                    play.setBackgroundResource(R.drawable.pause_button_512);
+                    play.setBackgroundResource(R.drawable.non_speaker_512);
                     music.start();
                     timerStart();
                 }
@@ -212,7 +201,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                play.setBackgroundResource(R.drawable.play_button_512);
+                play.setBackgroundResource(R.drawable.speaker_512);
                 timerStop();
             }
         });

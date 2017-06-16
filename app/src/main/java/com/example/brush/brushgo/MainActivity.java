@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private EditText edt_psw;
     private String user;
     private String psw;
+    private int timeArray[]=new int[] {120,180,240};
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authLinstener;
     private GoogleApiClient apiClient;
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
                         userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),180,3,"10:00","22:00");
+                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,"10:00","22:00");
                         userRef.setValue(data);
                     }
                 })
