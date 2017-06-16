@@ -89,14 +89,14 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void setValue() {
         morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
-        timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
-        reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");
+        /*timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");*/
 
         morningRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                m_time=dataSnapshot.getValue(String.class);
+            public void onDataChange(DataSnapshot m_dataSnapshot) {
+                m_time=m_dataSnapshot.getValue(String.class);
                 if(m_time==null)
                     m_alarm.setText("AM 尚未設定");
                 else
@@ -111,8 +111,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         eveningRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                e_time=dataSnapshot.getValue(String.class);
+            public void onDataChange(DataSnapshot e_dataSnapshot) {
+                e_time=e_dataSnapshot.getValue(String.class);
                 if(e_time==null)
                     e_alarm.setText("PM 尚未設定");
                 else
@@ -126,13 +126,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         });
 /*        timeRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                time=dataSnapshot.getValue(int.class)/3;
-                if(time==4)
+            public void onDataChange(DataSnapshot t_dataSnapshot) {
+                if(t_dataSnapshot.getValue(int.class)==240)
                     fourminutes.setChecked(true);
-                else if(time==3)
+                if(t_dataSnapshot.getValue(int.class)==180)
                     threeminutes.setChecked(true);
-                else
+                if(t_dataSnapshot.getValue(int.class)==120)
                     twominutes.setChecked(true);
             }
 
@@ -140,16 +139,15 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
-        reminderRef.addValueEventListener(new ValueEventListener() {
+        });*/
+        /*reminderRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                reminder =dataSnapshot.getValue(int.class);
-                if(reminder==7)
+            public void onDataChange(DataSnapshot r_dataSnapshot) {
+                if(r_dataSnapshot.getValue(int.class)==7)
                     oneweek.setChecked(true);
-                else if(time==3)
+                if(r_dataSnapshot.getValue(int.class)==3)
                     threedays.setChecked(true);
-                else
+                if(r_dataSnapshot.getValue(int.class)==1)
                     oneday.setChecked(true);
             }
 
@@ -214,9 +212,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                     if(oneday.isChecked())
                         reminder =1;
-                    else if(threedays.isChecked())
+                    if(threedays.isChecked())
                         reminder =3;
-                    else if(oneweek.isChecked())
+                    if(oneweek.isChecked())
                         reminder =7;
                     updateUser();
             }
@@ -226,11 +224,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
             if(twominutes.isChecked())
-                time=2;
-            else if(threeminutes.isChecked())
-                time=3;
-            else if(fourminutes.isChecked())
-                time=4;
+                time=120;
+            if(threeminutes.isChecked())
+                time=180;
+            if(fourminutes.isChecked())
+                time=240;
                 updateUser();
             }
         });
@@ -290,6 +288,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
        manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+
     private void evening_alarm(Calendar calendarTime) {
         intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
@@ -304,7 +303,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time*60, reminder, m_time,e_time);
+        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time, reminder, m_time,e_time);
         userRef.setValue(data);
         Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
     }

@@ -6,21 +6,21 @@ package com.example.brush.brushgo;
 public class DB_Setting {
     private String user;
     private int time;
-    private int remider;
+    private int reminder;
     private String morning;
     private String evening;
 
-    public DB_Setting(){
+    public DB_Setting() {
 
     }
-    public DB_Setting(String user, int time, int remider, String morning, String evening) {
+
+    public DB_Setting(String user, int time, int reminder, String morning, String evening) {
         this.user = user;
         this.time = time;
-        this.remider = remider;
+        this.reminder = reminder;
         this.morning = morning;
         this.evening = evening;
     }
-
     public String getUser() {
         return user;
     }
@@ -37,12 +37,12 @@ public class DB_Setting {
         this.time = time;
     }
 
-    public int getRemider() {
-        return remider;
+    public int getReminder() {
+        return reminder;
     }
 
-    public void setRemider(int remider) {
-        this.remider = remider;
+    public void setReminder(int reminder) {
+        this.reminder = reminder;
     }
 
     public String getMorning() {
@@ -60,4 +60,5 @@ public class DB_Setting {
     public void setEvening(String evening) {
         this.evening = evening;
     }
+
 }
