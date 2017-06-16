@@ -89,10 +89,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
 
         progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Music loading,please wait...");
-        progressDialog.setIcon(R.drawable.loading_512);
+        progressDialog.setMessage("載入音樂中,請稍後");
+        progressDialog.setIcon(R.drawable.loading_24);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
+        progressDialog.setIndeterminate(false);
         progressDialog.show();
 
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
