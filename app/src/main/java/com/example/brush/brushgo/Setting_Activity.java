@@ -53,8 +53,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private RadioGroup rg_time;
     private RadioGroup rg_reminder;
     private DrawerLayout drawer;
-    private int time=2;
-    private int reminder =1;
+    private int time;
+    private int reminder;
     private Button morning;
     private Button evening;
     private Calendar now;
@@ -89,8 +89,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void setValue() {
         morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
-        /*timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
-        reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");*/
+        timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");
 
         morningRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -124,38 +124,42 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
             }
         });
-/*        timeRef.addValueEventListener(new ValueEventListener() {
+        timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot t_dataSnapshot) {
-                if(t_dataSnapshot.getValue(int.class)==240)
-                    fourminutes.setChecked(true);
-                if(t_dataSnapshot.getValue(int.class)==180)
-                    threeminutes.setChecked(true);
-                if(t_dataSnapshot.getValue(int.class)==120)
-                    twominutes.setChecked(true);
+               time=t_dataSnapshot.getValue(int.class);
+    /*
+                    if(t_dataSnapshot.getValue(int.class)==240)
+                        fourminutes.setChecked(true);
+                    if(t_dataSnapshot.getValue(int.class)==180)
+                        threeminutes.setChecked(true);
+                    if(t_dataSnapshot.getValue(int.class)==120)
+                        twominutes.setChecked(true);
+    */
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });*/
-        /*reminderRef.addValueEventListener(new ValueEventListener() {
+        });
+        reminderRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot r_dataSnapshot) {
-                if(r_dataSnapshot.getValue(int.class)==7)
-                    oneweek.setChecked(true);
-                if(r_dataSnapshot.getValue(int.class)==3)
-                    threedays.setChecked(true);
-                if(r_dataSnapshot.getValue(int.class)==1)
-                    oneday.setChecked(true);
+            reminder=r_dataSnapshot.getValue(int.class);
+    /*                if(r_dataSnapshot.getValue(int.class)==7)
+                        oneweek.setChecked(true);
+                    if(r_dataSnapshot.getValue(int.class)==3)
+                        threedays.setChecked(true);
+                    if(r_dataSnapshot.getValue(int.class)==1)
+                        oneday.setChecked(true);*/
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });*/
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -281,23 +285,27 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void morning_alarm(Calendar calendarTime) {
         intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        if(calendarTime.before(now))
+        if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE, 1);
-        if(calendarTime.after(now))
-            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
-       //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-       manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            calendarTime.add(Calendar.DATE,-1);
+        }
+        else
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
 
     private void evening_alarm(Calendar calendarTime) {
         intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-        if(calendarTime.before(now))
+        if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE, 1);
-        if(calendarTime.after(now))
-            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            calendarTime.add(Calendar.DATE,-1);
+        }
+        else
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 
