@@ -283,7 +283,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         if(calendarTime.before(now))
             calendarTime.add(Calendar.DATE, 1);
-        else if(calendarTime.after(now))
+        if(calendarTime.after(now))
             calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
        manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -294,7 +294,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
         if(calendarTime.before(now))
             calendarTime.add(Calendar.DATE, 1);
-        else if(calendarTime.after(now))
+        if(calendarTime.after(now))
             calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
         manager.setRepeating(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);

@@ -55,10 +55,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         processControllers();
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,6 +168,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onStart(){
         super.onStart();
         auth.addAuthStateListener(authLinstener);
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void login(final String user, final String psw){

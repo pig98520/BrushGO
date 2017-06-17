@@ -61,9 +61,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase readFirebaseRef;
     private Firebase musicFirebaseRef;
     private Firebase recordFirebaseRef;
+    private Firebase userFirebaseRef;
     private ImageView clockArray[]=new ImageView[60];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
+    private int timeArray[]=new int[]{120,180,240};
     private MediaPlayer music;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
@@ -79,7 +81,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setMusic();
         processControl();
     }
-
     private void setMusic() {
         if(musicIndex<10)
             musicIndex+=1;
@@ -122,7 +123,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 defaultTime=dataSnapshot.getValue(int.class);
                 if(defaultTime==0)
-                    defaultTime=180;
+                {
+                    defaultTime=timeArray[(int) (Math.random()*3)];
+                    updateUser();
+                }
                 timer.setText(defaultTime+"");
                 if(defaultTime%60<10)
                     countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
@@ -136,6 +140,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
+
+    private void updateUser() {
+        userFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid());
+        DB_CreateUser data = new DB_CreateUser(auth.getCurrentUser().getEmail(),defaultTime,3);
+        userFirebaseRef.setValue(data);
+        Toast.makeText(Home_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void processView() {
         layout=(ConstraintLayout)findViewById(R.id.constraintLayout);
@@ -211,7 +223,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 music.stop();
                 music.release();
                 timerPause();
-                play.setBackgroundResource(R.drawable.play_button_512);
+                play.setBackgroundResource(R.drawable.speaker_512);
                 setMusic();
             }
         });
@@ -244,7 +256,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onFinish() {
-                play.setBackgroundResource(R.drawable.play_button_512);
+                play.setBackgroundResource(R.drawable.speaker_512);
                 timerStop();
                 finishDialog();
             }
