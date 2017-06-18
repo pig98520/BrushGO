@@ -3,6 +3,7 @@ package com.example.brush.brushgo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,33 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
     private Button menu;
     private DrawerLayout drawer;
     private FirebaseAuth auth;
+    private Boolean isdoubleClick=false;
+
+    @Override
+    public void onBackPressed() {
+        if(!isdoubleClick)
+        {
+            Toast.makeText(Video_Activity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
+            isdoubleClick=true;
+        }
+        else
+        {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+        new CountDownTimer(5000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                isdoubleClick=false;
+            }
+        }.start();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video);

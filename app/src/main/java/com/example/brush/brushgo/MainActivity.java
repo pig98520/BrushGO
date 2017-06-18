@@ -2,6 +2,7 @@ package com.example.brush.brushgo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -43,9 +44,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authLinstener;
     private GoogleApiClient apiClient;
+    private Firebase myFirebaseRef;
+    private Firebase userRef;
+    private boolean isdoubleClick=false;
 
-    Firebase myFirebaseRef;
-    Firebase userRef;
+    @Override
+    public void onBackPressed() {
+        if(!isdoubleClick)
+        {
+            Toast.makeText(MainActivity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
+            isdoubleClick=true;
+        }
+        else
+        {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+        new CountDownTimer(5000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                isdoubleClick=false;
+            }
+        }.start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Firebase.setAndroidContext(this);

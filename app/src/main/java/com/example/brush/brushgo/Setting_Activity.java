@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -75,6 +76,32 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Firebase userRef;
     private Firebase timeRef;
     private Firebase reminderRef;
+    private Boolean isdoubleClick=false;
+
+    @Override
+    public void onBackPressed() {
+        if(!isdoubleClick)
+        {
+            Toast.makeText(Setting_Activity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
+            isdoubleClick=true;
+        }
+        else
+        {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+        new CountDownTimer(5000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                isdoubleClick=false;
+            }
+        }.start();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {

@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.brush.brushgo.R.id.Home;
 import static com.example.brush.brushgo.R.id.drawerLayout;
 
 /**
@@ -71,6 +72,32 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
     private NavigationView navigateionView;
+    private boolean isdoubleClick=false;
+
+    @Override
+    public void onBackPressed() {
+        if(!isdoubleClick)
+        {
+            Toast.makeText(Home_Activity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
+            isdoubleClick=true;
+        }
+        else
+        {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+        new CountDownTimer(5000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                isdoubleClick=false;
+            }
+        }.start();
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +108,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setMusic();
         processControl();
     }
+
     private void setMusic() {
         if(musicIndex<10)
             musicIndex+=1;
@@ -163,7 +191,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
-        progressDialog = new ProgressDialog(this,R.style.AlertDialogCustom);
+        progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
         clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
         clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
@@ -282,7 +310,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
         progressBar.setMax(defaultTime);
         progressBar.setProgress(defaultTime-currentTime);
-        progressBar.setIndeterminate(true);
     }
 
     private void finishDialog() {
@@ -334,7 +361,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
 
-        if(id==R.id.Home)
+        if(id== Home)
         {
             Intent intent=new Intent();
             intent.setClass(this,Home_Activity.class);
