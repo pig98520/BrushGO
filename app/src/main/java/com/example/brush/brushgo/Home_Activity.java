@@ -313,7 +313,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void finishDialog() {
-        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
         finishDialog.setTitle("時間到了~");
         finishDialog.setMessage("恭喜你刷好牙了，請按確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
