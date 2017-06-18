@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -100,9 +101,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-        Firebase.setAndroidContext(this);
         processView();
         setValue();
         setMusic();
@@ -116,7 +118,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             musicIndex=1;
         music=new MediaPlayer(); //建立一個media player
         musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
-
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("載入音樂中,請稍後");
         progressDialog.setIcon(R.drawable.loading_24);

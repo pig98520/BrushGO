@@ -9,9 +9,8 @@
     </style>
 
     <style name="DialogCustom" parent="Theme.AppCompat.Light.Dialog">
-        <!--<item name="colorAccent">@color/colorPrimary</item>-->
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:background">@drawable/rounded_corner</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+       <!-- <item name="android:background">@drawable/rounded_corner</item>-->
         <item name="android:textColor">@color/black</item>
     </style>
 </resources>

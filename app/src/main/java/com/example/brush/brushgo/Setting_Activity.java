@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -105,6 +106,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
@@ -267,10 +269,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
 
     protected Dialog onCreateDialog(int id){
-        if(id==1)
-            return new TimePickerDialog(Setting_Activity.this,morningTimePickerListner, 0, 0,false);
-        if(id==2)
-            return new TimePickerDialog(Setting_Activity.this,eveningTimePickerListner, 0,0,false);
+        if(id==1) {
+            return new TimePickerDialog(Setting_Activity.this, morningTimePickerListner, 0,0, true);
+        }
+        if(id==2) {
+            return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListner,0,0, true);
+        }
         return null;
     }
 
