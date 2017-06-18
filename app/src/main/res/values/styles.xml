@@ -5,9 +5,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
     </style>
 
-    <style name="Progress_Theme" parent="@android:style/Theme.Dialog">
-
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog">
+        <!--<item name="colorAccent">@color/colorPrimary</item>-->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:background">@drawable/rounded_corner</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

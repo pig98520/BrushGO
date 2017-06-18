@@ -93,7 +93,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressDialog.setMessage("載入音樂中,請稍後");
         progressDialog.setIcon(R.drawable.loading_24);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(false);
+        progressDialog.setIndeterminate(true);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.show();
 
         musicFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -162,7 +163,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this,R.style.AlertDialogCustom);
         auth= FirebaseAuth.getInstance();
         clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
         clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
@@ -281,7 +282,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
         progressBar.setMax(defaultTime);
         progressBar.setProgress(defaultTime-currentTime);
-        progressBar.getProgressDrawable().setColorFilter(Color.BLACK,android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar.setIndeterminate(true);
     }
 
     private void finishDialog() {
