@@ -1,9 +1,11 @@
 package com.example.brush.brushgo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -182,10 +184,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });
         btn_forget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Are you forget your password?", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent();
-                intent.setClass(MainActivity.this,Question_Activity.class);
-                startActivity(intent);
+                forgetDialog();
             }
         });
         btn_google.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +193,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
     }
+
+    private void forgetDialog() {
+            AlertDialog.Builder forgetDialog=new AlertDialog.Builder(this);
+            forgetDialog.setTitle("忘記密碼");
+            forgetDialog.setMessage("是否發送忘記密碼E-mail聯絡客服?");
+            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent sendMail = new Intent(Intent.ACTION_SEND);
+                    sendMail.setType("message/rfc822");
+                    sendMail.putExtra(Intent.EXTRA_EMAIL  , new String[]{"brushgoapp@gmail.com"});
+                    sendMail.putExtra(Intent.EXTRA_SUBJECT, "我忘記我的BrushGo密碼");
+                    sendMail.putExtra(Intent.EXTRA_TEXT   , "請完成以下資料，我們將盡快發送新的密碼至您的Mail\n\n\n" +
+                                                                "--------------------------------------------------\n"+
+                                                                "姓名:\n\n"+
+                                                                "郵件:\n\n"+
+                                                                "備用郵件:\n\n"+
+                                                                "--------------------------------------------------"+
+                                                                "\n\n\n感謝您的填寫，我們將盡快為您處理");
+                    try {
+                        startActivity(Intent.createChooser(sendMail, "郵件傳送中..."));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(MainActivity.this, "傳送郵件失敗", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            };
+            forgetDialog.setNeutralButton("是",confirmClick);
+            forgetDialog.setNegativeButton("否",cancelClick);
+            forgetDialog.show();
+    }
+
     protected void onStart(){
         super.onStart();
         auth.addAuthStateListener(authLinstener);
