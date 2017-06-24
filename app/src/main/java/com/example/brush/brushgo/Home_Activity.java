@@ -69,6 +69,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private CountDownTimer countdownTimer;
     private int timeArray[]=new int[]{120,180,240};
     private MediaPlayer music;
+    private MediaPlayer finish_music;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
@@ -289,6 +290,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 play.setBackgroundResource(R.drawable.speaker_512);
                 timerStop();
                 finishDialog();
+                finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
+                finish_music.start();
             }
         };
         countdownTimer.start();
@@ -320,6 +323,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                finish_music.stop();
                 recordData();
             }
         };
