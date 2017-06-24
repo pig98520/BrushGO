@@ -63,9 +63,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private TextView m_alarm;
     private Calendar m_calendar;
     private String m_time;
+    private String[] m_array;
     private TextView e_alarm;
     private Calendar e_calendar;
     private String e_time;
+    private String [] e_array;
     private SimpleDateFormat formatter;
     private AlarmManager manager;
     private Intent intent;
@@ -125,11 +127,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot m_dataSnapshot) {
-                m_time=m_dataSnapshot.getValue(String.class);
+                m_time=m_dataSnapshot.getValue(String.class).trim();
                 if(m_time==null)
                     m_alarm.setText("AM 尚未設定");
                 else
-                m_alarm.setText("AM"+m_time);
+                m_alarm.setText("AM "+m_time);
             }
 
             @Override
@@ -141,11 +143,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot e_dataSnapshot) {
-                e_time=e_dataSnapshot.getValue(String.class);
+                e_time=e_dataSnapshot.getValue(String.class).trim();
                 if(e_time==null)
                     e_alarm.setText("PM 尚未設定");
                 else
-                e_alarm.setText("PM"+e_time);
+                e_alarm.setText("PM "+e_time);
             }
 
             @Override
@@ -270,42 +272,49 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     protected Dialog onCreateDialog(int id){
         if(id==1) {
-            return new TimePickerDialog(Setting_Activity.this, morningTimePickerListner, 0,0, true);
+            m_array=m_time.split(":");
+            return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener,Integer.parseInt(m_array[0]),Integer.parseInt(m_array[1]), false);
         }
         if(id==2) {
-            return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListner,0,0, true);
+            e_array=e_time.split(":");
+            return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener,Integer.parseInt(e_array[0]),Integer.parseInt(e_array[1]), true);
         }
         return null;
     }
 
-    protected TimePickerDialog.OnTimeSetListener morningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
+    protected TimePickerDialog.OnTimeSetListener morningTimePickerListener =new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             m_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            if(hourOfDay>12)
+                hourOfDay-=12;
             m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
-            m_time=formatter.format(m_calendar.getTime());
-            m_alarm.setText("AM"+m_time);
+            m_time=formatter.format(m_calendar.getTime()).trim();
+            m_alarm.setText("AM "+m_time);
             morning_alarm(m_calendar);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
         }
     };
 
-    protected TimePickerDialog.OnTimeSetListener eveningTimePickerListner=new TimePickerDialog.OnTimeSetListener(){
+    protected TimePickerDialog.OnTimeSetListener eveningTimePickerListener =new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             e_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            if(hourOfDay<12)
+                hourOfDay+=12;
+            e_calendar.set(Calendar.AM_PM,1);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
             e_calendar.set(Calendar.MILLISECOND, 0);
-            e_time=formatter.format(e_calendar.getTime());
-            e_alarm.setText("PM"+e_time);
+            e_time=formatter.format(e_calendar.getTime()).trim();
+            e_alarm.setText("PM "+e_time);
             evening_alarm(e_calendar);
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
