@@ -295,8 +295,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_calendar.set(Calendar.MILLISECOND, 0);
             m_time=formatter.format(m_calendar.getTime()).trim();
             m_alarm.setText("AM "+m_time);
-            view.setHour(hourOfDay);
-            view.setMinute(minute);
+            view.setCurrentHour(hourOfDay);
+            view.setCurrentMinute(minute);
             morning_alarm(m_calendar);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
@@ -317,8 +317,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.set(Calendar.MILLISECOND, 0);
             e_time=formatter.format(e_calendar.getTime()).trim();
             e_alarm.setText("PM "+e_time);
-            view.setHour(hourOfDay);
-            view.setMinute(minute);
+            view.setCurrentHour(hourOfDay);
+            view.setCurrentMinute(minute);
             evening_alarm(e_calendar);
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
             updateUser();
