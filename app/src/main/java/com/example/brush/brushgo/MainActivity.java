@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 user= edt_id.getText().toString();
                 psw= edt_psw.getText().toString();
                 if(user.equals("")||psw.equals(""))
-                    Toast.makeText(MainActivity.this, "Please enter your ID and Password~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "請輸入帳號和密碼", Toast.LENGTH_SHORT).show();
                 else
                     login(user,psw);
             }
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 user= edt_id.getText().toString();
                 psw= edt_psw.getText().toString();
                 if(user.equals("")||psw.equals(""))
-                    Toast.makeText(MainActivity.this,  "Please enter your ID and Password~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,  "請輸入帳號和密碼", Toast.LENGTH_SHORT).show();
                 else
                     createUser(user,psw);
             }

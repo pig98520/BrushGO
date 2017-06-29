@@ -22,8 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -59,6 +61,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private int reminder;
     private Button morning;
     private Button evening;
+    private Switch alarm_switch;
     private Calendar now;
     private TextView m_alarm;
     private Calendar m_calendar;
@@ -127,11 +130,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot m_dataSnapshot) {
-                m_time=m_dataSnapshot.getValue(String.class).trim();
+                m_time=m_dataSnapshot.getValue(String.class);
                 if(m_time==null)
                     m_alarm.setText("AM 尚未設定");
                 else
-                m_alarm.setText("AM "+m_time);
+                m_alarm.setText("AM "+m_time.trim());
             }
 
             @Override
@@ -143,11 +146,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot e_dataSnapshot) {
-                e_time=e_dataSnapshot.getValue(String.class).trim();
+                e_time=e_dataSnapshot.getValue(String.class);
                 if(e_time==null)
                     e_alarm.setText("PM 尚未設定");
                 else
-                e_alarm.setText("PM "+e_time);
+                e_alarm.setText("PM "+e_time.trim());
             }
 
             @Override
@@ -201,6 +204,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         menu=(Button) findViewById(R.id.btn_menu);
+        alarm_switch=(Switch)findViewById(R.id.alarm_switch);
         morning=(Button) findViewById(R.id.btn_morning);
         evening=(Button) findViewById(R.id.btn_evening);
         m_alarm=(TextView) findViewById(R.id.txt_morning);
@@ -241,6 +245,30 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 showDialog(2);
             }
         });
+        alarm_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(alarm_switch.isChecked())
+                {
+                    morning.setVisibility(View.VISIBLE);
+                    m_alarm.setVisibility(View.VISIBLE);
+                    evening.setVisibility(View.VISIBLE);
+                    e_alarm.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    morning.setVisibility(View.INVISIBLE);
+                    m_alarm.setVisibility(View.INVISIBLE);
+                    evening.setVisibility(View.INVISIBLE);
+                    e_alarm.setVisibility(View.INVISIBLE);
+                    manager.cancel(pendingIntent);
+                    m_time=null;
+                    e_time=null;
+                    updateUser();
+                }
+            }
+        });
         rg_reminder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -272,12 +300,20 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     protected Dialog onCreateDialog(int id){
         if(id==1) {
-            m_array=m_time.split(":");
-            return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener,Integer.parseInt(m_array[0]),Integer.parseInt(m_array[1]), false);
+            if(m_time!=null) {
+                m_array = m_time.split(":");
+                return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener, Integer.parseInt(m_array[0]), Integer.parseInt(m_array[1]), true);
+            }
+            else
+                return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener,0,0, true);
         }
         if(id==2) {
-            e_array=e_time.split(":");
-            return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener,Integer.parseInt(e_array[0]),Integer.parseInt(e_array[1]), true);
+            if(e_time!=null) {
+                e_array = e_time.split(":");
+                return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener, Integer.parseInt(e_array[0]), Integer.parseInt(e_array[1]), true);
+            }
+            else
+                return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener, 0,0, true);
         }
         return null;
     }
