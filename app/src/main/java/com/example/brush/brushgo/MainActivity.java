@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void forgetDialog() {
             AlertDialog.Builder forgetDialog=new AlertDialog.Builder(this);
             forgetDialog.setTitle("忘記密碼");
-            forgetDialog.setMessage("是否發送忘記密碼E-mail聯絡客服?");
+            forgetDialog.setMessage("是否發送忘記密碼E-mail聯絡客服?\n\n"+"若無安裝郵件軟體，請寫信到brushgoapp@gmail.com");
             DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
