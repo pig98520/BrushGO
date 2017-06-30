@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">BrushGo</string>
     <string name="BrushGo">BrushGo</string>
-    <string name="ID">帳號</string>
     <string name="password">密碼</string>
     <string name="chkContract">我已詳閱、了解並接受BrushGo的服務條款、隱私權與個人保護政策。</string>
     <string name="signin">登入</string>
@@ -24,4 +23,5 @@
     <string name="evening">PM</string>
     <string name="twominutes">兩分鐘</string>
     <string name="alarm_cancel">關閉提醒</string>
+    <string name="ID">帳號</string>
 </resources>

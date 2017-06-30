@@ -31,6 +31,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG =" MainActivity" ;
     private static final int RC_SIGN_IN=1;
@@ -268,19 +271,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
                         userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,"10:00","22:00");
+                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
                         userRef.setValue(data);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this,"註冊失敗，請檢查帳號是否存在。", Toast.LENGTH_SHORT).show();
+                        if(!isEmailValid(user))
+                            Toast.makeText(MainActivity.this,"帳號必須為電子郵件。", Toast.LENGTH_SHORT).show();
+                        else if(psw.length()<6)
+                            Toast.makeText(MainActivity.this,"密碼至少為六碼。", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(MainActivity.this,"註冊失敗，請檢查帳號是否已存在。", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         
     }
+
 }

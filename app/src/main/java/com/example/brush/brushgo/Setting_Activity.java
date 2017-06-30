@@ -161,15 +161,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot t_dataSnapshot) {
-               time=t_dataSnapshot.getValue(int.class);
-    /*
-                    if(t_dataSnapshot.getValue(int.class)==240)
-                        fourminutes.setChecked(true);
-                    if(t_dataSnapshot.getValue(int.class)==180)
-                        threeminutes.setChecked(true);
-                    if(t_dataSnapshot.getValue(int.class)==120)
-                        twominutes.setChecked(true);
-    */
+                time=t_dataSnapshot.getValue(int.class);
+                if(time==240)
+                    fourminutes.setChecked(true);
+                else if(time==180)
+                    threeminutes.setChecked(true);
+                else if(time==120)
+                    twominutes.setChecked(true);
             }
 
             @Override
@@ -181,12 +179,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onDataChange(DataSnapshot r_dataSnapshot) {
             reminder=r_dataSnapshot.getValue(int.class);
-    /*                if(r_dataSnapshot.getValue(int.class)==7)
-                        oneweek.setChecked(true);
-                    if(r_dataSnapshot.getValue(int.class)==3)
-                        threedays.setChecked(true);
-                    if(r_dataSnapshot.getValue(int.class)==1)
-                        oneday.setChecked(true);*/
+                if(reminder==7)
+                    oneweek.setChecked(true);
+                else if(reminder==3)
+                    threedays.setChecked(true);
+                else if(reminder==1)
+                    oneday.setChecked(true);
             }
 
             @Override
@@ -262,10 +260,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                     m_alarm.setVisibility(View.INVISIBLE);
                     evening.setVisibility(View.INVISIBLE);
                     e_alarm.setVisibility(View.INVISIBLE);
-                    manager.cancel(pendingIntent);
-                    m_time=null;
-                    e_time=null;
-                    updateUser();
+                    if(pendingIntent!=null){
+                        manager.cancel(pendingIntent);
+                        m_time=null;
+                        e_time=null;
+                        eveningRef.setValue(null);
+                        morningRef.setValue(null);
+                    }
                 }
             }
         });
@@ -273,13 +274,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                    if(oneday.isChecked())
-                        reminder =1;
-                    if(threedays.isChecked())
-                        reminder =3;
-                    if(oneweek.isChecked())
-                        reminder =7;
-                    updateUser();
+            if(oneday.isChecked())
+                reminder =1;
+            if(threedays.isChecked())
+                reminder =3;
+            if(oneweek.isChecked())
+                reminder =7;
+            reminderRef.setValue(reminder);
             }
         });
         rg_time.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -292,7 +293,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 time=180;
             if(fourminutes.isChecked())
                 time=240;
-                updateUser();
+            timeRef.setValue(time);
             }
         });
     }
@@ -334,8 +335,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
             morning_alarm(m_calendar);
+            morningRef.setValue(m_time);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
-            updateUser();
         }
     };
 
@@ -356,8 +357,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
             evening_alarm(e_calendar);
+            eveningRef.setValue(e_time);
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
-            updateUser();
         }
     };
 
@@ -388,13 +389,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void updateUser() {
-        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),time, reminder, m_time,e_time);
-        userRef.setValue(data);
-        Toast.makeText(Setting_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
-    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
