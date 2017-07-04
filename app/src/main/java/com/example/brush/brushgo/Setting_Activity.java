@@ -79,7 +79,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Firebase myFirebaseRef;
     private Firebase morningRef;
     private Firebase eveningRef;
-    private Firebase userRef;
     private Firebase timeRef;
     private Firebase reminderRef;
     private Boolean isdoubleClick=false;
@@ -200,7 +199,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
         auth= FirebaseAuth.getInstance();
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
-        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         menu=(Button) findViewById(R.id.btn_menu);
         alarm_switch=(Switch)findViewById(R.id.alarm_switch);
         morning=(Button) findViewById(R.id.btn_morning);
@@ -260,13 +258,18 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                     m_alarm.setVisibility(View.INVISIBLE);
                     evening.setVisibility(View.INVISIBLE);
                     e_alarm.setVisibility(View.INVISIBLE);
-                    if(pendingIntent!=null){
-                        manager.cancel(pendingIntent);
-                        m_time=null;
-                        e_time=null;
-                        eveningRef.setValue(null);
-                        morningRef.setValue(null);
-                    }
+                    m_time=null;
+                    e_time=null;
+                    eveningRef.setValue(null);
+                    morningRef.setValue(null);
+                    /*if(pendingIntent!=null)
+                    {
+                        try {
+                            manager.cancel(pendingIntent);
+                        } catch (Exception e) {
+                            Log.e("Fail", "AlarmManager update was not canceled. " + e.toString());
+                        }
+                    }*/
                 }
             }
         });
@@ -347,7 +350,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
             if(hourOfDay<12)
                 hourOfDay+=12;
-            e_calendar.set(Calendar.AM_PM,1);
             e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
