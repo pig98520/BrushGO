@@ -220,6 +220,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         oneweek=(RadioButton)findViewById(R.id.rdb_week);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
     }
 
     private void processControl() {
@@ -262,14 +263,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                     e_time=null;
                     eveningRef.setValue(null);
                     morningRef.setValue(null);
-                    /*if(pendingIntent!=null)
-                    {
-                        try {
-                            manager.cancel(pendingIntent);
-                        } catch (Exception e) {
-                            Log.e("Fail", "AlarmManager update was not canceled. " + e.toString());
-                        }
-                    }*/
+                    if(pendingIntent!=null)
+                        manager.cancel(pendingIntent);
                 }
             }
         });
@@ -337,7 +332,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_alarm.setText("AM "+m_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            morning_alarm(m_calendar);
+            alarmManager(m_calendar,0);
             morningRef.setValue(m_time);
             Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
@@ -358,16 +353,15 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_alarm.setText("PM "+e_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            evening_alarm(e_calendar);
+            alarmManager(e_calendar,1);
             eveningRef.setValue(e_time);
             Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void morning_alarm(Calendar calendarTime) {
-        intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+    private void alarmManager(Calendar calendarTime,int id) {
+        pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE, 1);
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -378,18 +372,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
 
-    private void evening_alarm(Calendar calendarTime) {
-        intent = new Intent(Setting_Activity.this, AlarmNotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-        if(calendarTime.before(now)) {
-            calendarTime.add(Calendar.DATE, 1);
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            calendarTime.add(Calendar.DATE,-1);
-        }
-        else
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
