@@ -263,8 +263,10 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                     e_time=null;
                     eveningRef.setValue(null);
                     morningRef.setValue(null);
-                    if(pendingIntent!=null)
-                        manager.cancel(pendingIntent);
+                    if(pendingIntent!=null) {
+                        pendingIntent = PendingIntent.getBroadcast(Setting_Activity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        pendingIntent = PendingIntent.getBroadcast(Setting_Activity.this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    }
                 }
             }
         });
