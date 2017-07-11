@@ -365,9 +365,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private void alarmManager(Calendar calendarTime,int id) {
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if(calendarTime.before(now)) {
-            calendarTime.add(Calendar.DATE, 1);
+            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE)+1);
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            calendarTime.add(Calendar.DATE,-1);
+            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
         }
         else
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
