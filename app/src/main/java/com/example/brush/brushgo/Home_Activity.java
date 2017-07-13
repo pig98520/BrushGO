@@ -53,6 +53,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
     private int defaultTime;
+    private int aveTime;
     private int timersec;
     private int currentTime;
     private int backgroundColor;
@@ -64,7 +65,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase musicFirebaseRef;
     private Firebase recordFirebaseRef;
     private Firebase userFirebaseRef;
-    private ImageView clockArray[]=new ImageView[60];
+    private ImageView upper_left[]=new ImageView[8];
+    private ImageView upper_right[]=new ImageView[8];
+    private ImageView lower_left[]=new ImageView[8];
+    private ImageView lower_right[]=new ImageView[8];
+    private ImageView arrow_array[]=new ImageView[8];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private int timeArray[]=new int[]{120,180,240};
@@ -195,22 +200,48 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
-        clockArray[0]=(ImageView)findViewById(R.id.imageView_12);
-        clockArray[5]=(ImageView)findViewById(R.id.imageView_1);
-        clockArray[10]=(ImageView)findViewById(R.id.imageView_2);
-        clockArray[15]=(ImageView)findViewById(R.id.imageView_3);
-        clockArray[20]=(ImageView)findViewById(R.id.imageView_4);
-        clockArray[25]=(ImageView)findViewById(R.id.imageView_5);
-        clockArray[30]=(ImageView)findViewById(R.id.imageView_6);
-        clockArray[35]=(ImageView)findViewById(R.id.imageView_7);
-        clockArray[40]=(ImageView)findViewById(R.id.imageView_8);
-        clockArray[45]=(ImageView)findViewById(R.id.imageView_9);
-        clockArray[50]=(ImageView)findViewById(R.id.imageView_10);
-        clockArray[55]=(ImageView)findViewById(R.id.imageView_11);
+        upper_left[0]=(ImageView)findViewById(R.id.imageView_1);
+        upper_left[1]=(ImageView)findViewById(R.id.imageView_2);
+        upper_left[2]=(ImageView)findViewById(R.id.imageView_3);
+        upper_left[3]=(ImageView)findViewById(R.id.imageView_4);
+        upper_left[4]=(ImageView)findViewById(R.id.imageView_5);
+        upper_left[5]=(ImageView)findViewById(R.id.imageView_6);
+        upper_left[6]=(ImageView)findViewById(R.id.imageView_7);
+        upper_right[0]=(ImageView)findViewById(R.id.imageView_8);
+        upper_right[1]=(ImageView)findViewById(R.id.imageView_9);
+        upper_right[2]=(ImageView)findViewById(R.id.imageView_10);
+        upper_right[3]=(ImageView)findViewById(R.id.imageView_11);
+        upper_right[4]=(ImageView)findViewById(R.id.imageView_12);
+        upper_right[5]=(ImageView)findViewById(R.id.imageView_13);
+        upper_right[6]=(ImageView)findViewById(R.id.imageView_14);
+        lower_left[0]=(ImageView)findViewById(R.id.imageView_21);
+        lower_left[1]=(ImageView)findViewById(R.id.imageView_20);
+        lower_left[2]=(ImageView)findViewById(R.id.imageView_19);
+        lower_left[3]=(ImageView)findViewById(R.id.imageView_18);
+        lower_left[4]=(ImageView)findViewById(R.id.imageView_17);
+        lower_left[5]=(ImageView)findViewById(R.id.imageView_16);
+        lower_left[6]=(ImageView)findViewById(R.id.imageView_15);
+        lower_right[0]=(ImageView)findViewById(R.id.imageView_28);
+        lower_right[1]=(ImageView)findViewById(R.id.imageView_27);
+        lower_right[2]=(ImageView)findViewById(R.id.imageView_26);
+        lower_right[3]=(ImageView)findViewById(R.id.imageView_25);
+        lower_right[4]=(ImageView)findViewById(R.id.imageView_24);
+        lower_right[5]=(ImageView)findViewById(R.id.imageView_23);
+        lower_right[6]=(ImageView)findViewById(R.id.imageView_22);
+
         colorArray[0]=R.color.background;
         colorArray[1]=R.color.pink;
         colorArray[2]=R.color.yellow;
         colorArray[3]=R.color.purple;
+
+        arrow_array[0]=(ImageView)findViewById(R.id.upper_left);
+        arrow_array[1]=(ImageView)findViewById(R.id.upper_right);
+        arrow_array[2]=(ImageView)findViewById(R.id.lower_right);
+        arrow_array[3]=(ImageView)findViewById(R.id.lower_left);
+        arrow_array[4]=(ImageView)findViewById(R.id.lower_left_out);
+        arrow_array[5]=(ImageView)findViewById(R.id.lower_right_out);
+        arrow_array[6]=(ImageView)findViewById(R.id.upper_right_out);
+        arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
     }
 
     private void processControl() {
@@ -219,7 +250,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
                 if(music.isPlaying()){
-                    play.setBackgroundResource(R.drawable.speaker_512);
+                    play.setBackgroundResource(R.drawable.play_button_512);
                     music.pause();
                     timerPause();
                 }
@@ -229,12 +260,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if(music.isPlaying()){
-                    play.setBackgroundResource(R.drawable.speaker_512);
+                    play.setBackgroundResource(R.drawable.play_button_512);
                     music.pause();
                     timerPause();
                 }
                 else {
-                    play.setBackgroundResource(R.drawable.non_speaker_512);
+                    play.setBackgroundResource(R.drawable.pause_button_512);
                     music.start();
                     timerStart();
                 }
@@ -244,7 +275,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         stop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                play.setBackgroundResource(R.drawable.speaker_512);
+                play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
             }
         });
@@ -254,7 +285,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 music.stop();
                 music.release();
                 timerPause();
-                play.setBackgroundResource(R.drawable.speaker_512);
+                play.setBackgroundResource(R.drawable.play_button_512);
                 setMusic();
             }
         });
@@ -281,13 +312,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     countdown.setText("0"+millisUntilFinished/1000/60+"：0"+millisUntilFinished/1000%60);
                 else
                     countdown.setText("0"+millisUntilFinished/1000/60+"："+millisUntilFinished/1000%60);
-                clcokStart();
+                tooth_start();
                 setProgressbar();
             }
 
             @Override
             public void onFinish() {
-                play.setBackgroundResource(R.drawable.speaker_512);
+                play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
                 finishDialog();
                 finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
@@ -306,7 +337,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer.setText(defaultTime+"");
         music.stop();
         setMusic();
-        clockStop();
+        tooth_stop();
         setProgressbar();
     }
 
@@ -319,7 +350,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
         finishDialog.setTitle("時間到了~");
-        finishDialog.setMessage("恭喜你刷好牙了，請按確認以紀錄。");
+        finishDialog.setMessage("恭喜你刷好牙了，醫師貼心提醒，請記得使用牙間刷清潔牙縫，並按確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -341,22 +372,67 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         Toast.makeText(Home_Activity.this,  "使用紀錄已更新", Toast.LENGTH_SHORT).show();
     }
 
-    private void clcokStart() {
+    private void tooth_start() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
-        if(currentTime%60%5==0) {
-            if (clockArray[currentTime % 60].getVisibility() == View.INVISIBLE) {
-                clockArray[currentTime % 60].setVisibility(View.VISIBLE);
-            } else if (clockArray[currentTime % 60].getVisibility() == View.VISIBLE) {
-                clockArray[currentTime % 60].setVisibility(View.INVISIBLE);
+        aveTime=defaultTime/8;
+
+        if(currentTime>defaultTime-aveTime*1&&currentTime<defaultTime-aveTime*0-1) {
+            arrow_array[0].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*2&&currentTime<defaultTime-aveTime*1) {
+            arrow_array[0].setVisibility(View.INVISIBLE);
+            arrow_array[1].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*3&&currentTime<defaultTime-aveTime*2) {
+            arrow_array[1].setVisibility(View.INVISIBLE);
+            arrow_array[2].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*4&&currentTime<defaultTime-aveTime*3) {
+            arrow_array[2].setVisibility(View.INVISIBLE);
+            arrow_array[3].setVisibility(View.VISIBLE);
+        }
+
+        else  if(currentTime>defaultTime-aveTime*5&&currentTime<defaultTime-aveTime*4) {
+            arrow_array[3].setVisibility(View.INVISIBLE);
+            arrow_array[4].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*6&&currentTime<defaultTime-aveTime*5) {
+            for(int i=0;i<lower_left.length-1;i++)
+            {
+                lower_left[i].setImageResource(R.drawable.tooth_clean_24);
             }
+            arrow_array[4].setVisibility(View.INVISIBLE);
+            arrow_array[5].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*7&&currentTime<defaultTime-aveTime*6) {
+            for(int i=0;i<lower_right.length-1;i++)
+            {
+                lower_right[i].setImageResource(R.drawable.tooth_clean_24);
+            }
+            arrow_array[5].setVisibility(View.INVISIBLE);
+            arrow_array[6].setVisibility(View.VISIBLE);
+        }
+        else  if(currentTime>defaultTime-aveTime*8+1&&currentTime<defaultTime-aveTime*7) {
+            for(int i=0;i<upper_right.length-1;i++)
+            {
+                upper_right[i].setImageResource(R.drawable.tooth_clean_24);
+            }
+            arrow_array[6].setVisibility(View.INVISIBLE);
+            arrow_array[7].setVisibility(View.VISIBLE);
         }
     }
 
-    private void clockStop() {
-        for(int i=0;i<60;i=i+5)
+    private void tooth_stop() {
+        arrow_array[7].setVisibility(View.INVISIBLE);
+        for(int i=0;i<upper_left.length-1;i++)
         {
-            clockArray[i].setVisibility(View.INVISIBLE);
+            upper_left[i].setImageResource(R.drawable.tooth_dirty_24);
+            lower_left[i].setImageResource(R.drawable.tooth_dirty_24);
+            upper_right[i].setImageResource(R.drawable.tooth_dirty_24);
+            lower_right[i].setImageResource(R.drawable.tooth_dirty_24);
         }
+        for(int i=0;i<arrow_array.length-1;i++)
+            arrow_array[i].setVisibility(View.INVISIBLE);
         if(defaultTime%60<10)
             countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
         else
