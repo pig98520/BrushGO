@@ -1,6 +1,9 @@
 package com.example.brush.brushgo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -80,6 +83,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private DrawerLayout drawer;
     private NavigationView navigateionView;
     private boolean isdoubleClick=false;
+    private AlarmManager alarmManager;
+    private Intent alarmIntent;
+    private PendingIntent pendingIntent;
 
     @Override
     public void onBackPressed() {
@@ -200,6 +206,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
+        dtFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        date = new Date();
+        nowTime = dtFormat.format(date);
         upper_left[0]=(ImageView)findViewById(R.id.imageView_1);
         upper_left[1]=(ImageView)findViewById(R.id.imageView_2);
         upper_left[2]=(ImageView)findViewById(R.id.imageView_3);
@@ -242,6 +251,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         arrow_array[5]=(ImageView)findViewById(R.id.lower_right_out);
         arrow_array[6]=(ImageView)findViewById(R.id.upper_right_out);
         arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
+
+        alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmIntent=new Intent(Home_Activity.this,AlarmReminderReceiver.class);
+        pendingIntent=PendingIntent.getBroadcast(this,0,alarmIntent,0);
     }
 
     private void processControl() {
@@ -350,27 +363,30 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
         finishDialog.setTitle("時間到了~");
-        finishDialog.setMessage("恭喜你刷好牙了，醫師貼心提醒，請記得使用牙間刷清潔牙縫，並按確認以紀錄。");
+        finishDialog.setMessage("恭喜你刷好牙了，醫師貼心提醒您，請記得使用牙間刷清潔牙縫，並按確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish_music.stop();
                 recordData();
+                setReminder();
             }
         };
         finishDialog.setNeutralButton("確定",confirmClick);
         finishDialog.show();
     }
 
+    private void setReminder() {
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
+    }
+
     private void recordData() {
-        dtFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        date = new Date();
-        nowTime = dtFormat.format(date);
         recordFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/record").child(auth.getCurrentUser().getUid());
         DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(),nowTime);
         recordFirebaseRef.push().setValue(data);
         Toast.makeText(Home_Activity.this,  "使用紀錄已更新", Toast.LENGTH_SHORT).show();
     }
+
 
     private void tooth_start() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
@@ -412,7 +428,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             arrow_array[5].setVisibility(View.INVISIBLE);
             arrow_array[6].setVisibility(View.VISIBLE);
         }
-        else  if(currentTime>defaultTime-aveTime*8+1&&currentTime<defaultTime-aveTime*7) {
+        else  if(currentTime>defaultTime-aveTime*8&&currentTime<defaultTime-aveTime*7) {
             for(int i=0;i<upper_right.length-1;i++)
             {
                 upper_right[i].setImageResource(R.drawable.tooth_clean_24);

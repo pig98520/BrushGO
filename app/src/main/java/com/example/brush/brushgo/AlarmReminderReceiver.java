@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 /**
- * Created by pig98520 on 2017/5/28.
+ * Created by pig98520 on 2017/7/14.
  */
 
-public class AlarmNotificationReceiver extends BroadcastReceiver{
+public class AlarmReminderReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
@@ -20,8 +20,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("刷牙時間到了~")
-                .setContentText("快點打開BrushGo來刷牙吧~")
+                .setContentTitle("您刷牙了嗎?")
+                .setContentText("已經一段時間沒有打開Brushgo刷牙了唷~")
                 //.setContentInfo("推播資訊")
                 .setDefaults(Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND);
 
