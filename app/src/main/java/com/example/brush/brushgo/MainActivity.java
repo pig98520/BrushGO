@@ -28,9 +28,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,12 +47,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private EditText edt_psw;
     private String user;
     private String psw;
+    private String user_name;
+    private String nowDate;
     private int timeArray[]=new int[] {120,180,240};
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authLinstener;
     private GoogleApiClient apiClient;
     private Firebase myFirebaseRef;
     private Firebase userRef;
+    private Firebase profileRef;
     private boolean isdoubleClick=false;
 
     @Override
@@ -116,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = auth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_google=(Button)findViewById(R.id.btn_google);
         edt_id =(EditText)findViewById(R.id.edt_id);
         edt_psw =(EditText)findViewById(R.id.edt_psw);
+        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
         auth= FirebaseAuth.getInstance();
         // Configure Google Sign In
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -182,7 +186,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 if(user.equals("")||psw.equals(""))
                     Toast.makeText(MainActivity.this,  "請輸入帳號和密碼", Toast.LENGTH_SHORT).show();
                 else
-                    createUser(user,psw);
+                    signupDialog();
+
             }
         });
         btn_forget.setOnClickListener(new View.OnClickListener() {
@@ -264,15 +269,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth.createUserWithEmailAndPassword(user,psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(MainActivity.this,"歡迎加入~ "+user, Toast.LENGTH_SHORT).show();
+                        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
+                        DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+                        userRef.setValue(setting);
+
+                        profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());
+                        DB_Profile profile=new DB_Profile(user_name,nowDate);
+                        profileRef.setValue(profile);
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);
-
-                        myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
-                        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-                        DB_Setting data = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
-                        userRef.setValue(data);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -286,6 +292,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                 });
     }
+
+    private void signupDialog() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        final EditText input=new EditText(this);
+        dialog.setTitle("註冊");
+        dialog.setMessage("請輸入您的姓名以同意註冊");
+        dialog.setView(input);
+
+        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                user_name=input.getText().toString().trim();
+                nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                createUser(user, psw);
+            }
+        };
+        DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        };
+        dialog.setNeutralButton("確定",confirmClick);
+        dialog.setNegativeButton("取消",cancelClick);
+        dialog.show();
+    }
+
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);

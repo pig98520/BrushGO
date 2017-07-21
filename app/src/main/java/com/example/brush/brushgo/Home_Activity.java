@@ -3,6 +3,7 @@ package com.example.brush.brushgo;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
@@ -86,6 +88,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private AlarmManager alarmManager;
     private Intent alarmIntent;
     private PendingIntent pendingIntent;
+    private Vibrator vibrator;
 
     @Override
     public void onBackPressed() {
@@ -255,6 +258,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmIntent=new Intent(Home_Activity.this,AlarmReminderReceiver.class);
         pendingIntent=PendingIntent.getBroadcast(this,0,alarmIntent,0);
+        vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     private void processControl() {
@@ -391,6 +395,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void tooth_start() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
         aveTime=defaultTime/8;
+        if(currentTime%aveTime==0&&currentTime!=defaultTime&&currentTime!=0)
+            vibrator.vibrate(1000);
 
         if(currentTime>defaultTime-aveTime*1&&currentTime<defaultTime-aveTime*0-1) {
             arrow_array[0].setVisibility(View.VISIBLE);
@@ -440,6 +446,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void tooth_stop() {
         arrow_array[7].setVisibility(View.INVISIBLE);
+        vibrator.vibrate(3000);
         for(int i=0;i<upper_left.length-1;i++)
         {
             upper_left[i].setImageResource(R.drawable.tooth_dirty_24);
