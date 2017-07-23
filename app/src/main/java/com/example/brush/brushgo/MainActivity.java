@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private Firebase myFirebaseRef;
     private Firebase userRef;
     private Firebase profileRef;
+    private Firebase toothRef;
     private boolean isdoubleClick=false;
 
     @Override
@@ -274,8 +275,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         userRef.setValue(setting);
 
                         profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());
-                        DB_Profile profile=new DB_Profile(user_name,nowDate);
+                        DB_Profile profile=new DB_Profile(user_name,nowDate,null,null,null);
                         profileRef.setValue(profile);
+
+                        toothRef=myFirebaseRef.child("tooth").child(auth.getCurrentUser().getUid().trim());
+                        for(int i=0;i<28;i++)
+                        {
+                            toothRef.child(i+1+"").setValue("g");
+                        }
+
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);

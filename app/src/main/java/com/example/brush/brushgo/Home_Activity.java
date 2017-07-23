@@ -41,6 +41,38 @@ import java.util.Date;
 
 import static com.example.brush.brushgo.R.id.Home;
 import static com.example.brush.brushgo.R.id.drawerLayout;
+import static com.example.brush.brushgo.R.id.imageView_1;
+import static com.example.brush.brushgo.R.id.imageView_10;
+import static com.example.brush.brushgo.R.id.imageView_11;
+import static com.example.brush.brushgo.R.id.imageView_12;
+import static com.example.brush.brushgo.R.id.imageView_13;
+import static com.example.brush.brushgo.R.id.imageView_14;
+import static com.example.brush.brushgo.R.id.imageView_15;
+import static com.example.brush.brushgo.R.id.imageView_16;
+import static com.example.brush.brushgo.R.id.imageView_17;
+import static com.example.brush.brushgo.R.id.imageView_18;
+import static com.example.brush.brushgo.R.id.imageView_19;
+import static com.example.brush.brushgo.R.id.imageView_2;
+import static com.example.brush.brushgo.R.id.imageView_20;
+import static com.example.brush.brushgo.R.id.imageView_21;
+import static com.example.brush.brushgo.R.id.imageView_22;
+import static com.example.brush.brushgo.R.id.imageView_23;
+import static com.example.brush.brushgo.R.id.imageView_24;
+import static com.example.brush.brushgo.R.id.imageView_25;
+import static com.example.brush.brushgo.R.id.imageView_26;
+import static com.example.brush.brushgo.R.id.imageView_27;
+import static com.example.brush.brushgo.R.id.imageView_28;
+import static com.example.brush.brushgo.R.id.imageView_3;
+import static com.example.brush.brushgo.R.id.imageView_4;
+import static com.example.brush.brushgo.R.id.imageView_5;
+import static com.example.brush.brushgo.R.id.imageView_6;
+import static com.example.brush.brushgo.R.id.imageView_7;
+import static com.example.brush.brushgo.R.id.imageView_8;
+import static com.example.brush.brushgo.R.id.imageView_9;
+import static com.example.brush.brushgo.R.id.lower_left;
+import static com.example.brush.brushgo.R.id.lower_right;
+import static com.example.brush.brushgo.R.id.upper_left;
+import static com.example.brush.brushgo.R.id.upper_right;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -70,10 +102,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase musicFirebaseRef;
     private Firebase recordFirebaseRef;
     private Firebase userFirebaseRef;
-    private ImageView upper_left[]=new ImageView[8];
+    private Firebase toothFirebaseRef;
+/*    private ImageView upper_left[]=new ImageView[8];
     private ImageView upper_right[]=new ImageView[8];
     private ImageView lower_left[]=new ImageView[8];
-    private ImageView lower_right[]=new ImageView[8];
+    private ImageView lower_right[]=new ImageView[8];*/
+    private ImageView tooth[]=new ImageView[28];
+    private int tooth_id[]=new int[]{
+                    imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7,
+                    imageView_8,imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14,
+                    imageView_15,imageView_16,imageView_17,imageView_18,imageView_19,imageView_20,imageView_21,
+                    imageView_22,imageView_23,imageView_24,imageView_25,imageView_26,imageView_27,imageView_28};
     private ImageView arrow_array[]=new ImageView[8];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
@@ -122,8 +161,59 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.home);
         processView();
         setValue();
+        setTooth();
         setMusic();
         processControl();
+    }
+
+    private void setValue() {
+        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
+        readFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                defaultTime=dataSnapshot.getValue(int.class);
+                if(defaultTime==0)
+                {
+                    defaultTime=timeArray[(int) (Math.random()*3)];
+                    updateUser();
+                }
+                timer.setText(defaultTime+"");
+                if(defaultTime%60<10)
+                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
+                else
+                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+    private void setTooth() {
+       toothFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/tooth/"+auth.getCurrentUser().getUid());
+            for(int j=0;j<tooth.length;j++) {
+                final int finalJ = j;
+                toothFirebaseRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getValue().toString().trim().equals("b"))
+                        {
+                            tooth[finalJ].setImageResource(R.drawable.tooth_dirty_24);
+                        }
+                        else
+                        {
+                            tooth[finalJ].setImageResource(R.drawable.tooth_clean_24);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+
+                });
+        }
     }
 
     private void setMusic() {
@@ -156,32 +246,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                    progressDialog.dismiss();
-            }
-        });
-    }
-
-    private void setValue() {
-        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
-        readFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                defaultTime=dataSnapshot.getValue(int.class);
-                if(defaultTime==0)
-                {
-                    defaultTime=timeArray[(int) (Math.random()*3)];
-                    updateUser();
-                }
-                timer.setText(defaultTime+"");
-                if(defaultTime%60<10)
-                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
-                else
-                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
+                progressDialog.dismiss();
             }
         });
     }
@@ -212,44 +277,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dtFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
         date = new Date();
         nowTime = dtFormat.format(date);
-        upper_left[0]=(ImageView)findViewById(R.id.imageView_1);
-        upper_left[1]=(ImageView)findViewById(R.id.imageView_2);
-        upper_left[2]=(ImageView)findViewById(R.id.imageView_3);
-        upper_left[3]=(ImageView)findViewById(R.id.imageView_4);
-        upper_left[4]=(ImageView)findViewById(R.id.imageView_5);
-        upper_left[5]=(ImageView)findViewById(R.id.imageView_6);
-        upper_left[6]=(ImageView)findViewById(R.id.imageView_7);
-        upper_right[0]=(ImageView)findViewById(R.id.imageView_8);
-        upper_right[1]=(ImageView)findViewById(R.id.imageView_9);
-        upper_right[2]=(ImageView)findViewById(R.id.imageView_10);
-        upper_right[3]=(ImageView)findViewById(R.id.imageView_11);
-        upper_right[4]=(ImageView)findViewById(R.id.imageView_12);
-        upper_right[5]=(ImageView)findViewById(R.id.imageView_13);
-        upper_right[6]=(ImageView)findViewById(R.id.imageView_14);
-        lower_left[0]=(ImageView)findViewById(R.id.imageView_21);
-        lower_left[1]=(ImageView)findViewById(R.id.imageView_20);
-        lower_left[2]=(ImageView)findViewById(R.id.imageView_19);
-        lower_left[3]=(ImageView)findViewById(R.id.imageView_18);
-        lower_left[4]=(ImageView)findViewById(R.id.imageView_17);
-        lower_left[5]=(ImageView)findViewById(R.id.imageView_16);
-        lower_left[6]=(ImageView)findViewById(R.id.imageView_15);
-        lower_right[0]=(ImageView)findViewById(R.id.imageView_28);
-        lower_right[1]=(ImageView)findViewById(R.id.imageView_27);
-        lower_right[2]=(ImageView)findViewById(R.id.imageView_26);
-        lower_right[3]=(ImageView)findViewById(R.id.imageView_25);
-        lower_right[4]=(ImageView)findViewById(R.id.imageView_24);
-        lower_right[5]=(ImageView)findViewById(R.id.imageView_23);
-        lower_right[6]=(ImageView)findViewById(R.id.imageView_22);
+        for(int i=0;i<tooth.length;i++)
+            tooth[i]=(ImageView)findViewById(tooth_id[i]);
 
         colorArray[0]=R.color.background;
         colorArray[1]=R.color.pink;
         colorArray[2]=R.color.yellow;
         colorArray[3]=R.color.purple;
 
-        arrow_array[0]=(ImageView)findViewById(R.id.upper_left);
-        arrow_array[1]=(ImageView)findViewById(R.id.upper_right);
-        arrow_array[2]=(ImageView)findViewById(R.id.lower_right);
-        arrow_array[3]=(ImageView)findViewById(R.id.lower_left);
+        arrow_array[0]=(ImageView)findViewById(upper_left);
+        arrow_array[1]=(ImageView)findViewById(upper_right);
+        arrow_array[2]=(ImageView)findViewById(lower_right);
+        arrow_array[3]=(ImageView)findViewById(lower_left);
         arrow_array[4]=(ImageView)findViewById(R.id.lower_left_out);
         arrow_array[5]=(ImageView)findViewById(R.id.lower_right_out);
         arrow_array[6]=(ImageView)findViewById(R.id.upper_right_out);
@@ -419,26 +458,26 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             arrow_array[4].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*6&&currentTime<defaultTime-aveTime*5) {
-            for(int i=0;i<lower_left.length-1;i++)
+/*            for(int i=0;i<lower_left.length-1;i++)
             {
                 lower_left[i].setImageResource(R.drawable.tooth_clean_24);
-            }
+            }*/
             arrow_array[4].setVisibility(View.INVISIBLE);
             arrow_array[5].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*7&&currentTime<defaultTime-aveTime*6) {
-            for(int i=0;i<lower_right.length-1;i++)
+/*            for(int i=0;i<lower_right.length-1;i++)
             {
                 lower_right[i].setImageResource(R.drawable.tooth_clean_24);
-            }
+            }*/
             arrow_array[5].setVisibility(View.INVISIBLE);
             arrow_array[6].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*8&&currentTime<defaultTime-aveTime*7) {
-            for(int i=0;i<upper_right.length-1;i++)
+/*            for(int i=0;i<upper_right.length-1;i++)
             {
                 upper_right[i].setImageResource(R.drawable.tooth_clean_24);
-            }
+            }*/
             arrow_array[6].setVisibility(View.INVISIBLE);
             arrow_array[7].setVisibility(View.VISIBLE);
         }
@@ -447,13 +486,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void tooth_stop() {
         arrow_array[7].setVisibility(View.INVISIBLE);
         vibrator.vibrate(3000);
-        for(int i=0;i<upper_left.length-1;i++)
+       /* for(int i=0;i<upper_left.length-1;i++)
         {
             upper_left[i].setImageResource(R.drawable.tooth_dirty_24);
             lower_left[i].setImageResource(R.drawable.tooth_dirty_24);
             upper_right[i].setImageResource(R.drawable.tooth_dirty_24);
             lower_right[i].setImageResource(R.drawable.tooth_dirty_24);
-        }
+        }*/
         for(int i=0;i<arrow_array.length-1;i++)
             arrow_array[i].setVisibility(View.INVISIBLE);
         if(defaultTime%60<10)
