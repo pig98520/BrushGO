@@ -94,19 +94,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int timersec;
     private int currentTime;
     private int backgroundColor;
-    private SimpleDateFormat dtFormat;
     private String nowTime;
-    private Date date;
+    private String nowDate;
     private FirebaseAuth auth;
-    private Firebase readFirebaseRef;
-    private Firebase musicFirebaseRef;
-    private Firebase recordFirebaseRef;
-    private Firebase userFirebaseRef;
-    private Firebase toothFirebaseRef;
-/*    private ImageView upper_left[]=new ImageView[8];
-    private ImageView upper_right[]=new ImageView[8];
-    private ImageView lower_left[]=new ImageView[8];
-    private ImageView lower_right[]=new ImageView[8];*/
+    private Firebase firebaseRef;
+    private Firebase readRef;
+    private Firebase musicRef;
+    private Firebase recordRef;
+    private Firebase toothRef;
+    private Firebase profileRef;
+    private Firebase settingRef;
+    private int[] timeArray=new int[]{120,180,240};
     private ImageView tooth[]=new ImageView[28];
     private int tooth_id[]=new int[]{
                     imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7,
@@ -116,7 +114,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private ImageView arrow_array[]=new ImageView[8];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
-    private int timeArray[]=new int[]{120,180,240};
     private MediaPlayer music;
     private MediaPlayer finish_music;
     private String musicUrl=" ";
@@ -160,104 +157,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
+        checkGoogleuser();
         setValue();
         setTooth();
         setMusic();
         processControl();
     }
-
-    private void setValue() {
-        readFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
-        readFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                defaultTime=dataSnapshot.getValue(int.class);
-                if(defaultTime==0)
-                {
-                    defaultTime=timeArray[(int) (Math.random()*3)];
-                    updateUser();
-                }
-                timer.setText(defaultTime+"");
-                if(defaultTime%60<10)
-                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
-                else
-                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
-    private void setTooth() {
-       toothFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/tooth/"+auth.getCurrentUser().getUid());
-            for(int j=0;j<tooth.length;j++) {
-                final int finalJ = j;
-                toothFirebaseRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue().toString().trim().equals("b"))
-                        {
-                            tooth[finalJ].setImageResource(R.drawable.tooth_dirty_24);
-                        }
-                        else
-                        {
-                            tooth[finalJ].setImageResource(R.drawable.tooth_clean_24);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-
-                });
-        }
-    }
-
-    private void setMusic() {
-        if(musicIndex<10)
-            musicIndex+=1;
-        else
-            musicIndex=1;
-        music=new MediaPlayer(); //建立一個media player
-        musicFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("載入音樂中,請稍後");
-        progressDialog.setIcon(R.drawable.loading_24);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        progressDialog.show();
-
-        musicFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                musicUrl=dataSnapshot.getValue(String.class); //取得節點內的資料
-                try {
-                    music.setDataSource(musicUrl); //設定media的路徑
-                    music.prepare();
-                    progressDialog.dismiss();
-                } catch (IOException e) {
-                    Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
-                }
-
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-    private void updateUser() {
-        userFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid());
-        DB_CreateUser data = new DB_CreateUser(auth.getCurrentUser().getEmail(),defaultTime,3);
-        userFirebaseRef.setValue(data);
-        Toast.makeText(Home_Activity.this,  "資料已儲存", Toast.LENGTH_SHORT).show();
-    }
-
 
     private void processView() {
         layout=(ConstraintLayout)findViewById(R.id.constraintLayout);
@@ -274,9 +179,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
-        dtFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        date = new Date();
-        nowTime = dtFormat.format(date);
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
+        settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
+        toothRef=firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
+        readRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
+        recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
+
+        nowTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+        nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         for(int i=0;i<tooth.length;i++)
             tooth[i]=(ImageView)findViewById(tooth_id[i]);
 
@@ -298,6 +209,114 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         alarmIntent=new Intent(Home_Activity.this,AlarmReminderReceiver.class);
         pendingIntent=PendingIntent.getBroadcast(this,0,alarmIntent,0);
         vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
+    }
+
+
+    private void checkGoogleuser() {
+        profileRef.child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()==null) {
+
+                    DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+                    settingRef.setValue(setting);
+
+                    DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
+                    profileRef.setValue(profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void setValue() {
+        readRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                defaultTime=dataSnapshot.getValue(int.class);
+                timer.setText(defaultTime+"");
+                if(defaultTime%60<10)
+                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
+                else
+                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+    private void setTooth() {
+            for(int j=0;j<tooth.length;j++) {
+                final int finalJ = j;
+                toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            if(dataSnapshot.getValue().toString().trim().equals("g"))
+                            {
+                                tooth[finalJ].setImageResource(R.drawable.tooth_clean_24);
+                            }
+                            else
+                            {
+                                tooth[finalJ].setImageResource(R.drawable.tooth_dirty_24);
+                            }
+                        }
+                        else
+                        {
+                            for(int i=0;i<28;i++)
+                                toothRef.child(i+1+"").setValue("g");
+                            setTooth();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+
+                });
+        }
+    }
+
+    private void setMusic() {
+        if(musicIndex<10)
+            musicIndex+=1;
+        else
+            musicIndex=1;
+        music=new MediaPlayer(); //建立一個media player
+        musicRef =firebaseRef.child("music").child(musicIndex+""); //取得firebase網址 用亂數取得節點網址
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("載入音樂中,請稍後");
+        progressDialog.setIcon(R.drawable.loading_24);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+
+        musicRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                musicUrl=dataSnapshot.getValue(String.class); //取得節點內的資料
+                try {
+                    music.setDataSource(musicUrl); //設定media的路徑
+                    music.prepare();
+                    progressDialog.dismiss();
+                } catch (IOException e) {
+                    Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
+                }
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void processControl() {
@@ -424,9 +443,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void recordData() {
-        recordFirebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/record").child(auth.getCurrentUser().getUid());
         DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(),nowTime);
-        recordFirebaseRef.push().setValue(data);
+        recordRef.push().setValue(data);
         Toast.makeText(Home_Activity.this,  "使用紀錄已更新", Toast.LENGTH_SHORT).show();
     }
 

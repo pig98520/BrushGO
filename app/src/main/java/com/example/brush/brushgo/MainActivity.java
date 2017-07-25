@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth.AuthStateListener authLinstener;
     private GoogleApiClient apiClient;
     private Firebase myFirebaseRef;
-    private Firebase userRef;
+    private Firebase settingRef;
     private Firebase profileRef;
     private Firebase toothRef;
     private boolean isdoubleClick=false;
@@ -270,24 +270,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth.createUserWithEmailAndPassword(user,psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
-                        userRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-                        DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
-                        userRef.setValue(setting);
-
-                        profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());
-                        DB_Profile profile=new DB_Profile(user_name,nowDate,null,null,null);
-                        profileRef.setValue(profile);
-
-                        toothRef=myFirebaseRef.child("tooth").child(auth.getCurrentUser().getUid().trim());
-                        for(int i=0;i<28;i++)
-                        {
-                            toothRef.child(i+1+"").setValue("g");
-                        }
-
+                        newuser();
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);
                     }
+
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e) {
@@ -299,6 +287,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Toast.makeText(MainActivity.this,"註冊失敗，請檢查帳號是否已存在。", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void newuser() {
+        settingRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
+        DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+        settingRef.setValue(setting);
+
+        profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());
+        DB_Profile profile=new DB_Profile(user_name,nowDate,null,null,null);
+        profileRef.setValue(profile);
+
+        toothRef=myFirebaseRef.child("tooth").child(auth.getCurrentUser().getUid().trim());
+        for(int i=0;i<28;i++)
+        {
+            toothRef.child(i+1+"").setValue("g");
+        }
     }
 
     private void signupDialog() {
