@@ -82,7 +82,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private ConstraintLayout layout;
     private Button menu;
     private Button play;
-    private Button stop;
     private Button change_music;
     private Button change_color;
     private TextView timer;
@@ -171,7 +170,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         drawer=(DrawerLayout)findViewById(drawerLayout);
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
-        stop=(Button) findViewById(R.id.btn_stop);
         music=new MediaPlayer();
         change_music=(Button)findViewById(R.id.btn_changecmusic);
         change_color=(Button)findViewById(R.id.btn_changecolor);
@@ -346,13 +344,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
             }
 
-        });
-        stop.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                play.setBackgroundResource(R.drawable.play_button_512);
-                timerStop();
-            }
         });
         change_music.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -583,5 +574,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onStop() {
         super.onStop();
+        if(music.isPlaying()){
+            play.setBackgroundResource(R.drawable.play_button_512);
+            music.pause();
+            timerPause();
+        }
     }
 }
