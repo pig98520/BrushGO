@@ -92,6 +92,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int aveTime;
     private int timersec;
     private int currentTime;
+    private boolean isTimer=false;
     private int backgroundColor;
     private String nowTime;
     private String nowDate;
@@ -170,7 +171,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         drawer=(DrawerLayout)findViewById(drawerLayout);
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
-        music=new MediaPlayer();
         change_music=(Button)findViewById(R.id.btn_changecmusic);
         change_color=(Button)findViewById(R.id.btn_changecolor);
         timer=(TextView)findViewById(R.id.txt_timer);
@@ -284,14 +284,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setMusic() {
-        if(musicIndex<10)
-            musicIndex+=1;
-        else
-            musicIndex=1;
-        musicRef =firebaseRef.child("music").child(musicIndex+""); //取得firebase網址 用亂數取得節點網址
+        music=new MediaPlayer();
+        musicIndex=(int)(Math.random()*10+1);
+        musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("載入音樂中,請稍後");
         progressDialog.setIcon(R.drawable.loading_24);
+
 /*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
         progressDialog.setProgressStyle(R.style.DialogCustom);
         progressDialog.setIndeterminate(true);
@@ -348,11 +347,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         change_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                music.stop();
-                music.release();
-                timerPause();
-                play.setBackgroundResource(R.drawable.play_button_512);
-                setMusic();
+                if(isTimer)
+                {
+                    music.stop();
+                    music.release();
+                    timerPause();
+                    play.setBackgroundResource(R.drawable.play_button_512);
+                    setMusic();
+                }
+                else
+                    setMusic();
             }
         });
         change_color.setOnClickListener(new View.OnClickListener() {
@@ -369,6 +373,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         });
     }
     private void timerStart() {
+        isTimer=true;
         timersec= Integer.parseInt(timer.getText().toString().trim());
         countdownTimer = new CountDownTimer(timersec * 1000, 1000) {
             @Override
