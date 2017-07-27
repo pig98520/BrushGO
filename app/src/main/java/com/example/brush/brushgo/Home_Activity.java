@@ -172,6 +172,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         menu=(Button) findViewById(R.id.btn_menu);
         play=(Button) findViewById(R.id.btn_play);
         stop=(Button) findViewById(R.id.btn_stop);
+        music=new MediaPlayer();
         change_music=(Button)findViewById(R.id.btn_changecmusic);
         change_color=(Button)findViewById(R.id.btn_changecolor);
         timer=(TextView)findViewById(R.id.txt_timer);
@@ -289,7 +290,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             musicIndex+=1;
         else
             musicIndex=1;
-        music=new MediaPlayer(); //建立一個media player
         musicRef =firebaseRef.child("music").child(musicIndex+""); //取得firebase網址 用亂數取得節點網址
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("載入音樂中,請稍後");
@@ -311,7 +311,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
-
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -584,6 +583,5 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onStop() {
         super.onStop();
-        music.release();
     }
 }
