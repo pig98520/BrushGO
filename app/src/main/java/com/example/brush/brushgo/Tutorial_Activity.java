@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,17 +23,19 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by swlab on 2017/5/5.
  */
 
-public class Question_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Tutorial_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Boolean isdoubleClick=false;
+    private Tutorial_Adapter customAdapter;
+    private ViewPager viewPager;
 
     @Override
     public void onBackPressed() {
         if(!isdoubleClick)
         {
-            Toast.makeText(Question_Activity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
+            Toast.makeText(Tutorial_Activity.this,"雙擊以退出",Toast.LENGTH_LONG).show();
             isdoubleClick=true;
         }
         else
@@ -56,17 +59,20 @@ public class Question_Activity extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.question);
+        setContentView(R.layout.tutorial);
         processView();
         processControl();
     }
 
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
-        navigateionView.setNavigationItemSelectedListener(Question_Activity.this);
+        navigateionView.setNavigationItemSelectedListener(Tutorial_Activity.this);
         menu=(Button) findViewById(R.id.btn_menu);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
+        viewPager=(ViewPager)findViewById(R.id.viewPager);
+        customAdapter=new Tutorial_Adapter(this);
+        viewPager.setAdapter(customAdapter);
     }
 
     private void processControl() {
@@ -100,10 +106,10 @@ public class Question_Activity extends AppCompatActivity implements NavigationVi
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
         }
-        else if(id==R.id.Question)
+        else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Question_Activity.class);
+            intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Setting)
@@ -122,7 +128,7 @@ public class Question_Activity extends AppCompatActivity implements NavigationVi
                 public void onClick(DialogInterface dialog, int which) {
                     auth.signOut();
                     Intent intent=new Intent();
-                    intent.setClass(Question_Activity.this,MainActivity.class);
+                    intent.setClass(Tutorial_Activity.this,MainActivity.class);
                     startActivity(intent);
                 }
             };

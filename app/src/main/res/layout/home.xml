@@ -17,8 +17,8 @@
 
         <Button
             android:id="@+id/btn_play"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -28,29 +28,28 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.79"
-            app:layout_constraintHorizontal_bias="0.501" />
+            app:layout_constraintVertical_bias="0.962" />
 
         <Button
             android:id="@+id/btn_changecolor"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/paint_button_512"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintHorizontal_bias="0.864"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.79" />
+            app:layout_constraintVertical_bias="0.962" />
 
         <Button
             android:id="@+id/btn_changecmusic"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -61,7 +60,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.787" />
+            app:layout_constraintVertical_bias="0.962" />
 
         <Button
             android:id="@+id/btn_menu"
@@ -104,11 +103,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintHorizontal_bias="0.16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.286"
+            app:layout_constraintVertical_bias="0.332"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -121,11 +120,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.183"
+            app:layout_constraintHorizontal_bias="0.18"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.24"
+            app:layout_constraintVertical_bias="0.286"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -138,11 +137,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.203"
+            app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.195"
+            app:layout_constraintVertical_bias="0.24"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -155,11 +154,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.252"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.149"
+            app:layout_constraintVertical_bias="0.195"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -176,7 +175,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.111"
+            app:layout_constraintVertical_bias="0.149"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -193,7 +192,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.07999998"
+            app:layout_constraintVertical_bias="0.111"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -210,7 +209,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.066"
+            app:layout_constraintVertical_bias="0.111"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -227,7 +226,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.066"
+            app:layout_constraintVertical_bias="0.111"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -244,7 +243,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.07999998"
+            app:layout_constraintVertical_bias="0.111"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -257,11 +256,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.68"
+            app:layout_constraintHorizontal_bias="0.677"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.111"
+            app:layout_constraintVertical_bias="0.149"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -278,7 +277,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.149"
+            app:layout_constraintVertical_bias="0.195"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -295,7 +294,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.195"
+            app:layout_constraintVertical_bias="0.24"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -312,7 +311,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.252"
+            app:layout_constraintVertical_bias="0.297"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -325,16 +324,16 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.82"
+            app:layout_constraintHorizontal_bias="0.83"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.286"
+            app:layout_constraintVertical_bias="0.332"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
             android:id="@+id/imageView_15"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
@@ -342,11 +341,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintHorizontal_bias="0.16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.351"
+            app:layout_constraintVertical_bias="0.442"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -359,11 +358,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.183"
+            app:layout_constraintHorizontal_bias="0.18"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.396"
+            app:layout_constraintVertical_bias="0.499"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -376,11 +375,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.203"
+            app:layout_constraintHorizontal_bias="0.215"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.442"
+            app:layout_constraintVertical_bias="0.533"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -393,11 +392,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.252"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.487"
+            app:layout_constraintVertical_bias="0.578"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -414,7 +413,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.533"
+            app:layout_constraintVertical_bias="0.611"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -431,7 +430,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.565"
+            app:layout_constraintVertical_bias="0.654"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -447,7 +446,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.578"
+            app:layout_constraintVertical_bias="0.667"
             app:srcCompat="@drawable/tooth_dirty_24"
             app:layout_constraintHorizontal_bias="0.462" />
 
@@ -461,11 +460,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.561"
+            app:layout_constraintHorizontal_bias="0.552"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.578"
+            app:layout_constraintVertical_bias="0.667"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -478,11 +477,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.63"
+            app:layout_constraintHorizontal_bias="0.622"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.565"
+            app:layout_constraintVertical_bias="0.654"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -495,11 +494,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.691"
+            app:layout_constraintHorizontal_bias="0.677"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.533"
+            app:layout_constraintVertical_bias="0.611"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -516,7 +515,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.487"
+            app:layout_constraintVertical_bias="0.578"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -533,7 +532,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.442"
+            app:layout_constraintVertical_bias="0.533"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -550,7 +549,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.405"
+            app:layout_constraintVertical_bias="0.506"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <ImageView
@@ -563,11 +562,11 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.82"
+            app:layout_constraintHorizontal_bias="0.83"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.351"
+            app:layout_constraintVertical_bias="0.442"
             app:srcCompat="@drawable/tooth_dirty_24" />
 
         <TextView
@@ -587,8 +586,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.913"
-            app:layout_constraintHorizontal_bias="0.501" />
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.504" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -600,11 +599,11 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.683" />
+            app:layout_constraintVertical_bias="0.831" />
 
         <ImageView
             android:id="@+id/tongue"
@@ -632,11 +631,11 @@
             android:rotation="270"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.32"
+            app:layout_constraintHorizontal_bias="0.342"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.447"
+            app:layout_constraintVertical_bias="0.524"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -650,11 +649,11 @@
             android:rotation="270"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.144"
+            app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.56"
+            app:layout_constraintVertical_bias="0.736"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -668,11 +667,11 @@
             android:rotation="180"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.682"
+            app:layout_constraintHorizontal_bias="0.657"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.447"
+            app:layout_constraintVertical_bias="0.524"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -690,7 +689,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.56"
+            app:layout_constraintVertical_bias="0.736"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView

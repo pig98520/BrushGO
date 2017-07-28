@@ -396,10 +396,10 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
         }
-        else if(id==R.id.Question)
+        else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Question_Activity.class);
+            intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Setting)

@@ -38,7 +38,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Information_Activity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Question_Activity"
+        <activity android:name=".Tutorial_Activity"
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>

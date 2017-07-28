@@ -1,13 +1,15 @@
 package com.example.brush.brushgo;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final String TAG =" MainActivity" ;
     private static final int RC_SIGN_IN=1;
     private GoogleSignInOptions gso;
+    private ProgressDialog progressDialog;
     private Button btn_sigin;
     private Button btn_forget;
     private Button btn_signup;
@@ -102,12 +105,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                // Google Sign In failed, update UI appropriately
-                // ...
+
             }
         }
     }
@@ -119,12 +120,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            progressDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "無法使用google帳戶登入",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         edt_id =(EditText)findViewById(R.id.edt_id);
         edt_psw =(EditText)findViewById(R.id.edt_psw);
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
+        progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
         // Configure Google Sign In
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -162,8 +162,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         authLinstener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser()!=null)
+                if(firebaseAuth.getCurrentUser()!=null){
                     startActivity(new Intent(MainActivity.this,Home_Activity.class));
+                }
             }
         };
 
@@ -176,8 +177,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 psw= edt_psw.getText().toString();
                 if(user.equals("")||psw.equals(""))
                     Toast.makeText(MainActivity.this, "請輸入帳號和密碼", Toast.LENGTH_SHORT).show();
-                else
-                    login(user,psw);
+                else {
+                    loadingDialog();
+                    login(user, psw);
+                }
             }
         });
         btn_signup.setOnClickListener(new View.OnClickListener(){
@@ -198,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });
         btn_google.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                loadingDialog();
                 signIn();
             }
         });
@@ -253,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth.signInWithEmailAndPassword(user, psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(MainActivity.this,"歡迎回來~   "+user, Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);
@@ -271,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
                         newuser();
+                        progressDialog.dismiss();
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Home_Activity.class);
                         startActivity(intent);
@@ -287,6 +292,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Toast.makeText(MainActivity.this,"註冊失敗，請檢查帳號是否已存在。", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void loadingDialog() {
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("登入中,請稍後");
+        progressDialog.setIcon(R.drawable.loading_24);
+
+/*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
+        progressDialog.setProgressStyle(R.style.DialogCustom);
+        progressDialog.setIndeterminate(true);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
     }
 
     private void newuser() {
@@ -315,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                loadingDialog();
                 user_name=input.getText().toString().trim();
                 nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 createUser(user, psw);

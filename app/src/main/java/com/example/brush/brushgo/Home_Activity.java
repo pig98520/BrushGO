@@ -216,7 +216,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()==null) {
-
                     DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
                     settingRef.setValue(setting);
 
@@ -287,16 +286,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("載入音樂中,請稍後");
-        progressDialog.setIcon(R.drawable.loading_24);
-
-/*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
-        progressDialog.setProgressStyle(R.style.DialogCustom);
-        progressDialog.setIndeterminate(true);
-        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        progressDialog.show();
-
+        loadingDialog();
         musicRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -314,6 +304,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private void loadingDialog() {
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("載入音樂中,請稍後");
+        progressDialog.setIcon(R.drawable.loading_24);
+
+/*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
+        progressDialog.setProgressStyle(R.style.DialogCustom);
+        progressDialog.setIndeterminate(true);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
     }
 
     private void processControl() {
@@ -536,10 +538,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
         }
-        else if(id==R.id.Question)
+        else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
-            intent.setClass(this,Question_Activity.class);
+            intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Setting)
