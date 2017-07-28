@@ -258,11 +258,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         if(dataSnapshot.exists()){
                             if(dataSnapshot.getValue().toString().trim().equals("g"))
                             {
-                                tooth[finalJ].setImageResource(R.drawable.tooth_clean_24);
+                                tooth[finalJ].setImageResource(R.drawable.tooth_clean_128);
                             }
                             else
                             {
-                                tooth[finalJ].setImageResource(R.drawable.tooth_dirty_24);
+                                tooth[finalJ].setImageResource(R.drawable.tooth_dirty_128);
                             }
                         }
                         else
@@ -476,7 +476,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         else  if(currentTime>defaultTime-aveTime*6&&currentTime<defaultTime-aveTime*5) {
 /*            for(int i=0;i<lower_left.length-1;i++)
             {
-                lower_left[i].setImageResource(R.drawable.tooth_clean_24);
+                lower_left[i].setImageResource(R.drawable.tooth_clean_128);
             }*/
             arrow_array[4].setVisibility(View.INVISIBLE);
             arrow_array[5].setVisibility(View.VISIBLE);
@@ -484,7 +484,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         else  if(currentTime>defaultTime-aveTime*7&&currentTime<defaultTime-aveTime*6) {
 /*            for(int i=0;i<lower_right.length-1;i++)
             {
-                lower_right[i].setImageResource(R.drawable.tooth_clean_24);
+                lower_right[i].setImageResource(R.drawable.tooth_clean_128);
             }*/
             arrow_array[5].setVisibility(View.INVISIBLE);
             arrow_array[6].setVisibility(View.VISIBLE);
@@ -492,7 +492,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         else  if(currentTime>defaultTime-aveTime*8&&currentTime<defaultTime-aveTime*7) {
 /*            for(int i=0;i<upper_right.length-1;i++)
             {
-                upper_right[i].setImageResource(R.drawable.tooth_clean_24);
+                upper_right[i].setImageResource(R.drawable.tooth_clean_128);
             }*/
             arrow_array[6].setVisibility(View.INVISIBLE);
             arrow_array[7].setVisibility(View.VISIBLE);
@@ -504,10 +504,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         vibrator.vibrate(3000);
        /* for(int i=0;i<upper_left.length-1;i++)
         {
-            upper_left[i].setImageResource(R.drawable.tooth_dirty_24);
-            lower_left[i].setImageResource(R.drawable.tooth_dirty_24);
-            upper_right[i].setImageResource(R.drawable.tooth_dirty_24);
-            lower_right[i].setImageResource(R.drawable.tooth_dirty_24);
+            upper_left[i].setImageResource(R.drawable.tooth_dirty_128);
+            lower_left[i].setImageResource(R.drawable.tooth_dirty_128);
+            upper_right[i].setImageResource(R.drawable.tooth_dirty_128);
+            lower_right[i].setImageResource(R.drawable.tooth_dirty_128);
         }*/
         for(int i=0;i<arrow_array.length-1;i++)
             arrow_array[i].setVisibility(View.INVISIBLE);

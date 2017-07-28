@@ -12,7 +12,7 @@ import android.widget.ImageView;
  */
 
 public class Tutorial_Adapter extends PagerAdapter {
-    private int[] image={R.drawable.play_button_512,R.drawable.pause_button_512,R.drawable.paint_button_512};
+    private int[] image={R.drawable.home_1,R.drawable.home_2,R.drawable.home_3,R.drawable.menu_1};
     private LayoutInflater layoutInflater;
     private Context context;
     private View view;
