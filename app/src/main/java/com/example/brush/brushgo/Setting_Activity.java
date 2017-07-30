@@ -47,6 +47,7 @@ import java.util.Calendar;
  */
 
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private Button menu;
     private RadioButton twominutes;
     private RadioButton threeminutes;
@@ -208,7 +209,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         now = Calendar.getInstance();
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
-        formatter = new SimpleDateFormat(" HH:mm");
+        formatter = new SimpleDateFormat("HH:mm");
         formatter.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
         rg_time=(RadioGroup)findViewById(R.id.rg_time);
         rg_reminder=(RadioGroup)findViewById(R.id.rg_remider);
@@ -363,6 +364,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
+        if(id==0) {
+            intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+        }
+        else if(id==1){
+            intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+        }
+
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if(calendarTime.before(now)) {
             calendarTime.set(Calendar.DATE,now.get(Calendar.DATE)+1);
@@ -373,7 +381,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
