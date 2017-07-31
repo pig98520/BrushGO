@@ -373,9 +373,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if(calendarTime.before(now)) {
-            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE)+1);
+            calendarTime.add(Calendar.DATE,1); //如果時間早於現在就加一天
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            calendarTime.set(Calendar.DATE,now.get(Calendar.DATE));
+            calendarTime.add(Calendar.DATE,-1); //把加上去的日期扣回來
         }
         else
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
