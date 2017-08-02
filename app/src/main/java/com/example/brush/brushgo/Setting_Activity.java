@@ -134,7 +134,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 if(m_time==null)
                     m_alarm.setText("AM 尚未設定");
                 else
-                m_alarm.setText("AM "+m_time.trim());
+                    m_alarm.setText("AM "+m_time.trim());
             }
 
             @Override
@@ -150,7 +150,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 if(e_time==null)
                     e_alarm.setText("PM 尚未設定");
                 else
-                e_alarm.setText("PM "+e_time.trim());
+                    e_alarm.setText("PM "+e_time.trim());
             }
 
             @Override
@@ -178,7 +178,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         reminderRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot r_dataSnapshot) {
-            reminder=r_dataSnapshot.getValue(int.class);
+                reminder=r_dataSnapshot.getValue(int.class);
                 if(reminder==7)
                     oneweek.setChecked(true);
                 else if(reminder==3)
@@ -275,26 +275,26 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-            if(oneday.isChecked())
-                reminder =1;
-            if(threedays.isChecked())
-                reminder =3;
-            if(oneweek.isChecked())
-                reminder =7;
-            reminderRef.setValue(reminder);
+                if(oneday.isChecked())
+                    reminder =1;
+                if(threedays.isChecked())
+                    reminder =3;
+                if(oneweek.isChecked())
+                    reminder =7;
+                reminderRef.setValue(reminder);
             }
         });
         rg_time.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-            if(twominutes.isChecked())
-                time=120;
-            if(threeminutes.isChecked())
-                time=180;
-            if(fourminutes.isChecked())
-                time=240;
-            timeRef.setValue(time);
+                if(twominutes.isChecked())
+                    time=120;
+                if(threeminutes.isChecked())
+                    time=180;
+                if(fourminutes.isChecked())
+                    time=240;
+                timeRef.setValue(time);
             }
         });
     }
@@ -364,18 +364,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
-        if(id==0) {
-            if(m_calendar.getTime().getMinutes()<10)
-                intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":0"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
-            else
-                intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
-        }
-        else if(id==1){
-            if(e_calendar.getTime().getMinutes()<10)
-                intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":0"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
-            else
-                intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
-        }
 
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if(calendarTime.before(now)) {

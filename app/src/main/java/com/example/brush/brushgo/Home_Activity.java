@@ -205,7 +205,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
 
         alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        intent =new Intent(Home_Activity.this,AlarmNotificationReceiver.class);
+        intent =new Intent(Home_Activity.this,AlarmReminderReceiver.class);
         vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
     }
 
@@ -436,7 +436,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setReminder() {
-        intent.putExtra("contentText","您已經兩天沒有回到BrushGo刷牙囉~");
         pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
     }
@@ -503,13 +502,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void tooth_stop() {
         arrow_array[7].setVisibility(View.INVISIBLE);
         vibrator.vibrate(3000);
-       /* for(int i=0;i<upper_left.length-1;i++)
-        {
-            upper_left[i].setImageResource(R.drawable.tooth_dirty_128);
-            lower_left[i].setImageResource(R.drawable.tooth_dirty_128);
-            upper_right[i].setImageResource(R.drawable.tooth_dirty_128);
-            lower_right[i].setImageResource(R.drawable.tooth_dirty_128);
-        }*/
+
         for(int i=0;i<arrow_array.length-1;i++)
             arrow_array[i].setVisibility(View.INVISIBLE);
         if(defaultTime%60<10)

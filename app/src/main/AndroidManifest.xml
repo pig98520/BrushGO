@@ -43,6 +43,7 @@
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
         <receiver android:name=".AlarmNotificationReceiver"/>
+        <receiver android:name=".AlarmReminderReceiver"></receiver>
     </application>
 
 </manifest>
