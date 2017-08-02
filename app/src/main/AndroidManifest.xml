@@ -18,9 +18,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/tooth_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/tooth_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:background="@color/background">
@@ -43,7 +43,6 @@
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
         <receiver android:name=".AlarmNotificationReceiver"/>
-        <receiver android:name=".AlarmReminderReceiver"/>
     </application>
 
 </manifest>

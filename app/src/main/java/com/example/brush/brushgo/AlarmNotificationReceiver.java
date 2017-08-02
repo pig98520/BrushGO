@@ -24,7 +24,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.tooth_icon)
                 .setContentTitle("BrushGo")
                 .setContentText(intent.getStringExtra("contentText"))
                 /* .setContentInfo("推播資訊")*/

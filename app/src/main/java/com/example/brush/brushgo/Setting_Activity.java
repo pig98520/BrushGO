@@ -365,10 +365,16 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
         if(id==0) {
-            intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+            if(m_calendar.getTime().getMinutes()<10)
+                intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":0"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+            else
+                intent.putExtra("contentText","上午"+m_calendar.getTime().getHours()+":"+m_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
         }
         else if(id==1){
-            intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+            if(e_calendar.getTime().getMinutes()<10)
+                intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":0"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
+            else
+                intent.putExtra("contentText","下午"+e_calendar.getTime().getHours()+":"+e_calendar.getTime().getMinutes()+"到了喔,打開BrushGo刷牙吧");
         }
 
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);

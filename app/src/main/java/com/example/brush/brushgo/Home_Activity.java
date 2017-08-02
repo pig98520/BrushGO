@@ -107,10 +107,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int[] timeArray=new int[]{120,180,240};
     private ImageView tooth[]=new ImageView[28];
     private int tooth_id[]=new int[]{
-                    imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7,
-                    imageView_8,imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14,
-                    imageView_15,imageView_16,imageView_17,imageView_18,imageView_19,imageView_20,imageView_21,
-                    imageView_22,imageView_23,imageView_24,imageView_25,imageView_26,imageView_27,imageView_28};
+            imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7,
+            imageView_8,imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14,
+            imageView_15,imageView_16,imageView_17,imageView_18,imageView_19,imageView_20,imageView_21,
+            imageView_22,imageView_23,imageView_24,imageView_25,imageView_26,imageView_27,imageView_28};
     private ImageView arrow_array[]=new ImageView[8];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
@@ -122,7 +122,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private NavigationView navigateionView;
     private boolean isdoubleClick=false;
     private AlarmManager alarmManager;
-    private Intent alarmIntent;
+    private Intent intent;
     private PendingIntent pendingIntent;
     private Vibrator vibrator;
 
@@ -205,8 +205,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
 
         alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmIntent=new Intent(Home_Activity.this,AlarmReminderReceiver.class);
-        pendingIntent=PendingIntent.getBroadcast(this,0,alarmIntent,0);
+        intent =new Intent(Home_Activity.this,AlarmNotificationReceiver.class);
         vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
     }
 
@@ -250,35 +249,35 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         });
     }
     private void setTooth() {
-            for(int j=0;j<tooth.length;j++) {
-                final int finalJ = j;
-                toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            if(dataSnapshot.getValue().toString().trim().equals("g"))
-                            {
-                                tooth[finalJ].setImageResource(R.drawable.tooth_clean_128);
-                            }
-                            else
-                            {
-                                tooth[finalJ].setImageResource(R.drawable.tooth_dirty_128);
-                            }
+        for(int j=0;j<tooth.length;j++) {
+            final int finalJ = j;
+            toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        if(dataSnapshot.getValue().toString().trim().equals("g"))
+                        {
+                            tooth[finalJ].setImageResource(R.drawable.tooth_clean_128);
                         }
                         else
                         {
-                            for(int i=0;i<28;i++)
-                                toothRef.child(i+1+"").setValue("g");
-                            setTooth();
+                            tooth[finalJ].setImageResource(R.drawable.tooth_dirty_128);
                         }
                     }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
+                    else
+                    {
+                        for(int i=0;i<28;i++)
+                            toothRef.child(i+1+"").setValue("g");
+                        setTooth();
                     }
+                }
 
-                });
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+
+            });
         }
     }
 
@@ -437,6 +436,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setReminder() {
+        intent.putExtra("contentText","您已經兩天沒有回到BrushGo刷牙囉~");
+        pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
     }
 
