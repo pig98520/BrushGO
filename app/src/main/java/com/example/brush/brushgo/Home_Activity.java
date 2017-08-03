@@ -436,7 +436,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         intent.putExtra("contentTitle","打開BrushGo吧");
         intent.putExtra("contentText","已經一段時間沒使用BrushGo刷牙囉:(");
         pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,pendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+3000 ,pendingIntent);//從現在開始的兩天後
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
     }
 
     private void recordData() {
