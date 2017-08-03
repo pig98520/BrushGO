@@ -36,6 +36,7 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -96,6 +97,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int backgroundColor;
     private String nowTime;
     private String nowDate;
+    private DecimalFormat decimalFormat;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
     private Firebase readRef;
@@ -185,6 +187,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         readRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
 
+        decimalFormat= new DecimalFormat("00");
         nowTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
         nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         for(int i=0;i<tooth.length;i++)
@@ -205,7 +208,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
 
         alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        intent =new Intent(Home_Activity.this,AlarmReminderReceiver.class);
+        intent =new Intent(Home_Activity.this,AlarmNotificationReceiver.class);
         vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
     }
 
@@ -236,10 +239,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 defaultTime=dataSnapshot.getValue(int.class);
                 timer.setText(defaultTime+"");
-                if(defaultTime%60<10)
-                    countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
-                else
-                    countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
+                countdown.setText(decimalFormat.format(defaultTime/60)+" : "+decimalFormat.format(defaultTime%60));
             }
 
             @Override
@@ -380,10 +380,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(millisUntilFinished/1000+"");
-                if(millisUntilFinished/1000%60<10)
-                    countdown.setText("0"+millisUntilFinished/1000/60+"：0"+millisUntilFinished/1000%60);
-                else
-                    countdown.setText("0"+millisUntilFinished/1000/60+"："+millisUntilFinished/1000%60);
+                countdown.setText(decimalFormat.format(millisUntilFinished/1000/60)+" : "+decimalFormat.format(millisUntilFinished/1000%60));
                 tooth_start();
                 setProgressbar();
             }
@@ -436,8 +433,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setReminder() {
-        pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
+        intent.putExtra("contentTitle","打開BrushGo吧");
+        intent.putExtra("contentText","已經一段時間沒使用BrushGo刷牙囉:(");
+        pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,pendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+3000 ,pendingIntent);//從現在開始的兩天後
     }
 
     private void recordData() {

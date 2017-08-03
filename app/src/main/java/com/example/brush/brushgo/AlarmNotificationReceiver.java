@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**
@@ -15,10 +16,18 @@ import java.util.Calendar;
  */
 
 public class AlarmNotificationReceiver extends BroadcastReceiver{
+    private DecimalFormat decimalFormat = new DecimalFormat("00");
+    private String contentTitle="BrushGo";
+    private String contentText =decimalFormat.format(Calendar.getInstance().getTime().getHours())+":"
+            +decimalFormat.format(Calendar.getInstance().getTime().getMinutes())+"到了喔,快點打開BrushGo來刷牙吧";;
     @Override
-
     public void onReceive(Context context, Intent intent) {
-        String time=Calendar.getInstance().getTime().getHours()+":"+Calendar.getInstance().getTime().getMinutes();
+        if(intent.getStringExtra("contentTitle")!=null)
+            contentTitle=intent.getStringExtra("contentTitle");
+
+        if(intent.getStringExtra("contentText")!=null)
+            contentText =intent.getStringExtra("contentText");
+
         Intent notifiIntent =new Intent(context,Home_Activity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, 0); //點擊後回到
 
@@ -27,8 +36,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.tooth_icon)
-                .setContentTitle("BrushGo")
-                .setContentText(time+"到了喔,快點打開BrushGo來刷牙吧")
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
                 /* .setContentInfo("推播資訊")*/
                 .setContentIntent(pendingIntent) //點擊後回到APP
                 .setDefaults(Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND);

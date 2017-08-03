@@ -36,6 +36,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -72,7 +73,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Calendar e_calendar;
     private String e_time;
     private String [] e_array;
-    private SimpleDateFormat formatter;
+    private SimpleDateFormat simpleDateFormat;
+    private DecimalFormat decimalFormat;
     private AlarmManager manager;
     private Intent intent;
     private PendingIntent pendingIntent;
@@ -209,8 +211,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         now = Calendar.getInstance();
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
-        formatter = new SimpleDateFormat("HH:mm");
-        formatter.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+        simpleDateFormat = new SimpleDateFormat("HH:mm");
+        simpleDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+        decimalFormat=new DecimalFormat("00");
         rg_time=(RadioGroup)findViewById(R.id.rg_time);
         rg_reminder=(RadioGroup)findViewById(R.id.rg_remider);
         twominutes =(RadioButton)findViewById(R.id.rdb_two);
@@ -331,7 +334,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_calendar.set(Calendar.MINUTE, minute);
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
-            m_time=formatter.format(m_calendar.getTime()).trim();
+            m_time= simpleDateFormat.format(m_calendar.getTime()).trim();
             m_alarm.setText("AM "+m_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
@@ -352,7 +355,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.set(Calendar.MINUTE, minute);
             e_calendar.set(Calendar.SECOND, 0);
             e_calendar.set(Calendar.MILLISECOND, 0);
-            e_time=formatter.format(e_calendar.getTime()).trim();
+            e_time= simpleDateFormat.format(e_calendar.getTime()).trim();
             e_alarm.setText("PM "+e_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
@@ -364,8 +367,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
-
-        pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
+/*        if(id==0)
+            intent.putExtra("contentText",decimalFormat.format(m_calendar.getTime().getHours())+" : "
+                                    +decimalFormat.format(m_calendar.getTime().getMinutes()));
+        else if(id==1)
+            intent.putExtra("contentText",decimalFormat.format(e_calendar.getTime().getHours())+" : "
+                    +decimalFormat.format(e_calendar.getTime().getMinutes()));*/
+        pendingIntent = PendingIntent.getBroadcast(this, id, intent, pendingIntent.FLAG_UPDATE_CURRENT);
         if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE,1); //如果時間早於現在就加一天
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -373,7 +381,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         }
         else
             manager.setRepeating(AlarmManager.RTC_WAKEUP, calendarTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        //alarmManager.set(AlarmManager.RTC_WAKEUP,calendarTime.getTimeInMillis(), pendingIntent);
     }
 
     @Override
