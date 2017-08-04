@@ -29,7 +29,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
             contentText =intent.getStringExtra("contentText");
 
         Intent notifiIntent =new Intent(context,Home_Activity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, 0); //點擊後回到
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, 0); //點擊後回到APP
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)

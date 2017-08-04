@@ -188,7 +188,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
 
         decimalFormat= new DecimalFormat("00");
-        nowTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         for(int i=0;i<tooth.length;i++)
             tooth[i]=(ImageView)findViewById(tooth_id[i]);
