@@ -36,7 +36,15 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
-        <receiver android:name=".AlarmNotificationReceiver"></receiver>
+        <receiver android:name=".AlarmNotificationReceiver">
+<!--
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+-->
+        </receiver>
         <receiver android:name=".AlarmReminderReceiver"></receiver>
     </application>
 

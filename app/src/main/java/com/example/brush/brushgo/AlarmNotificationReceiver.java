@@ -19,7 +19,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
     private DecimalFormat decimalFormat = new DecimalFormat("00");
     private String contentTitle="BrushGo";
     private String contentText =decimalFormat.format(Calendar.getInstance().getTime().getHours())+":"
-            +decimalFormat.format(Calendar.getInstance().getTime().getMinutes())+"到了喔,快點打開BrushGo來刷牙吧";;
+            +decimalFormat.format(Calendar.getInstance().getTime().getMinutes())+"到了喔,快點打開BrushGo來刷牙吧";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getStringExtra("contentTitle")!=null)
@@ -29,12 +30,11 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
             contentText =intent.getStringExtra("contentText");
 
         Intent notifiIntent =new Intent(context,Home_Activity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, 0); //點擊後回到APP
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT); //點擊後回到APP
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.tooth_icon)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
@@ -45,5 +45,4 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
         NotificationManager notificationManager=(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,builder.build());
     }
-
 }

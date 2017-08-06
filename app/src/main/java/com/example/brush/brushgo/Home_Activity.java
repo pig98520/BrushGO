@@ -93,6 +93,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int aveTime;
     private int timersec;
     private int currentTime;
+    private int reminderTime;
     private boolean isTimer=false;
     private int backgroundColor;
     private String nowTime;
@@ -100,7 +101,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private DecimalFormat decimalFormat;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
-    private Firebase readRef;
+    private Firebase timeRef;
+    private Firebase reminderRef;
     private Firebase musicRef;
     private Firebase recordRef;
     private Firebase toothRef;
@@ -184,7 +186,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
         settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
         toothRef=firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
-        readRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
+        timeRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
+        reminderRef=firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("reminder");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
 
         decimalFormat= new DecimalFormat("00");
@@ -234,7 +237,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setValue() {
-        readRef.addValueEventListener(new ValueEventListener() {
+        timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 defaultTime=dataSnapshot.getValue(int.class);
@@ -433,10 +436,22 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setReminder() {
-        intent.putExtra("contentTitle","打開BrushGo吧");
-        intent.putExtra("contentText","已經一段時間沒使用BrushGo刷牙囉:(");
-        pendingIntent=PendingIntent.getBroadcast(this,(int)System.currentTimeMillis(), intent,pendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+2*24*60*60*1000 ,pendingIntent);//從現在開始的兩天後
+        reminderRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                reminderTime=Integer.parseInt(dataSnapshot.getValue().toString());
+                intent.putExtra("contentTitle","打開BrushGo吧");
+                intent.putExtra("contentText","已經"+reminderTime+"天沒使用BrushGo刷牙囉:(");
+                pendingIntent=PendingIntent.getBroadcast(Home_Activity.this,(int)System.currentTimeMillis(), intent,pendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+reminderTime*AlarmManager.INTERVAL_DAY ,pendingIntent);//從現在開始的兩天後
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
     }
 
     private void recordData() {
