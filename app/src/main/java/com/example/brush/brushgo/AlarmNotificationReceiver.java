@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
 
 /**
  * Created by pig98520 on 2017/5/28.
@@ -18,8 +17,7 @@ import java.util.Calendar;
 public class AlarmNotificationReceiver extends BroadcastReceiver{
     private DecimalFormat decimalFormat = new DecimalFormat("00");
     private String contentTitle="BrushGo";
-    private String contentText =decimalFormat.format(Calendar.getInstance().getTime().getHours())+":"
-            +decimalFormat.format(Calendar.getInstance().getTime().getMinutes())+"到了喔,快點打開BrushGo來刷牙吧";
+    private String contentText ="刷牙時間到了喔,快點打開BrushGo來刷牙吧";
 
     @Override
     public void onReceive(Context context, Intent intent) {

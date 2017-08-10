@@ -63,7 +63,11 @@ import static com.example.brush.brushgo.R.id.imageView_25;
 import static com.example.brush.brushgo.R.id.imageView_26;
 import static com.example.brush.brushgo.R.id.imageView_27;
 import static com.example.brush.brushgo.R.id.imageView_28;
+import static com.example.brush.brushgo.R.id.imageView_29;
 import static com.example.brush.brushgo.R.id.imageView_3;
+import static com.example.brush.brushgo.R.id.imageView_30;
+import static com.example.brush.brushgo.R.id.imageView_31;
+import static com.example.brush.brushgo.R.id.imageView_32;
 import static com.example.brush.brushgo.R.id.imageView_4;
 import static com.example.brush.brushgo.R.id.imageView_5;
 import static com.example.brush.brushgo.R.id.imageView_6;
@@ -109,12 +113,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase profileRef;
     private Firebase settingRef;
     private int[] timeArray=new int[]{120,180,240};
-    private ImageView tooth[]=new ImageView[28];
+    private ImageView tooth[]=new ImageView[32];
     private int tooth_id[]=new int[]{
-            imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7,
-            imageView_8,imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14,
-            imageView_15,imageView_16,imageView_17,imageView_18,imageView_19,imageView_20,imageView_21,
-            imageView_22,imageView_23,imageView_24,imageView_25,imageView_26,imageView_27,imageView_28};
+            imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7, imageView_8,
+            imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14, imageView_15,imageView_16,
+            imageView_17,imageView_18,imageView_19,imageView_20,imageView_21, imageView_22,imageView_23,imageView_24,
+            imageView_25,imageView_26,imageView_27,imageView_28,imageView_29,imageView_30,imageView_31,imageView_32};
     private ImageView arrow_array[]=new ImageView[8];
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
@@ -269,7 +273,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     }
                     else
                     {
-                        for(int i=0;i<28;i++)
+                        for(int i=0;i<32;i++)
                             toothRef.child(i+1+"").setValue("g");
                         setTooth();
                     }
@@ -285,6 +289,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setMusic() {
+        if(currentTime==defaultTime)
+            startDialog();
+
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
@@ -312,7 +319,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("載入音樂中,請稍後");
         progressDialog.setIcon(R.drawable.loading_24);
-
 /*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
         progressDialog.setProgressStyle(R.style.DialogCustom);
         progressDialog.setIndeterminate(true);
@@ -376,6 +382,21 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
+
+    private void startDialog() {
+        AlertDialog.Builder startDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        startDialog.setTitle("貼心提醒");
+        startDialog.setMessage("使用BrushGo刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");
+        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        };
+        startDialog.setNeutralButton("已清潔，開始刷牙。",confirmClick);
+        startDialog.show();
+    }
+
     private void timerStart() {
         isTimer=true;
         timersec= Integer.parseInt(timer.getText().toString().trim());
@@ -422,7 +443,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
         finishDialog.setTitle("時間到了~");
-        finishDialog.setMessage("恭喜你刷好牙了，醫師貼心提醒您，請記得使用牙間刷清潔牙縫，並按確認以紀錄。");
+        finishDialog.setMessage("恭喜你刷好牙了，請按下確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
