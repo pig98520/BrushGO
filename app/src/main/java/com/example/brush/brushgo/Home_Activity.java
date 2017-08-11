@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -98,6 +100,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private int timersec;
     private int currentTime;
     private int reminderTime;
+    private long currentTimemillisecond;
     private boolean isTimer=false;
     private int backgroundColor;
     private String nowTime;
@@ -458,13 +461,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void setReminder() {
         reminderRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 reminderTime=Integer.parseInt(dataSnapshot.getValue().toString());
                 intent.putExtra("contentTitle","打開BrushGo吧");
                 intent.putExtra("contentText","已經"+reminderTime+"天沒使用BrushGo刷牙囉:(");
-                pendingIntent=PendingIntent.getBroadcast(Home_Activity.this,(int)System.currentTimeMillis(), intent,pendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+reminderTime*AlarmManager.INTERVAL_DAY ,pendingIntent);//從現在開始的兩天後
+                currentTimemillisecond =System.currentTimeMillis();
+                pendingIntent=PendingIntent.getBroadcast(Home_Activity.this, (int) currentTimemillisecond, intent,pendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTimemillisecond +reminderTime*AlarmManager.INTERVAL_DAY ,pendingIntent);
+                profileRef.child("last_brush_time").setValue(currentTimemillisecond);
             }
 
             @Override

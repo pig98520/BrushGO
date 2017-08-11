@@ -35,10 +35,13 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
     private Firebase morningRef;
     private Firebase eveningRef;
     private Firebase reminderRef;
+    private Firebase lastBrushtimeRef;
     private SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
     private Calendar calendar;
     private Date m_time;
     private Date e_time;
+    private Long currentTimemillisecond;
+    private int reminderTime;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -48,6 +51,8 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
         auth= FirebaseAuth.getInstance();
         morningRef =new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
         eveningRef =new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
+        reminderRef=new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");
+        lastBrushtimeRef =new Firebase("https://brushgo-67813.firebaseio.com/profile/"+auth.getCurrentUser().getUid()+"/last_brush_time");
         alarmIntent =new Intent(context,AlarmNotificationReceiver.class);
         calendar=Calendar.getInstance();
 
@@ -99,6 +104,35 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        lastBrushtimeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    currentTimemillisecond = Long.parseLong(dataSnapshot.getValue().toString());
+                    reminderRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) {
+                                reminderTime=Integer.parseInt(dataSnapshot.getValue().toString());
+                                alarmIntent.putExtra("contentTitle", "打開BrushGo吧");
+                                alarmIntent.putExtra("contentText", "已經" + reminderTime + "天沒使用BrushGo刷牙囉:(");
+                                pendingIntent = PendingIntent.getBroadcast(context, (int) (long) currentTimemillisecond, alarmIntent, pendingIntent.FLAG_UPDATE_CURRENT);
+                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTimemillisecond + AlarmManager.INTERVAL_DAY * reminderTime, pendingIntent);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
                 }
             }
 
