@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -69,7 +68,6 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
                         }
                         else
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, m_time.getTime(),AlarmManager.INTERVAL_DAY, pendingIntent);
-                        Log.i("alarmInfo",m_time.getTime()+"");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -98,7 +96,6 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
                         }
                         else
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, e_time.getTime(),AlarmManager.INTERVAL_DAY, pendingIntent);
-                        Log.i("alarmInfo",e_time.getTime()+"");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
