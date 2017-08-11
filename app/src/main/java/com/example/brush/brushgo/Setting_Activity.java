@@ -367,12 +367,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
-/*        if(id==0)
-            intent.putExtra("contentText",decimalFormat.format(m_calendar.getTime().getHours())+" : "
-                                    +decimalFormat.format(m_calendar.getTime().getMinutes()));
-        else if(id==1)
-            intent.putExtra("contentText",decimalFormat.format(e_calendar.getTime().getHours())+" : "
-                    +decimalFormat.format(e_calendar.getTime().getMinutes()));*/
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, pendingIntent.FLAG_UPDATE_CURRENT);
         if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE,1); //如果時間早於現在就加一天

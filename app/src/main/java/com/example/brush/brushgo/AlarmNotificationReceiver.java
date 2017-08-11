@@ -8,16 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by pig98520 on 2017/5/28.
  */
 
 public class AlarmNotificationReceiver extends BroadcastReceiver{
-    private DecimalFormat decimalFormat = new DecimalFormat("00");
     private String contentTitle="BrushGo";
     private String contentText ="刷牙時間到了喔,快點打開BrushGo來刷牙吧";
+    private Intent notifiIntent;
+    private PendingIntent pendingIntent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,8 +26,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver{
         if(intent.getStringExtra("contentText")!=null)
             contentText =intent.getStringExtra("contentText");
 
-        Intent notifiIntent =new Intent(context,Home_Activity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT); //點擊後回到APP
+        notifiIntent =new Intent(context,Home_Activity.class);
+        pendingIntent = PendingIntent.getActivity(context, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT); //點擊後回到APP
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)
