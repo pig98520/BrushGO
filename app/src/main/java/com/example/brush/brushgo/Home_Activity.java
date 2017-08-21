@@ -170,7 +170,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processView();
         checkGoogleuser();
         setValue();
-        setTooth();
+/*        setTooth();*/
         setMusic();
         processControl();
     }

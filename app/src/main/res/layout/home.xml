@@ -108,7 +108,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.345"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_1" />
 
         <ImageView
             android:id="@+id/imageView_2"
@@ -125,7 +125,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.287"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_2" />
 
         <ImageView
             android:id="@+id/imageView_3"
@@ -142,7 +142,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.23"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_3" />
 
         <ImageView
             android:id="@+id/imageView_4"
@@ -159,7 +159,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.172"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_4" />
 
         <ImageView
             android:id="@+id/imageView_5"
@@ -176,7 +176,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.115"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_5" />
 
         <ImageView
             android:id="@+id/imageView_6"
@@ -193,7 +193,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.057"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_6" />
 
         <ImageView
             android:id="@+id/imageView_7"
@@ -210,7 +210,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.015"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_7" />
 
         <ImageView
             android:id="@+id/imageView_8"
@@ -227,7 +227,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_8" />
 
         <ImageView
             android:id="@+id/imageView_9"
@@ -244,7 +244,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_9" />
 
         <ImageView
             android:id="@+id/imageView_10"
@@ -261,7 +261,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.015"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_10" />
 
         <ImageView
             android:id="@+id/imageView_11"
@@ -278,7 +278,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.057"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_11" />
 
         <ImageView
             android:id="@+id/imageView_12"
@@ -295,7 +295,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.128"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_12" />
 
         <ImageView
             android:id="@+id/imageView_13"
@@ -312,7 +312,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.172"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_13" />
 
         <ImageView
             android:id="@+id/imageView_14"
@@ -329,7 +329,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.23"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_14" />
 
         <ImageView
             android:id="@+id/imageView_15"
@@ -346,7 +346,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.298"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_15" />
 
         <ImageView
             android:id="@+id/imageView_16"
@@ -363,7 +363,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.345"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_16" />
 
         <ImageView
             android:id="@+id/imageView_17"
@@ -374,13 +374,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.899"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.439"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_1" />
 
         <ImageView
             android:id="@+id/imageView_18"
@@ -391,13 +392,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.89"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.499"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_2" />
 
         <ImageView
             android:id="@+id/imageView_19"
@@ -408,13 +410,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.88"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.56"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_3" />
 
         <ImageView
             android:id="@+id/imageView_20"
@@ -425,13 +428,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.86"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.619"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_4" />
 
         <ImageView
             android:id="@+id/imageView_21"
@@ -442,13 +446,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.82"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.683"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_5" />
 
         <ImageView
             android:id="@+id/imageView_22"
@@ -459,13 +464,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.73"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.74"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_6" />
 
         <ImageView
             android:id="@+id/imageView_23"
@@ -476,13 +482,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.642"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.769"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_7" />
 
         <ImageView
             android:id="@+id/imageView_24"
@@ -493,13 +500,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.553"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.79"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_8" />
 
         <ImageView
             android:id="@+id/imageView_25"
@@ -510,13 +518,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.455"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.79"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_9" />
 
         <ImageView
             android:id="@+id/imageView_26"
@@ -527,13 +536,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.366"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.769"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_10" />
 
         <ImageView
             android:id="@+id/imageView_27"
@@ -544,13 +554,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.26"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.74"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_11" />
 
         <ImageView
             android:id="@+id/imageView_28"
@@ -561,13 +572,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.171"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.683"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_12" />
 
         <ImageView
             android:id="@+id/imageView_29"
@@ -578,13 +590,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.142"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.625"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_13" />
 
         <ImageView
             android:id="@+id/imageView_30"
@@ -595,13 +608,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.12"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.562"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_14" />
 
         <ImageView
             android:id="@+id/imageView_31"
@@ -612,13 +626,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.499"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_15" />
 
         <ImageView
             android:id="@+id/imageView_32"
@@ -629,13 +644,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:visibility="visible"
+            android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.094"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.439"
-            app:srcCompat="@drawable/tooth_clean_128" />
+            app:srcCompat="@drawable/tooth_16" />
 
         <TextView
             android:id="@+id/txt_countdown"
@@ -720,7 +736,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintVertical_bias="0.76"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -752,11 +768,11 @@
             android:rotation="180"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.83"
+            app:layout_constraintHorizontal_bias="0.839"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.796"
+            app:layout_constraintVertical_bias="0.76"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -770,11 +786,11 @@
             android:rotation="90"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.726"
+            app:layout_constraintHorizontal_bias="0.682"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.179"
+            app:layout_constraintVertical_bias="0.095"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -788,11 +804,11 @@
             android:rotation="90"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.861"
+            app:layout_constraintHorizontal_bias="0.839"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_bias="0.015"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -809,7 +825,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_bias="0.015"
             app:srcCompat="@drawable/arrow_512" />
 
         <ImageView
@@ -822,11 +838,11 @@
             android:layout_marginTop="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.254"
+            app:layout_constraintHorizontal_bias="0.295"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.179"
+            app:layout_constraintVertical_bias="0.095"
             app:srcCompat="@drawable/arrow_512" />
 
     </android.support.constraint.ConstraintLayout>
