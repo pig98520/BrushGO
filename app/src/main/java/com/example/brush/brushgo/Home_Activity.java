@@ -123,6 +123,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             imageView_17,imageView_18,imageView_19,imageView_20,imageView_21, imageView_22,imageView_23,imageView_24,
             imageView_25,imageView_26,imageView_27,imageView_28,imageView_29,imageView_30,imageView_31,imageView_32};
     private ImageView arrow_array[]=new ImageView[8];
+    private int tooth_dirty[]=new int[]{
+        R.drawable.tooth_1_, R.drawable.tooth_2_, R.drawable.tooth_3_, R.drawable.tooth_4_, R.drawable.tooth_5_, R.drawable.tooth_6_, R.drawable.tooth_7_, R.drawable.tooth_8_,
+        R.drawable.tooth_9_, R.drawable.tooth_10_, R.drawable.tooth_11_, R.drawable.tooth_12_, R.drawable.tooth_13_, R.drawable.tooth_14_, R.drawable.tooth_15_, R.drawable.tooth_16_,
+        R.drawable.tooth_1_, R.drawable.tooth_2_, R.drawable.tooth_3_, R.drawable.tooth_4_, R.drawable.tooth_5_, R.drawable.tooth_6_, R.drawable.tooth_7_, R.drawable.tooth_8_,
+        R.drawable.tooth_9_, R.drawable.tooth_10_, R.drawable.tooth_11_, R.drawable.tooth_12_, R.drawable.tooth_13_, R.drawable.tooth_14_, R.drawable.tooth_15_, R.drawable.tooth_16_};
+    private int tooth_clean[]=new int[]{
+            R.drawable.tooth_1, R.drawable.tooth_2, R.drawable.tooth_3, R.drawable.tooth_4, R.drawable.tooth_5, R.drawable.tooth_6, R.drawable.tooth_7, R.drawable.tooth_8,
+            R.drawable.tooth_9, R.drawable.tooth_10, R.drawable.tooth_11, R.drawable.tooth_12, R.drawable.tooth_13, R.drawable.tooth_14, R.drawable.tooth_15, R.drawable.tooth_16,
+            R.drawable.tooth_1, R.drawable.tooth_2, R.drawable.tooth_3, R.drawable.tooth_4, R.drawable.tooth_5, R.drawable.tooth_6, R.drawable.tooth_7, R.drawable.tooth_8,
+            R.drawable.tooth_9, R.drawable.tooth_10, R.drawable.tooth_11, R.drawable.tooth_12, R.drawable.tooth_13, R.drawable.tooth_14, R.drawable.tooth_15, R.drawable.tooth_16
+    };
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
@@ -170,7 +181,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processView();
         checkGoogleuser();
         setValue();
-/*        setTooth();*/
+        setTooth();
         setMusic();
         processControl();
     }
@@ -265,13 +276,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
-                        if(dataSnapshot.getValue().toString().trim().equals("g"))
+                        if(dataSnapshot.getValue().toString().trim().equals("b"))
                         {
-                            tooth[finalJ].setImageResource(R.drawable.tooth_clean_128);
+                            tooth[finalJ].setImageResource(tooth_dirty[finalJ]);
                         }
                         else
                         {
-                            tooth[finalJ].setImageResource(R.drawable.tooth_dirty_128);
+                            tooth[finalJ].setImageResource(tooth_clean[finalJ]);
                         }
                     }
                     else
