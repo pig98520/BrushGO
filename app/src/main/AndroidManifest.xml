@@ -17,7 +17,8 @@
         android:roundIcon="@drawable/tooth_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:largeHeap="true">
 
         <activity android:name=".MainActivity">
             <intent-filter>

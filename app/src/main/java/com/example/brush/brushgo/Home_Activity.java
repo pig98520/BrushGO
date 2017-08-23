@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -36,6 +37,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -115,6 +117,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase toothRef;
     private Firebase profileRef;
     private Firebase settingRef;
+    private Firebase imageRef;
     private int[] timeArray=new int[]{120,180,240};
     private ImageView tooth[]=new ImageView[32];
     private int tooth_id[]=new int[]{
@@ -123,17 +126,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             imageView_17,imageView_18,imageView_19,imageView_20,imageView_21, imageView_22,imageView_23,imageView_24,
             imageView_25,imageView_26,imageView_27,imageView_28,imageView_29,imageView_30,imageView_31,imageView_32};
     private ImageView arrow_array[]=new ImageView[8];
-    private int tooth_dirty[]=new int[]{
-        R.drawable.tooth_1_, R.drawable.tooth_2_, R.drawable.tooth_3_, R.drawable.tooth_4_, R.drawable.tooth_5_, R.drawable.tooth_6_, R.drawable.tooth_7_, R.drawable.tooth_8_,
-        R.drawable.tooth_9_, R.drawable.tooth_10_, R.drawable.tooth_11_, R.drawable.tooth_12_, R.drawable.tooth_13_, R.drawable.tooth_14_, R.drawable.tooth_15_, R.drawable.tooth_16_,
-        R.drawable.tooth_1_, R.drawable.tooth_2_, R.drawable.tooth_3_, R.drawable.tooth_4_, R.drawable.tooth_5_, R.drawable.tooth_6_, R.drawable.tooth_7_, R.drawable.tooth_8_,
-        R.drawable.tooth_9_, R.drawable.tooth_10_, R.drawable.tooth_11_, R.drawable.tooth_12_, R.drawable.tooth_13_, R.drawable.tooth_14_, R.drawable.tooth_15_, R.drawable.tooth_16_};
-    private int tooth_clean[]=new int[]{
-            R.drawable.tooth_1, R.drawable.tooth_2, R.drawable.tooth_3, R.drawable.tooth_4, R.drawable.tooth_5, R.drawable.tooth_6, R.drawable.tooth_7, R.drawable.tooth_8,
-            R.drawable.tooth_9, R.drawable.tooth_10, R.drawable.tooth_11, R.drawable.tooth_12, R.drawable.tooth_13, R.drawable.tooth_14, R.drawable.tooth_15, R.drawable.tooth_16,
-            R.drawable.tooth_1, R.drawable.tooth_2, R.drawable.tooth_3, R.drawable.tooth_4, R.drawable.tooth_5, R.drawable.tooth_6, R.drawable.tooth_7, R.drawable.tooth_8,
-            R.drawable.tooth_9, R.drawable.tooth_10, R.drawable.tooth_11, R.drawable.tooth_12, R.drawable.tooth_13, R.drawable.tooth_14, R.drawable.tooth_15, R.drawable.tooth_16
-    };
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
@@ -207,6 +199,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timeRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
         reminderRef=firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("reminder");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
+        imageRef=firebaseRef.child("image");
 
         decimalFormat= new DecimalFormat("00");
         nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -278,11 +271,31 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     if(dataSnapshot.exists()){
                         if(dataSnapshot.getValue().toString().trim().equals("b"))
                         {
-                            tooth[finalJ].setImageResource(tooth_dirty[finalJ]);
+                            imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Picasso.with(Home_Activity.this).load(Uri.parse(dataSnapshot.getValue().toString())).into(tooth[finalJ]);
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
                         }
                         else
                         {
-                            tooth[finalJ].setImageResource(tooth_clean[finalJ]);
+                            imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Picasso.with(Home_Activity.this).load(Uri.parse(dataSnapshot.getValue().toString())).into(tooth[finalJ]);
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
                         }
                     }
                     else
@@ -303,7 +316,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setMusic() {
-
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
