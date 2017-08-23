@@ -303,8 +303,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setMusic() {
-        if(currentTime==defaultTime)
-            startDialog();
 
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
@@ -318,6 +316,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.setDataSource(musicUrl); //設定media的路徑
                     music.prepare();
                     progressDialog.dismiss();
+                    if(currentTime==defaultTime)
+                        startDialog();
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
