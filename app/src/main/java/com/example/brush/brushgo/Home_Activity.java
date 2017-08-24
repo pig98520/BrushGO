@@ -173,8 +173,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processView();
         checkGoogleuser();
         setValue();
-        setTooth();
         setMusic();
+        setTooth();
         processControl();
     }
 
@@ -237,6 +237,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
                     DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
                     profileRef.setValue(profile);
+
+                    Intent intent=new Intent();
+                    intent.setClass(Home_Activity.this,Tutorial_Activity.class);
+                    startActivity(intent);
                 }
             }
 
@@ -300,7 +304,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     }
                     else
                     {
-                        for(int i=0;i<32;i++)
+                        for(int i=0;i<tooth.length;i++)
                             toothRef.child(i+1+"").setValue("g");
                         setTooth();
                     }
@@ -310,7 +314,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 public void onCancelled(FirebaseError firebaseError) {
 
                 }
-
             });
         }
     }

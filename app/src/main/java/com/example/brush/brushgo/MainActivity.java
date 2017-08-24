@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         newuser();
                         progressDialog.dismiss();
                         Intent intent=new Intent();
-                        intent.setClass(MainActivity.this,Home_Activity.class);
+                        intent.setClass(MainActivity.this,Tutorial_Activity.class);
                         startActivity(intent);
                     }
 

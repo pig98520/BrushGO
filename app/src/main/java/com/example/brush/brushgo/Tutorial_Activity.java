@@ -82,6 +82,48 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
                 drawer.openDrawer(GravityCompat.START);
             }
         });
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position==customAdapter.getCount()-1) {
+                    finisnDialog();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void finisnDialog() {
+        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        finishDialog.setTitle("教學結束");
+        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent=new Intent();
+                intent.setClass(Tutorial_Activity.this,Home_Activity.class);
+                startActivity(intent);
+            }
+        };
+        DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        };
+        finishDialog.setNeutralButton("開始刷牙",confirmClick);
+        finishDialog.setNegativeButton("重看一次",cancelClick);
+        finishDialog.show();
     }
 
     @Override
