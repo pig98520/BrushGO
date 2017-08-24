@@ -32,12 +32,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -173,8 +173,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processView();
         checkGoogleuser();
         setValue();
-        setMusic();
         setTooth();
+        startDialog();
         processControl();
     }
 
@@ -256,6 +256,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 defaultTime=dataSnapshot.getValue(int.class);
+                currentTime=defaultTime;
                 timer.setText(defaultTime+"");
                 countdown.setText(decimalFormat.format(defaultTime/60)+" : "+decimalFormat.format(defaultTime%60));
             }
@@ -278,7 +279,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                             imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Picasso.with(Home_Activity.this).load(Uri.parse(dataSnapshot.getValue().toString())).into(tooth[finalJ]);
+                                    Glide.with(Home_Activity.this)
+                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .into(tooth[finalJ]);
                                 }
 
                                 @Override
@@ -292,7 +295,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                             imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Picasso.with(Home_Activity.this).load(Uri.parse(dataSnapshot.getValue().toString())).into(tooth[finalJ]);
+                                    Glide.with(Home_Activity.this)
+                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .into(tooth[finalJ]);
                                 }
 
                                 @Override
@@ -318,6 +323,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+
     private void setMusic() {
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
@@ -331,8 +337,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.setDataSource(musicUrl); //設定media的路徑
                     music.prepare();
                     progressDialog.dismiss();
-                    if(currentTime==defaultTime)
-                        startDialog();
+
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
@@ -415,11 +420,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void startDialog() {
         AlertDialog.Builder startDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
         startDialog.setTitle("貼心提醒");
-        startDialog.setMessage("使用BrushGo刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");
+        startDialog.setMessage("刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                setMusic();
             }
         };
         startDialog.setNeutralButton("已清潔，開始刷牙。",confirmClick);
@@ -457,10 +462,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void timerStop() {
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
+        setProgressbar();
         music.stop();
         setMusic();
         tooth_stop();
-        setProgressbar();
     }
 
     private void setProgressbar() {
@@ -470,7 +475,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void finishDialog() {
-        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
         finishDialog.setTitle("時間到了~");
         finishDialog.setMessage("恭喜你刷好牙了，請按下確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){

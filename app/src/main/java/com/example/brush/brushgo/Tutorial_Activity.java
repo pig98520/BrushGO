@@ -12,9 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 
 public class Tutorial_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private Button menu;
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Boolean isdoubleClick=false;
@@ -67,7 +64,6 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Tutorial_Activity.this);
-        menu=(Button) findViewById(R.id.btn_menu);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
         viewPager=(ViewPager)findViewById(R.id.viewPager);
@@ -76,12 +72,6 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     }
 
     private void processControl() {
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
