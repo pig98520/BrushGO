@@ -628,6 +628,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     Intent intent=new Intent();
                     intent.setClass(Home_Activity.this,MainActivity.class);
                     startActivity(intent);
+/*                    deleteAccount();*/
                 }
             };
             DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
@@ -643,7 +644,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    /*private void deleteAccount() {
+        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
 
+                } else {
+
+                }
+            }
+        });
+    }*/
     @Override
     protected void onStop() {
         super.onStop();
