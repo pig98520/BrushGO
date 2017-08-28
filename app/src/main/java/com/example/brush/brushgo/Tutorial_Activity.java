@@ -2,9 +2,11 @@ package com.example.brush.brushgo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -61,6 +63,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         processControl();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Tutorial_Activity.this);
@@ -95,6 +98,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
 
     private void finisnDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        finishDialog.setCancelable(false);
         finishDialog.setTitle("教學結束");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
             @Override

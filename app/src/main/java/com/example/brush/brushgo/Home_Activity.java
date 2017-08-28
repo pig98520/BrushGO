@@ -130,6 +130,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
     private MediaPlayer finish_music;
+    private Boolean finish=false;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
@@ -328,7 +329,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
-        loadingDialog();
+        if(!finish)
+            loadingDialog();
         musicRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -337,6 +339,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.setDataSource(musicUrl); //設定media的路徑
                     music.prepare();
                     progressDialog.dismiss();
+                    finish=false;
 
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
@@ -419,6 +422,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void startDialog() {
         AlertDialog.Builder startDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        startDialog.setCancelable(false);
         startDialog.setTitle("貼心提醒");
         startDialog.setMessage("刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
@@ -445,6 +449,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onFinish() {
+                finish=true;
                 play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
                 finishDialog();
@@ -474,8 +479,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar.setProgress(defaultTime-currentTime);
     }
 
-    private void finishDialog() {
+    /*private void finishDialog() {
         AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
+        finishDialog.setCancelable(false);
         finishDialog.setTitle("時間到了~");
         finishDialog.setMessage("恭喜你刷好牙了，請按下確認以紀錄。");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
@@ -488,6 +494,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         };
         finishDialog.setNeutralButton("確定",confirmClick);
         finishDialog.show();
+    }*/
+    private void finishDialog() {
+        startActivity(new Intent(this,Finsih_Dialog.class));
+        recordData();
+        setReminder();
     }
 
     private void setReminder() {
@@ -515,7 +526,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void recordData() {
         DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(),nowTime);
         recordRef.push().setValue(data);
-        Toast.makeText(Home_Activity.this,  "使用紀錄已更新", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -37,6 +37,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Finsih_Dialog"
+        android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme"/>
+
         <receiver android:name=".AlarmNotificationReceiver"></receiver>
         <receiver android:name=".AlarmReminderReceiver"></receiver>
         <receiver android:name=".AlarmRebootReceiver">
