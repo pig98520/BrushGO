@@ -65,8 +65,8 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private void processView() {
-        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
-        navigateionView.setNavigationItemSelectedListener(Tutorial_Activity.this);
+        NavigationView navigationView=(NavigationView) findViewById(R.id.nav_information);
+        navigationView.setNavigationItemSelectedListener(Tutorial_Activity.this);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
         viewPager=(ViewPager)findViewById(R.id.viewPager);

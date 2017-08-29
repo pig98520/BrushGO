@@ -37,7 +37,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Finsih_Dialog"
+        <activity android:name=".Firework_Dialog"
         android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme"/>
 

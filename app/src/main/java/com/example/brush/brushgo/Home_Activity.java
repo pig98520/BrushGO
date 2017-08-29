@@ -496,7 +496,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         finishDialog.show();
     }*/
     private void finishDialog() {
-        startActivity(new Intent(this,Finsih_Dialog.class));
+        startActivity(new Intent(this,Firework_Dialog.class));
         recordData();
         setReminder();
     }
@@ -556,26 +556,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             arrow_array[4].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*6&&currentTime<defaultTime-aveTime*5) {
-/*            for(int i=0;i<lower_left.length-1;i++)
-            {
-                lower_left[i].setImageResource(R.drawable.tooth_clean_128);
-            }*/
             arrow_array[4].setVisibility(View.INVISIBLE);
             arrow_array[5].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*7&&currentTime<defaultTime-aveTime*6) {
-/*            for(int i=0;i<lower_right.length-1;i++)
-            {
-                lower_right[i].setImageResource(R.drawable.tooth_clean_128);
-            }*/
             arrow_array[5].setVisibility(View.INVISIBLE);
             arrow_array[6].setVisibility(View.VISIBLE);
         }
         else  if(currentTime>defaultTime-aveTime*8&&currentTime<defaultTime-aveTime*7) {
-/*            for(int i=0;i<upper_right.length-1;i++)
-            {
-                upper_right[i].setImageResource(R.drawable.tooth_clean_128);
-            }*/
             arrow_array[6].setVisibility(View.INVISIBLE);
             arrow_array[7].setVisibility(View.VISIBLE);
         }
@@ -583,7 +571,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void tooth_stop() {
         arrow_array[7].setVisibility(View.INVISIBLE);
-        vibrator.vibrate(3000);
+        vibrator.vibrate(1500);
 
         for(int i=0;i<arrow_array.length-1;i++)
             arrow_array[i].setVisibility(View.INVISIBLE);
