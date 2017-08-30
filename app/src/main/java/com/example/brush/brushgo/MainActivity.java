@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             progressDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "無法使用google帳戶登入",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -265,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
                         Toast.makeText(MainActivity.this,"請檢查帳號和密碼。", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -284,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
                         if(!isEmailValid(user))
                             Toast.makeText(MainActivity.this,"帳號必須為電子郵件。", Toast.LENGTH_SHORT).show();
                         else if(psw.length()<6)

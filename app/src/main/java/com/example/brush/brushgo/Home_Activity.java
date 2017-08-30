@@ -421,7 +421,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void startDialog() {
-        AlertDialog.Builder startDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        AlertDialog.Builder startDialog=new AlertDialog.Builder(this);
         startDialog.setCancelable(false);
         startDialog.setTitle("貼心提醒");
         startDialog.setMessage("刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");

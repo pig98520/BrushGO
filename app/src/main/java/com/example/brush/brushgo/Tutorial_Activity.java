@@ -97,7 +97,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     }
 
     private void finisnDialog() {
-        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this,R.style.DialogCustom);
+        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
         finishDialog.setCancelable(false);
         finishDialog.setTitle("教學結束");
         DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
