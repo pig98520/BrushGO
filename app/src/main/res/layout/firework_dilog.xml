@@ -35,8 +35,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.904"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.904" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -55,8 +54,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.144" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -75,8 +73,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.089"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.089" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -95,8 +92,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.914"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.914" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -115,8 +111,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -135,8 +130,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -155,8 +149,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -175,8 +168,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/fireworks" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/title"

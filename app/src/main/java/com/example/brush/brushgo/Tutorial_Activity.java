@@ -1,5 +1,6 @@
 package com.example.brush.brushgo;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -14,7 +15,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +34,12 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private Boolean isdoubleClick=false;
     private Tutorial_Adapter customAdapter;
     private ViewPager viewPager;
+    private int[] sliderView=new int[]{R.id.slider_1,R.id.slider_2,R.id.slider_3,R.id.slider_4};
+    private ImageView[] slider=new ImageView[sliderView.length];
+    private Dialog customDialog;
+    private Button dialog_confirm;
+    private TextView dialog_title;
+    private TextView dialog_message;
 
     @Override
     public void onBackPressed() {
@@ -72,15 +83,23 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         viewPager=(ViewPager)findViewById(R.id.viewPager);
         customAdapter=new Tutorial_Adapter(this);
         viewPager.setAdapter(customAdapter);
+        for(int i=0;i<slider.length;i++)
+            slider[i]=(ImageView)findViewById(sliderView[i]);
     }
 
     private void processControl() {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                if(position==customAdapter.getCount()-1) {
+                if (position == customAdapter.getCount() - 1) {
                     finisnDialog();
+                }
+                for (int i = 0; i < customAdapter.getCount(); i++)
+                {
+                    if(position==i)
+                        slider[i].setImageResource(R.drawable.slider_black);
+                    else
+                        slider[i].setImageResource(R.drawable.slider_gray);
                 }
             }
 
@@ -94,31 +113,39 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
 
             }
         });
+        for(int i=0;i<slider.length;i++)
+        {
+            final int finalI = i;
+            slider[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewPager.setCurrentItem(finalI, true);
+                }
+            });
+        }
     }
 
     private void finisnDialog() {
-        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
-        finishDialog.setCancelable(false);
-        finishDialog.setTitle("教學結束");
-        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+        customDialog =new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("教學結束");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("馬上使用BrushGo刷牙吧！");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("Go");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
+        customDialog.show();
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent=new Intent();
-                intent.setClass(Tutorial_Activity.this,Home_Activity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                customDialog.dismiss();
+                startActivity(new Intent(Tutorial_Activity.this,Home_Activity.class));
             }
-        };
-        DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
-        };
-        finishDialog.setNeutralButton("開始刷牙",confirmClick);
-        finishDialog.setNegativeButton("重看一次",cancelClick);
-        finishDialog.show();
+        });
     }
 
     @Override

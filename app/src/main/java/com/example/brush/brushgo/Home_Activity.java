@@ -1,13 +1,13 @@
 package com.example.brush.brushgo;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -141,6 +142,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private PendingIntent pendingIntent;
     private Vibrator vibrator;
 
+    private Dialog customDialog;
+    private TextView dialog_title;
+    private TextView dialog_message;
+    private Button dialog_confirm;
+    private ImageView[] fireworkArray =new ImageView[8];
+    private int[] fireworkView =new int[]{R.id.imageView1,R.id.imageView2,R.id.imageView3,R.id.imageView4,
+            R.id.imageView5,R.id.imageView6,R.id.imageView7,R.id.imageView8};
+
+
     @Override
     public void onBackPressed() {
         if(!isdoubleClick)
@@ -178,6 +188,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         startDialog();
         processControl();
     }
+
 
     private void processView() {
         layout=(ConstraintLayout)findViewById(R.id.constraintLayout);
@@ -233,15 +244,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()==null) {
+                    Intent intent=new Intent();
+                    intent.setClass(Home_Activity.this,Tutorial_Activity.class);
+                    startActivity(intent);
+
                     DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
                     settingRef.setValue(setting);
 
                     DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
                     profileRef.setValue(profile);
-
-                    Intent intent=new Intent();
-                    intent.setClass(Home_Activity.this,Tutorial_Activity.class);
-                    startActivity(intent);
                 }
             }
 
@@ -268,6 +279,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
+
     private void setTooth() {
         for(int j=0;j<tooth.length;j++) {
             final int finalJ = j;
@@ -278,10 +290,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         if(dataSnapshot.getValue().toString().trim().equals("b"))
                         {
                             imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                public void onDataChange(final DataSnapshot dataSnapshot) {
                                     Glide.with(Home_Activity.this)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
 
@@ -298,6 +312,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Glide.with(Home_Activity.this)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
 
@@ -354,12 +369,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void loadingDialog() {
         progressDialog.setTitle("Loading");
-        progressDialog.setMessage("載入音樂中,請稍後");
+        progressDialog.setMessage("載入音樂中，請稍後");
         progressDialog.setIcon(R.drawable.loading_24);
-/*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
-        progressDialog.setProgressStyle(R.style.DialogCustom);
-        progressDialog.setIndeterminate(true);
-        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
         progressDialog.show();
     }
 
@@ -421,18 +433,27 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void startDialog() {
-        AlertDialog.Builder startDialog=new AlertDialog.Builder(this);
-        startDialog.setCancelable(false);
-        startDialog.setTitle("貼心提醒");
-        startDialog.setMessage("刷牙前，請先使用牙間刷及牙線清潔您的牙縫喔~");
-        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+        customDialog =new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("貼心提醒");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("刷牙前請先使用牙線及牙間刷做簡單清潔。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("已清潔，開始刷牙。");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
+        customDialog.show();
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                customDialog.dismiss();
                 setMusic();
             }
-        };
-        startDialog.setNeutralButton("已清潔，開始刷牙。",confirmClick);
-        startDialog.show();
+        });
     }
 
     private void timerStart() {
@@ -479,26 +500,37 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         progressBar.setProgress(defaultTime-currentTime);
     }
 
-    /*private void finishDialog() {
-        AlertDialog.Builder finishDialog=new AlertDialog.Builder(this);
-        finishDialog.setCancelable(false);
-        finishDialog.setTitle("時間到了~");
-        finishDialog.setMessage("恭喜你刷好牙了，請按下確認以紀錄。");
-        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+    private void finishDialog() {
+        customDialog =new Dialog(this);
+        customDialog.setContentView(R.layout.firework_dilog);
+        customDialog.setCancelable(false);
+
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("刷牙時間到囉");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("恭喜您刷完牙了，按下確認以紀錄。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+        for(int i = 0; i< fireworkView.length; i++) {
+            fireworkArray[i] = (ImageView) customDialog.findViewById(fireworkView[i]);
+            Glide.with(Home_Activity.this)
+                    .load(Uri.parse("https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/image%2Ffirework.gif?alt=media&token=c3d69e19-6be0-415e-86ff-7aeed07f3c51"))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(fireworkArray[i]);
+        }
+
+        customDialog.show();
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish_music.stop();
+            public void onClick(View v) {
                 recordData();
                 setReminder();
+                music.stop();
+                customDialog.dismiss();
+                Toast.makeText(Home_Activity.this,"資料已儲存",Toast.LENGTH_LONG).show();
             }
-        };
-        finishDialog.setNeutralButton("確定",confirmClick);
-        finishDialog.show();
-    }*/
-    private void finishDialog() {
-        startActivity(new Intent(this,Firework_Dialog.class));
-        recordData();
-        setReminder();
+        });
     }
 
     private void setReminder() {
