@@ -1,7 +1,6 @@
 package com.example.brush.brushgo;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +36,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private ImageView[] slider=new ImageView[sliderView.length];
     private Dialog customDialog;
     private Button dialog_confirm;
+    private Button dialog_cancel;
     private TextView dialog_title;
     private TextView dialog_message;
 
@@ -113,7 +112,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
 
             }
         });
-        for(int i=0;i<slider.length;i++)
+        for(int i=0;i<customAdapter.getCount();i++)
         {
             final int finalI = i;
             slider[i].setOnClickListener(new View.OnClickListener() {
@@ -126,15 +125,17 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     }
 
     private void finisnDialog() {
-        customDialog =new Dialog(this);
-        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_two);
         customDialog.setCancelable(false);
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("教學結束");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
         dialog_message.setText("馬上使用BrushGo刷牙吧！");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
-        dialog_confirm.setText("Go");
+        dialog_confirm.setText("開始刷牙");
+        dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+        dialog_cancel.setText("再看一次");
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
         customDialog.show();
@@ -144,6 +145,13 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             public void onClick(View v) {
                 customDialog.dismiss();
                 startActivity(new Intent(Tutorial_Activity.this,Home_Activity.class));
+            }
+        });
+        dialog_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                startActivity(new Intent(Tutorial_Activity.this,Tutorial_Activity.class));
             }
         });
     }
@@ -184,27 +192,35 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         }
         else if(id==R.id.Logout)
         {
-            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
-            logoutDialog.setTitle("確定要登出?");
-            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
-            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    auth.signOut();
-                    Intent intent=new Intent();
-                    intent.setClass(Tutorial_Activity.this,MainActivity.class);
-                    startActivity(intent);
-                }
-            };
-            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            customDialog =new Dialog(this,R.style.DialogCustom);
+            customDialog.setContentView(R.layout.custom_dialog_two);
+            customDialog.setCancelable(false);
+            dialog_title = (TextView) customDialog.findViewById(R.id.title);
+            dialog_title.setText("確定要登出?");
+            dialog_message = (TextView) customDialog.findViewById(R.id.message);
+            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+            dialog_confirm.setText("登出");
+            dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+            dialog_cancel.setText("取消");
+            customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
+            customDialog.show();
+
+            dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    auth.signOut();
+                    customDialog.dismiss();
+                    startActivity(new Intent(Tutorial_Activity.this,MainActivity.class));
                 }
-            };
-            logoutDialog.setNeutralButton("確定",confirmClick);
-            logoutDialog.setNegativeButton("取消",cancelClick);
-            logoutDialog.show();
+            });
+            dialog_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog.dismiss();
+                }
+            });
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

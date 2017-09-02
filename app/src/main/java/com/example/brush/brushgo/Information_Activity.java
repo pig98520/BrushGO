@@ -1,6 +1,6 @@
 package com.example.brush.brushgo;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,15 +8,28 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -27,6 +40,13 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Boolean isdoubleClick=false;
+    private RecyclerView recyclerView;
+
+    private Dialog customDialog;
+    private Button dialog_confirm;
+    private Button dialog_cancel;
+    private TextView dialog_title;
+    private TextView dialog_message;
 
     @Override
     public void onBackPressed() {
@@ -67,7 +87,63 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         menu=(Button) findViewById(R.id.btn_menu);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setupRecyclerView();
     }
+
+    private void setupRecyclerView() {
+        DatabaseReference dbRef=FirebaseDatabase.getInstance().getReference("information");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    DB_Information info=snapshot.getValue(DB_Information.class);
+                    Log.i("Photo's Title:", info.getTitle());
+                    Log.i("Photo's Content:", info.getContent());
+                    Log.i("Photo's Url:", info.getImageUrl());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Photo", "failed: " + databaseError.getMessage());
+            }
+        });
+
+        FirebaseRecyclerAdapter<DB_Information,infoViewHolder> adapter=new FirebaseRecyclerAdapter<DB_Information, infoViewHolder>(DB_Information.class,R.layout.information_list,infoViewHolder.class,dbRef) {
+            @Override
+            protected void populateViewHolder(infoViewHolder viewHolder, DB_Information model, int position) {
+                viewHolder.setPhoto(model);
+            }
+        };
+        recyclerView.setAdapter(adapter);
+
+    }
+    static class infoViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView title;
+        TextView content;
+
+        public infoViewHolder(View itemView) {
+            super(itemView);
+            image = (ImageView) itemView.findViewById(R.id.imageView);
+            title = (TextView) itemView.findViewById(R.id.txt_title);
+            content = (TextView) itemView.findViewById(R.id.txt_content);
+        }
+
+        public void setPhoto(DB_Information lerisure) {
+            title.setText(lerisure.getTitle());
+/*            content.setText(lerisure.getContent());*/
+            content.setText(Html.fromHtml("<a href="+lerisure.getContent()+">觀看文章</a> "));
+            content.setMovementMethod(LinkMovementMethod.getInstance());
+            Glide.with(image.getContext())
+                    .load(lerisure.getImageUrl())
+                    .into(image);
+        }
+    }
+
 
     private void processControl() {
         menu.setOnClickListener(new View.OnClickListener() {
@@ -114,27 +190,35 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         }
         else if(id==R.id.Logout)
         {
-            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
-            logoutDialog.setTitle("確定要登出?");
-            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
-            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    auth.signOut();
-                    Intent intent=new Intent();
-                    intent.setClass(Information_Activity.this,MainActivity.class);
-                    startActivity(intent);
-                }
-            };
-            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            customDialog =new Dialog(this,R.style.DialogCustom);
+            customDialog.setContentView(R.layout.custom_dialog_two);
+            customDialog.setCancelable(false);
+            dialog_title = (TextView) customDialog.findViewById(R.id.title);
+            dialog_title.setText("確定要登出?");
+            dialog_message = (TextView) customDialog.findViewById(R.id.message);
+            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+            dialog_confirm.setText("登出");
+            dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+            dialog_cancel.setText("取消");
+            customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
+            customDialog.show();
+
+            dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    auth.signOut();
+                    customDialog.dismiss();
+                    startActivity(new Intent(Information_Activity.this,MainActivity.class));
                 }
-            };
-            logoutDialog.setNeutralButton("確定",confirmClick);
-            logoutDialog.setNegativeButton("取消",cancelClick);
-            logoutDialog.show();
+            });
+            dialog_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog.dismiss();
+                }
+            });
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

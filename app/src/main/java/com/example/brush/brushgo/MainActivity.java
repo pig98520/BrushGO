@@ -1,10 +1,8 @@
 package com.example.brush.brushgo;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -41,7 +40,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final String TAG =" MainActivity" ;
     private static final int RC_SIGN_IN=1;
     private GoogleSignInOptions gso;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
+    private TextView dialog_title;
+    private TextView dialog_message;
     private Button btn_sigin;
     private Button btn_forget;
     private Button btn_signup;
@@ -141,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         edt_id =(EditText)findViewById(R.id.edt_id);
         edt_psw =(EditText)findViewById(R.id.edt_psw);
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
-        progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
         // Configure Google Sign In
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -298,14 +298,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void loadingDialog() {
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("登入中,請稍後");
-        progressDialog.setIcon(R.drawable.loading_24);
+        progressDialog =new Dialog(this,R.style.DialogCustom);
+        progressDialog.setContentView(R.layout.custom_progress_dialog);
+        progressDialog.setCancelable(false);
+        dialog_title = (TextView) progressDialog.findViewById(R.id.title);
+        dialog_title.setText("Loading");
+        dialog_message = (TextView) progressDialog.findViewById(R.id.message);
+        dialog_message.setText("載入音樂請稍候...");
+        progressDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
-/*        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
-        progressDialog.setProgressStyle(R.style.DialogCustom);
-        progressDialog.setIndeterminate(true);
-        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.show();
     }
 

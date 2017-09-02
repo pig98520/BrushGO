@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +83,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Firebase timeRef;
     private Firebase reminderRef;
     private Boolean isdoubleClick=false;
+
+    private Dialog customDialog;
+    private Button dialog_confirm;
+    private Button dialog_cancel;
+    private TextView dialog_title;
+    private TextView dialog_message;
 
     @Override
     public void onBackPressed() {
@@ -412,27 +416,35 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         }
         else if(id==R.id.Logout)
         {
-            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
-            logoutDialog.setTitle("確定要登出?");
-            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
-            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    auth.signOut();
-                    Intent intent=new Intent();
-                    intent.setClass(Setting_Activity.this,MainActivity.class);
-                    startActivity(intent);
-                }
-            };
-            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            customDialog =new Dialog(this,R.style.DialogCustom);
+            customDialog.setContentView(R.layout.custom_dialog_two);
+            customDialog.setCancelable(false);
+            dialog_title = (TextView) customDialog.findViewById(R.id.title);
+            dialog_title.setText("確定要登出?");
+            dialog_message = (TextView) customDialog.findViewById(R.id.message);
+            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+            dialog_confirm.setText("登出");
+            dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+            dialog_cancel.setText("取消");
+            customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
+            customDialog.show();
+
+            dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    auth.signOut();
+                    customDialog.dismiss();
+                    startActivity(new Intent(Setting_Activity.this,MainActivity.class));
                 }
-            };
-            logoutDialog.setNeutralButton("確定",confirmClick);
-            logoutDialog.setNegativeButton("取消",cancelClick);
-            logoutDialog.show();
+            });
+            dialog_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog.dismiss();
+                }
+            });
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

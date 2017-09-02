@@ -3,10 +3,8 @@ package com.example.brush.brushgo;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -21,7 +19,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,7 +94,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private TextView timer;
     private TextView countdown;
     private ProgressBar progressBar;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private int defaultTime;
     private int aveTime;
     private int timersec;
@@ -146,6 +143,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private TextView dialog_title;
     private TextView dialog_message;
     private Button dialog_confirm;
+    private Button dialog_cancel;
     private ImageView[] fireworkArray =new ImageView[8];
     private int[] fireworkView =new int[]{R.id.imageView1,R.id.imageView2,R.id.imageView3,R.id.imageView4,
             R.id.imageView5,R.id.imageView6,R.id.imageView7,R.id.imageView8};
@@ -202,7 +200,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
-        progressDialog = new ProgressDialog(this,R.style.DialogCustom);
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
@@ -355,7 +352,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.prepare();
                     progressDialog.dismiss();
                     finish=false;
-
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
@@ -368,10 +364,15 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void loadingDialog() {
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("載入音樂中，請稍後");
-        progressDialog.setIcon(R.drawable.loading_24);
+        progressDialog =new Dialog(this,R.style.DialogCustom);
+        progressDialog.setContentView(R.layout.custom_progress_dialog);
+        progressDialog.setCancelable(false);
+        dialog_title = (TextView) progressDialog.findViewById(R.id.title);
+        dialog_title.setText("Loading");
+        dialog_message = (TextView) progressDialog.findViewById(R.id.message);
+        dialog_message.setText("載入音樂請稍候...");
         progressDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
         progressDialog.show();
     }
 
@@ -433,10 +434,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void startDialog() {
-        customDialog =new Dialog(this);
-        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_one);
         customDialog.setCancelable(false);
-
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
@@ -501,7 +501,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void finishDialog() {
-        customDialog =new Dialog(this);
+        customDialog =new Dialog(this,R.style.DialogCustom);
         customDialog.setContentView(R.layout.firework_dilog);
         customDialog.setCancelable(false);
 
@@ -648,28 +648,35 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         else if(id==R.id.Logout)
         {
-            AlertDialog.Builder logoutDialog=new AlertDialog.Builder(this);
-            logoutDialog.setTitle("確定要登出?");
-            logoutDialog.setMessage("登出後即無法使用部分提醒功能。");
-            DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    auth.signOut();
-                    Intent intent=new Intent();
-                    intent.setClass(Home_Activity.this,MainActivity.class);
-                    startActivity(intent);
-/*                    deleteAccount();*/
-                }
-            };
-            DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            customDialog =new Dialog(this,R.style.DialogCustom);
+            customDialog.setContentView(R.layout.custom_dialog_two);
+            customDialog.setCancelable(false);
+            dialog_title = (TextView) customDialog.findViewById(R.id.title);
+            dialog_title.setText("確定要登出?");
+            dialog_message = (TextView) customDialog.findViewById(R.id.message);
+            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+            dialog_confirm.setText("登出");
+            dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+            dialog_cancel.setText("取消");
+            customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
+            customDialog.show();
+
+            dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    auth.signOut();
+                    customDialog.dismiss();
+                    startActivity(new Intent(Home_Activity.this,MainActivity.class));
                 }
-            };
-            logoutDialog.setNeutralButton("確定",confirmClick);
-            logoutDialog.setNegativeButton("取消",cancelClick);
-            logoutDialog.show();
+            });
+            dialog_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog.dismiss();
+                }
+            });
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
