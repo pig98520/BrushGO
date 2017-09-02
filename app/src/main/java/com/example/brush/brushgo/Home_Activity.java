@@ -201,6 +201,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
         music=new MediaPlayer();
+        finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
@@ -339,6 +340,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
+        music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
         if(!finish)
@@ -474,7 +476,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
                 finishDialog();
-                finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
                 finish_music.start();
             }
         };
@@ -526,7 +527,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 recordData();
                 setReminder();
-                music.stop();
+                if(finish_music.isPlaying())
+                    finish_music.stop();
                 customDialog.dismiss();
                 Toast.makeText(Home_Activity.this,"資料已儲存",Toast.LENGTH_LONG).show();
             }
@@ -701,5 +703,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             music.pause();
             timerPause();
         }
+        if(finish_music.isPlaying())
+            finish_music.pause();
     }
 }
