@@ -200,6 +200,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
+        music=new MediaPlayer();
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
@@ -338,7 +339,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
-        music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
         if(!finish)
