@@ -43,6 +43,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.example.brush.brushgo.R.id.Home;
+import static com.example.brush.brushgo.R.id.arrow_1;
+import static com.example.brush.brushgo.R.id.arrow_10;
+import static com.example.brush.brushgo.R.id.arrow_11;
+import static com.example.brush.brushgo.R.id.arrow_12;
+import static com.example.brush.brushgo.R.id.arrow_13;
+import static com.example.brush.brushgo.R.id.arrow_14;
+import static com.example.brush.brushgo.R.id.arrow_15;
+import static com.example.brush.brushgo.R.id.arrow_16;
+import static com.example.brush.brushgo.R.id.arrow_17;
+import static com.example.brush.brushgo.R.id.arrow_18;
+import static com.example.brush.brushgo.R.id.arrow_19;
+import static com.example.brush.brushgo.R.id.arrow_2;
+import static com.example.brush.brushgo.R.id.arrow_20;
+import static com.example.brush.brushgo.R.id.arrow_21;
+import static com.example.brush.brushgo.R.id.arrow_22;
+import static com.example.brush.brushgo.R.id.arrow_23;
+import static com.example.brush.brushgo.R.id.arrow_24;
+import static com.example.brush.brushgo.R.id.arrow_25;
+import static com.example.brush.brushgo.R.id.arrow_3;
+import static com.example.brush.brushgo.R.id.arrow_4;
+import static com.example.brush.brushgo.R.id.arrow_5;
+import static com.example.brush.brushgo.R.id.arrow_6;
+import static com.example.brush.brushgo.R.id.arrow_7;
+import static com.example.brush.brushgo.R.id.arrow_8;
+import static com.example.brush.brushgo.R.id.arrow_9;
 import static com.example.brush.brushgo.R.id.drawerLayout;
 import static com.example.brush.brushgo.R.id.imageView_1;
 import static com.example.brush.brushgo.R.id.imageView_10;
@@ -76,10 +101,6 @@ import static com.example.brush.brushgo.R.id.imageView_6;
 import static com.example.brush.brushgo.R.id.imageView_7;
 import static com.example.brush.brushgo.R.id.imageView_8;
 import static com.example.brush.brushgo.R.id.imageView_9;
-import static com.example.brush.brushgo.R.id.lower_left;
-import static com.example.brush.brushgo.R.id.lower_right;
-import static com.example.brush.brushgo.R.id.upper_left;
-import static com.example.brush.brushgo.R.id.upper_right;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -123,7 +144,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             imageView_9,imageView_10,imageView_11,imageView_12,imageView_13,imageView_14, imageView_15,imageView_16,
             imageView_17,imageView_18,imageView_19,imageView_20,imageView_21, imageView_22,imageView_23,imageView_24,
             imageView_25,imageView_26,imageView_27,imageView_28,imageView_29,imageView_30,imageView_31,imageView_32};
-    private ImageView arrow_array[]=new ImageView[8];
+    private ImageView arrow[]=new ImageView[25];
+    private int arrow_id[]=new int[]{
+            arrow_1,arrow_2,arrow_3,arrow_4,arrow_5,
+           arrow_6,arrow_7,arrow_8,arrow_9,arrow_10,
+            arrow_11,arrow_12,arrow_13,arrow_14,arrow_15,
+            arrow_16,arrow_17,arrow_18,arrow_19,arrow_20,
+            arrow_21,arrow_22,arrow_23,arrow_24,arrow_25};
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
     private MediaPlayer music;
@@ -218,19 +245,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         for(int i=0;i<tooth.length;i++)
             tooth[i]=(ImageView)findViewById(tooth_id[i]);
 
+        for(int i = 0; i< arrow.length; i++)
+            arrow[i]=(ImageView)findViewById(arrow_id[i]);
+
         colorArray[0]=R.color.background;
         colorArray[1]=R.color.pink;
         colorArray[2]=R.color.yellow;
         colorArray[3]=R.color.purple;
 
-        arrow_array[0]=(ImageView)findViewById(upper_left);
-        arrow_array[1]=(ImageView)findViewById(upper_right);
-        arrow_array[2]=(ImageView)findViewById(lower_right);
-        arrow_array[3]=(ImageView)findViewById(lower_left);
-        arrow_array[4]=(ImageView)findViewById(R.id.lower_left_out);
-        arrow_array[5]=(ImageView)findViewById(R.id.lower_right_out);
-        arrow_array[6]=(ImageView)findViewById(R.id.upper_right_out);
-        arrow_array[7]=(ImageView)findViewById(R.id.upper_left_out);
 
         alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
         intent =new Intent(Home_Activity.this,AlarmNotificationReceiver.class);
@@ -289,7 +311,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         if(dataSnapshot.getValue().toString().trim().equals("b"))
                         {
                             imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
-
                                 @Override
                                 public void onDataChange(final DataSnapshot dataSnapshot) {
                                     Glide.with(Home_Activity.this)
@@ -565,50 +586,37 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void tooth_start() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
-        aveTime=defaultTime/8;
+        aveTime=defaultTime/25;
         if(currentTime%aveTime==0&&currentTime!=defaultTime&&currentTime!=0)
-            vibrator.vibrate(1000);
+            vibrator.vibrate(500);
 
-        if(currentTime>defaultTime-aveTime*1&&currentTime<defaultTime-aveTime*0-1) {
-            arrow_array[0].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*2&&currentTime<defaultTime-aveTime*1) {
-            arrow_array[0].setVisibility(View.INVISIBLE);
-            arrow_array[1].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*3&&currentTime<defaultTime-aveTime*2) {
-            arrow_array[1].setVisibility(View.INVISIBLE);
-            arrow_array[2].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*4&&currentTime<defaultTime-aveTime*3) {
-            arrow_array[2].setVisibility(View.INVISIBLE);
-            arrow_array[3].setVisibility(View.VISIBLE);
-        }
-
-        else  if(currentTime>defaultTime-aveTime*5&&currentTime<defaultTime-aveTime*4) {
-            arrow_array[3].setVisibility(View.INVISIBLE);
-            arrow_array[4].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*6&&currentTime<defaultTime-aveTime*5) {
-            arrow_array[4].setVisibility(View.INVISIBLE);
-            arrow_array[5].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*7&&currentTime<defaultTime-aveTime*6) {
-            arrow_array[5].setVisibility(View.INVISIBLE);
-            arrow_array[6].setVisibility(View.VISIBLE);
-        }
-        else  if(currentTime>defaultTime-aveTime*8&&currentTime<defaultTime-aveTime*7) {
-            arrow_array[6].setVisibility(View.INVISIBLE);
-            arrow_array[7].setVisibility(View.VISIBLE);
+        for(int i = 0; i< arrow.length; i++){
+            if(i==0)
+            {
+                if(currentTime>defaultTime-aveTime*(i+1)&&currentTime<defaultTime-aveTime*(i-1))
+                    arrow[i].setVisibility(View.VISIBLE);
+            }
+            else if(i==arrow.length-1)
+            {
+                if(currentTime>defaultTime-aveTime*(i+1)&&currentTime<defaultTime-aveTime*i){
+                    arrow[i].setImageResource(R.drawable.tongue_brush);
+                    arrow[i-1].setVisibility(View.INVISIBLE);
+                }
+            }
+            else
+                if(currentTime>defaultTime-aveTime*(i+1)&&currentTime<defaultTime-aveTime*i){
+                    arrow[i].setVisibility(View.VISIBLE);
+                    arrow[i-1].setVisibility(View.INVISIBLE);
+                }
         }
     }
 
     private void tooth_stop() {
-        arrow_array[7].setVisibility(View.INVISIBLE);
-        vibrator.vibrate(1500);
+        arrow[arrow.length-1].setImageResource(R.drawable.tongue);
+        vibrator.vibrate(1000);
 
-        for(int i=0;i<arrow_array.length-1;i++)
-            arrow_array[i].setVisibility(View.INVISIBLE);
+        for(int i = 0; i< arrow.length-1; i++)
+            arrow[i].setVisibility(View.INVISIBLE);
         if(defaultTime%60<10)
             countdown.setText("0"+defaultTime/60+"：0"+defaultTime%60);
         else
