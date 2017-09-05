@@ -667,13 +667,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:rotation="30"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.00999999"
-            app:srcCompat="@drawable/arrow_3" />
+            app:srcCompat="@drawable/arrow_2" />
 
         <ImageView
             android:id="@+id/arrow_4"
@@ -727,7 +728,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.249"
-            app:srcCompat="@drawable/arrow_4" />
+            app:srcCompat="@drawable/arrow_3" />
 
         <ImageView
             android:id="@+id/arrow_7"
@@ -737,7 +738,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="160"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.791"
@@ -745,7 +745,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.29000002"
-            app:srcCompat="@drawable/arrow_1" />
+            app:srcCompat="@drawable/arrow_5" />
 
         <ImageView
             android:id="@+id/arrow_8"
@@ -755,7 +755,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="80"
+            android:rotation="20"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.701"
@@ -763,7 +763,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.17000002"
-            app:srcCompat="@drawable/arrow_2" />
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_9"
@@ -773,13 +773,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:rotation="330"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.116"
-            app:srcCompat="@drawable/arrow_3" />
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_10"
@@ -789,7 +790,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="340"
+            android:rotation="280"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.298"
@@ -797,7 +798,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.17"
-            app:srcCompat="@drawable/arrow_2" />
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_11"
@@ -807,6 +808,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:rotation="200"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.211"
@@ -814,7 +816,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.29000002"
-            app:srcCompat="@drawable/arrow_1" />
+            app:srcCompat="@drawable/arrow_5" />
 
         <ImageView
             android:id="@+id/arrow_12"
@@ -831,7 +833,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.264"
-            app:srcCompat="@drawable/arrow_4" />
+            app:srcCompat="@drawable/arrow_3" />
 
         <ImageView
             android:id="@+id/arrow_13"
@@ -841,7 +843,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="340"
+            android:rotation="180"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.025"
@@ -849,7 +851,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.624"
-            app:srcCompat="@drawable/arrow_1" />
+            app:srcCompat="@drawable/arrow_5" />
 
         <ImageView
             android:id="@+id/arrow_14"
@@ -859,7 +861,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="250"
+            android:rotation="190"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.19"
@@ -867,7 +869,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.794"
-            app:srcCompat="@drawable/arrow_2" />
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_15"
@@ -877,14 +879,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="180"
+            android:rotation="150"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85"
-            app:srcCompat="@drawable/arrow_3" />
+            app:layout_constraintVertical_bias="0.86"
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_16"
@@ -894,7 +896,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="160"
+            android:rotation="110"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.842"
@@ -902,7 +904,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.78"
-            app:srcCompat="@drawable/arrow_2" />
+            app:srcCompat="@drawable/arrow_4" />
 
         <ImageView
             android:id="@+id/arrow_17"
@@ -912,7 +914,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="180"
+            android:rotation="20"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.979"
@@ -920,7 +922,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.61"
-            app:srcCompat="@drawable/arrow_1" />
+            app:srcCompat="@drawable/arrow_5" />
 
         <ImageView
             android:id="@+id/arrow_18"
@@ -938,7 +940,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.621"
-            app:srcCompat="@drawable/arrow_4" />
+            app:srcCompat="@drawable/arrow_3" />
 
         <ImageView
             android:id="@+id/arrow_19"
@@ -951,7 +953,7 @@
             android:rotation="180"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.78"
+            app:layout_constraintHorizontal_bias="0.771"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -984,14 +986,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="180"
+            android:rotation="210"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.77"
-            app:srcCompat="@drawable/arrow_3" />
+            app:srcCompat="@drawable/arrow_2" />
 
         <ImageView
             android:id="@+id/arrow_22"
@@ -1001,7 +1003,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="250"
+            android:rotation="260"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.32"
@@ -1022,7 +1024,7 @@
             android:rotation="340"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.23"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -1045,7 +1047,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.65"
-            app:srcCompat="@drawable/arrow_4" />
+            app:srcCompat="@drawable/arrow_3" />
 
         <ImageView
             android:id="@+id/arrow_25"
