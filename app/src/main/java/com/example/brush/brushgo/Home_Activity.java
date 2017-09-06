@@ -315,6 +315,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 public void onDataChange(final DataSnapshot dataSnapshot) {
                                     Glide.with(Home_Activity.this)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .dontAnimate()
                                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
@@ -332,6 +333,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Glide.with(Home_Activity.this)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                            .dontAnimate()
                                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
@@ -535,10 +537,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
         for(int i = 0; i< fireworkView.length; i++) {
             fireworkArray[i] = (ImageView) customDialog.findViewById(fireworkView[i]);
-            Glide.with(Home_Activity.this)
+                    Glide.with(Home_Activity.this)
                     .load(Uri.parse("https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/image%2Ffirework.gif?alt=media&token=c3d69e19-6be0-415e-86ff-7aeed07f3c51"))
+                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(fireworkArray[i]);
+/*            StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("image").child("firework.gif");
+                    Glide.with(Home_Activity.this)
+                            .using(new FirebaseImageLoader())
+                            .load(storageReference)
+                            .into(fireworkArray[i]);*/
         }
 
         customDialog.show();

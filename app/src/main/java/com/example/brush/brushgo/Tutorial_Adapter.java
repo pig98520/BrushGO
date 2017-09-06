@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,6 @@ import java.util.ArrayList;
  */
 
 public class Tutorial_Adapter extends PagerAdapter {
-/*    private int[] imageUrl={R.drawable.tutorial_1,R.drawable.tutorial_2,R.drawable.tutorial_3,R.drawable.tutorial_4};*/
     private String [] imageUrl ={
         "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_1.png?alt=media&token=85823925-4687-4447-a815-e1ea1bc82dd8",
         "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_2.png?alt=media&token=3131009c-33c0-4bd2-91e4-9aa2f4755e5f",
@@ -29,7 +27,6 @@ public class Tutorial_Adapter extends PagerAdapter {
     private Context context;
     private View view;
     private ImageView imageView;
-    private Firebase dbRef;
     private ArrayList<String > imageList =new ArrayList<String>();
 
     public Tutorial_Adapter (Context context)

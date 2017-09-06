@@ -24,6 +24,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/play_button_512"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -39,6 +40,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/paint_button_512"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.839"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -55,6 +57,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/music_button_512"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -1095,6 +1098,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -1108,6 +1112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/white"
         app:menu="@menu/navigation_menu"></android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
