@@ -60,7 +60,6 @@ import static com.example.brush.brushgo.R.id.arrow_21;
 import static com.example.brush.brushgo.R.id.arrow_22;
 import static com.example.brush.brushgo.R.id.arrow_23;
 import static com.example.brush.brushgo.R.id.arrow_24;
-import static com.example.brush.brushgo.R.id.arrow_25;
 import static com.example.brush.brushgo.R.id.arrow_3;
 import static com.example.brush.brushgo.R.id.arrow_4;
 import static com.example.brush.brushgo.R.id.arrow_5;
@@ -101,6 +100,7 @@ import static com.example.brush.brushgo.R.id.imageView_6;
 import static com.example.brush.brushgo.R.id.imageView_7;
 import static com.example.brush.brushgo.R.id.imageView_8;
 import static com.example.brush.brushgo.R.id.imageView_9;
+import static com.example.brush.brushgo.R.id.tongue;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -150,12 +150,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
            arrow_6,arrow_7,arrow_8,arrow_9,arrow_10,
             arrow_11,arrow_12,arrow_13,arrow_14,arrow_15,
             arrow_16,arrow_17,arrow_18,arrow_19,arrow_20,
-            arrow_21,arrow_22,arrow_23,arrow_24,arrow_25};
+            arrow_21,arrow_22,arrow_23,arrow_24,tongue};
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
+    private CountDownTimer startTimer;
     private MediaPlayer music;
     private MediaPlayer finish_music;
+    private Boolean start=false;
     private Boolean finish=false;
+    private Boolean click_confirm=false;
+    private String push_key;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
@@ -377,6 +381,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.prepare();
                     progressDialog.dismiss();
                     finish=false;
+                    if(!start)
+                        startBrush();
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
@@ -426,6 +432,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.start();
                     timerStart();
                 }
+                startTimer.cancel();
+                start=true;
             }
 
         });
@@ -481,6 +489,44 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         });
     }
 
+    private void startBrush() {
+        if(!start) {
+            startTimer = new CountDownTimer(5 * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    vibrator.vibrate(1000);
+                    customDialog = new Dialog(Home_Activity.this, R.style.DialogCustom);
+                    customDialog.setContentView(R.layout.custom_dialog_one);
+                    customDialog.setCancelable(false);
+                    dialog_title = (TextView) customDialog.findViewById(R.id.title);
+                    dialog_title.setText("提醒");
+                    dialog_message = (TextView) customDialog.findViewById(R.id.message);
+                    dialog_message.setText("準備好要開始刷牙了嗎?");
+                    dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+                    dialog_confirm.setText("開始");
+                    dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            customDialog.dismiss();
+                            start = true;
+                            play.setBackgroundResource(R.drawable.pause_button_512);
+                            music.start();
+                            timerStart();
+                        }
+                    });
+                    customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+                    customDialog.show();
+                }
+            };
+            startTimer.start();
+        }
+    }
+
     private void timerStart() {
         isTimer=true;
         timersec= Integer.parseInt(timer.getText().toString().trim());
@@ -500,6 +546,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 timerStop();
                 finishDialog();
                 finish_music.start();
+                recordData();
+                setReminder();
             }
         };
         countdownTimer.start();
@@ -530,7 +578,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         customDialog.setCancelable(false);
 
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
-        dialog_title.setText("刷牙時間到囉");
+        dialog_title.setText("時間到囉");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
         dialog_message.setText("恭喜您刷完牙了，按下確認以紀錄。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
@@ -554,6 +602,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                click_confirm=true;
                 recordData();
                 setReminder();
                 if(finish_music.isPlaying())
@@ -587,8 +636,19 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void recordData() {
-        DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(),nowTime);
-        recordRef.push().setValue(data);
+        if(!click_confirm) {
+            DB_Record data = new DB_Record(auth.getCurrentUser().getEmail(), nowTime, "F");
+            recordRef.push().setValue(data, new Firebase.CompletionListener() {
+                @Override
+                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                    push_key=firebase.getKey();
+                }
+            });
+        }
+        else {
+            recordRef.child(push_key).child("click_confirm").setValue("T");
+            click_confirm=false;
+        }
     }
 
 
@@ -721,5 +781,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         if(finish_music.isPlaying())
             finish_music.pause();
+        startTimer.cancel();
     }
 }

@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public class Tutorial_Adapter extends PagerAdapter {
     private String [] imageUrl ={
-        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_1.png?alt=media&token=85823925-4687-4447-a815-e1ea1bc82dd8",
-        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_2.png?alt=media&token=3131009c-33c0-4bd2-91e4-9aa2f4755e5f",
-        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_3.png?alt=media&token=37ae4bc7-03b0-4c2f-aa74-25649244b7a8",
-        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_4.png?alt=media&token=1bef073e-6bd7-41be-b6f8-efc5310871b8"
+        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_1.png?alt=media&token=74fd4d58-8e2b-45de-bd9f-bb66ec7014c1",
+        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_2.png?alt=media&token=10f74194-ab79-430b-8712-3cf710b541cf",
+        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_3.png?alt=media&token=55267499-2df4-42c1-8c2b-9cf1396a3ff3",
+        "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_4.png?alt=media&token=3191f088-bec4-4c4b-9dca-3c4172b99f0d"
     };
     private LayoutInflater layoutInflater;
     private Context context;

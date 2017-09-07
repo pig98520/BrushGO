@@ -7,10 +7,12 @@ package com.example.brush.brushgo;
 public class DB_Record {
     private String user;
     private String time;
+    private String click_confirm;
 
-    public DB_Record(String user, String time) {
+    public DB_Record(String user, String time,String click_confirm) {
         this.user = user;
         this.time = time;
+        this.click_confirm=click_confirm;
     }
     public String getUser() {
         return user;
@@ -28,4 +30,11 @@ public class DB_Record {
         this.time = time;
     }
 
+    public String getClick_confirm() {
+        return click_confirm;
+    }
+
+    public void setClick_confirm(String click_confirm) {
+        this.click_confirm = click_confirm;
+    }
 }
