@@ -159,6 +159,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Boolean start=false;
     private Boolean finish=false;
     private Boolean click_confirm=false;
+    private long startTime=5;
     private String push_key;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
@@ -433,7 +434,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     timerStart();
                 }
                 startTimer.cancel();
-                start=true;
             }
 
         });
@@ -490,11 +490,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void startBrush() {
-        if(!start) {
-            startTimer = new CountDownTimer(5 * 1000, 1000) {
+            startTimer = new CountDownTimer(startTime * 1000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-
+                    startTime=millisUntilFinished/1000;
+                    start = true;
                 }
 
                 @Override
@@ -513,7 +513,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         @Override
                         public void onClick(View v) {
                             customDialog.dismiss();
-                            start = true;
+                            start=false;
                             play.setBackgroundResource(R.drawable.pause_button_512);
                             music.start();
                             timerStart();
@@ -524,7 +524,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
             };
             startTimer.start();
-        }
     }
 
     private void timerStart() {
@@ -781,6 +780,14 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         if(finish_music.isPlaying())
             finish_music.pause();
-        startTimer.cancel();
+        if(start)
+            startTimer.cancel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(start)
+            startTimer.start();
     }
 }
