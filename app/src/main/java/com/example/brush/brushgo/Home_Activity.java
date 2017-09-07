@@ -156,8 +156,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private CountDownTimer startTimer;
     private MediaPlayer music;
     private MediaPlayer finish_music;
-    private Boolean start=false;
-    private Boolean finish=false;
+    private Boolean isStart =false;
+    private Boolean isFinish =false;
     private Boolean click_confirm=false;
     private long startTime=5;
     private String push_key;
@@ -371,7 +371,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
-        if(!finish)
+        if(!isFinish)
             loadingDialog();
         musicRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -381,8 +381,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     music.setDataSource(musicUrl); //設定media的路徑
                     music.prepare();
                     progressDialog.dismiss();
-                    finish=false;
-                    if(!start)
+                    isFinish =false;
+                    if(!isStart)
                         startBrush();
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
@@ -490,40 +490,40 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void startBrush() {
-            startTimer = new CountDownTimer(startTime * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    startTime=millisUntilFinished/1000;
-                    start = true;
-                }
+        startTimer = new CountDownTimer(startTime * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                startTime=millisUntilFinished/1000;
+                isStart = true;
+            }
 
-                @Override
-                public void onFinish() {
-                    vibrator.vibrate(1000);
-                    customDialog = new Dialog(Home_Activity.this, R.style.DialogCustom);
-                    customDialog.setContentView(R.layout.custom_dialog_one);
-                    customDialog.setCancelable(false);
-                    dialog_title = (TextView) customDialog.findViewById(R.id.title);
-                    dialog_title.setText("提醒");
-                    dialog_message = (TextView) customDialog.findViewById(R.id.message);
-                    dialog_message.setText("準備好要開始刷牙了嗎?");
-                    dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
-                    dialog_confirm.setText("開始");
-                    dialog_confirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            customDialog.dismiss();
-                            start=false;
-                            play.setBackgroundResource(R.drawable.pause_button_512);
-                            music.start();
-                            timerStart();
-                        }
-                    });
-                    customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-                    customDialog.show();
-                }
-            };
-            startTimer.start();
+            @Override
+            public void onFinish() {
+                vibrator.vibrate(1000);
+                customDialog = new Dialog(Home_Activity.this, R.style.DialogCustom);
+                customDialog.setContentView(R.layout.custom_dialog_one);
+                customDialog.setCancelable(false);
+                dialog_title = (TextView) customDialog.findViewById(R.id.title);
+                dialog_title.setText("提醒");
+                dialog_message = (TextView) customDialog.findViewById(R.id.message);
+                dialog_message.setText("尚未開始BrushGo，請按下確認鍵開始刷牙唷");
+                dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+                dialog_confirm.setText("確認");
+                dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        customDialog.dismiss();
+                        isStart =true;
+                        play.setBackgroundResource(R.drawable.pause_button_512);
+                        music.start();
+                        timerStart();
+                    }
+                });
+                customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+                customDialog.show();
+            }
+        };
+        startTimer.start();
     }
 
     private void timerStart() {
@@ -540,7 +540,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onFinish() {
-                finish=true;
+                isFinish =true;
                 play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
                 finishDialog();
@@ -577,9 +577,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         customDialog.setCancelable(false);
 
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
-        dialog_title.setText("時間到囉");
+        dialog_title.setText("恭喜完成");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("恭喜您刷完牙了，按下確認以紀錄。");
+        dialog_message.setText("已經刷完牙囉，可以開始漱口了。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
         for(int i = 0; i< fireworkView.length; i++) {
@@ -587,13 +587,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     Glide.with(Home_Activity.this)
                     .load(Uri.parse("https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/image%2Ffirework.gif?alt=media&token=c3d69e19-6be0-415e-86ff-7aeed07f3c51"))
                     .dontAnimate()
+                    .placeholder(R.drawable.firework16)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(fireworkArray[i]);
-/*            StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("image").child("firework.gif");
-                    Glide.with(Home_Activity.this)
-                            .using(new FirebaseImageLoader())
-                            .load(storageReference)
-                            .into(fireworkArray[i]);*/
         }
 
         customDialog.show();
@@ -780,14 +776,22 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         if(finish_music.isPlaying())
             finish_music.pause();
-        if(start)
+        if(isStart) {
             startTimer.cancel();
+            isStart =false;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(start)
-            startTimer.start();
+        if(isStart&&!isTimer){
+            startTime=5;
+            startBrush();
+        }
+        else if(!isStart &&isTimer) {
+            startTime=10;
+            startBrush();
+        }
     }
 }
