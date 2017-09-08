@@ -159,7 +159,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Boolean isStart =false;
     private Boolean isFinish =false;
     private Boolean click_confirm=false;
-    private long startTime=5;
     private String push_key;
     private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
@@ -383,7 +382,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     progressDialog.dismiss();
                     isFinish =false;
                     if(!isStart)
-                        startBrush();
+                        rebrush(5);
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                 }
@@ -424,16 +423,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if(music.isPlaying()){
+                    rebrush(10);
                     play.setBackgroundResource(R.drawable.play_button_512);
                     music.pause();
                     timerPause();
                 }
                 else {
+                    isStart=true;
+                    startTimer.cancel();
                     play.setBackgroundResource(R.drawable.pause_button_512);
                     music.start();
                     timerStart();
                 }
-                startTimer.cancel();
             }
 
         });
@@ -450,6 +451,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
                 else
                     setMusic();
+                rebrush(10);
             }
         });
         change_color.setOnClickListener(new View.OnClickListener() {
@@ -489,12 +491,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         });
     }
 
-    private void startBrush() {
-        startTimer = new CountDownTimer(startTime * 1000, 1000) {
+    private void rebrush(final long time) {
+        startTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                startTime=millisUntilFinished/1000;
-                isStart = true;
+
             }
 
             @Override
@@ -506,7 +507,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 dialog_title = (TextView) customDialog.findViewById(R.id.title);
                 dialog_title.setText("提醒");
                 dialog_message = (TextView) customDialog.findViewById(R.id.message);
-                dialog_message.setText("尚未開始BrushGo，請按下確認鍵開始刷牙唷");
+                if(time==5)
+                    dialog_message.setText("尚未開始BrushGo，請按下確認鍵開始刷牙唷");
+                else
+                    dialog_message.setText("準備好繼續BrushGo了嗎?");
                 dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
                 dialog_confirm.setText("確認");
                 dialog_confirm.setOnClickListener(new View.OnClickListener() {
@@ -785,13 +789,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
-        if(isStart&&!isTimer){
-            startTime=5;
-            startBrush();
-        }
-        else if(!isStart &&isTimer) {
-            startTime=10;
-            startBrush();
+        if(!isStart &&isTimer) {
+            rebrush(10);
         }
     }
 }
