@@ -153,11 +153,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             arrow_21,arrow_22,arrow_23,arrow_24,tongue};
     private int colorArray[]=new int[4];
     private CountDownTimer countdownTimer;
-    private CountDownTimer startTimer;
-    private MediaPlayer music;
+    private CountDownTimer rebrushTimer;
+    private MediaPlayer background_music;
     private MediaPlayer finish_music;
     private Boolean isStart =false;
     private Boolean isFinish =false;
+    private Boolean isRebrush=false;
     private Boolean click_confirm=false;
     private String push_key;
     private String musicUrl=" ";
@@ -231,7 +232,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timer=(TextView)findViewById(R.id.txt_timer);
         countdown=(TextView)findViewById(R.id.txt_countdown);
         progressBar=(ProgressBar) findViewById(R.id.progressBar);
-        music=new MediaPlayer();
+        background_music=new MediaPlayer();
         finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
@@ -367,7 +368,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
-        music=new MediaPlayer();
+        background_music=new MediaPlayer();
         musicIndex=(int)(Math.random()*10+1);
         musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
         if(!isFinish)
@@ -377,8 +378,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 musicUrl=dataSnapshot.getValue(String.class); //取得節點內的資料
                 try {
-                    music.setDataSource(musicUrl); //設定media的路徑
-                    music.prepare();
+                    background_music.setDataSource(musicUrl); //設定media的路徑
+                    background_music.prepare();
                     progressDialog.dismiss();
                     isFinish =false;
                     if(!isStart)
@@ -412,9 +413,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
-                if(music.isPlaying()){
+                if(background_music.isPlaying()){
                     play.setBackgroundResource(R.drawable.play_button_512);
-                    music.pause();
+                    background_music.pause();
                     timerPause();
                 }
             }
@@ -422,17 +423,17 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         play.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(music.isPlaying()){
+                if(background_music.isPlaying()){
                     rebrush(10);
                     play.setBackgroundResource(R.drawable.play_button_512);
-                    music.pause();
+                    background_music.pause();
                     timerPause();
                 }
                 else {
                     isStart=true;
-                    startTimer.cancel();
+                    rebrushTimer.cancel();
                     play.setBackgroundResource(R.drawable.pause_button_512);
-                    music.start();
+                    background_music.start();
                     timerStart();
                 }
             }
@@ -443,8 +444,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 if(isTimer)
                 {
-                    music.stop();
-                    music.release();
+                    background_music.stop();
+                    background_music.release();
                     timerPause();
                     play.setBackgroundResource(R.drawable.play_button_512);
                     setMusic();
@@ -492,7 +493,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void rebrush(final long time) {
-        startTimer = new CountDownTimer(time * 1000, 1000) {
+        isRebrush=true;
+        rebrushTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -518,8 +520,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     public void onClick(View v) {
                         customDialog.dismiss();
                         isStart =true;
+                        isRebrush=false;
                         play.setBackgroundResource(R.drawable.pause_button_512);
-                        music.start();
+                        background_music.start();
                         timerStart();
                     }
                 });
@@ -527,7 +530,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 customDialog.show();
             }
         };
-        startTimer.start();
+        rebrushTimer.start();
     }
 
     private void timerStart() {
@@ -564,7 +567,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         countdownTimer.cancel();
         timer.setText(defaultTime+"");
         setProgressbar();
-        music.stop();
+        background_music.stop();
         setMusic();
         tooth_stop();
     }
@@ -758,13 +761,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    /*private void deleteAccount() {
+/*    private void deleteAccount() {
         FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-
-                } else {
 
                 }
             }
@@ -773,24 +774,26 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onStop() {
         super.onStop();
-        if(music.isPlaying()){
+        if(background_music.isPlaying()){
             play.setBackgroundResource(R.drawable.play_button_512);
-            music.pause();
+            background_music.pause();
             timerPause();
         }
         if(finish_music.isPlaying())
             finish_music.pause();
-        if(isStart) {
-            startTimer.cancel();
-            isStart =false;
+        if(isRebrush){
+            rebrushTimer.cancel();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isStart &&isTimer) {
+        if(isTimer) {
             rebrush(10);
+        }
+        if(isRebrush&&!isTimer){
+            rebrush(5);
         }
     }
 }
