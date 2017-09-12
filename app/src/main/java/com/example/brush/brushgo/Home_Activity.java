@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -317,11 +317,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         {
                             imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(final DataSnapshot dataSnapshot) {
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    /*https://juejin.im/entry/5924f28eda2f60005d7725b2*/
+                                    RequestOptions options = new RequestOptions()
+                                            .dontAnimate();
                                     Glide.with(Home_Activity.this)
+                                            .setDefaultRequestOptions(options)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                            .dontAnimate()
-                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
 
@@ -336,10 +338,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                             imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    RequestOptions options = new RequestOptions()
+                                            .dontAnimate();
                                     Glide.with(Home_Activity.this)
+                                            .setDefaultRequestOptions(options)
                                             .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                            .dontAnimate()
-                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(tooth[finalJ]);
                                 }
 
@@ -592,10 +595,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         for(int i = 0; i< fireworkView.length; i++) {
             fireworkArray[i] = (ImageView) customDialog.findViewById(fireworkView[i]);
                     Glide.with(Home_Activity.this)
+                    .asGif()
                     .load(Uri.parse("https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/image%2Ffirework.gif?alt=media&token=c3d69e19-6be0-415e-86ff-7aeed07f3c51"))
-                    .dontAnimate()
-                    .placeholder(R.drawable.firework16)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(fireworkArray[i]);
         }
 
@@ -789,11 +790,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
-        if(isTimer) {
+        if(!isRebrush&&isTimer) //關閉前未通知,且音樂進行到一半
             rebrush(10);
-        }
-        if(isRebrush&&!isTimer){
+        if(isRebrush&&!isTimer) //關閉前正在倒數,且音樂尚未開始
             rebrush(5);
-        }
     }
 }
