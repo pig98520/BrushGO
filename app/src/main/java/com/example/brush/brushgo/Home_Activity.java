@@ -171,6 +171,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private PendingIntent pendingIntent;
     private Vibrator vibrator;
 
+    private RequestOptions options;
     private Dialog customDialog;
     private TextView dialog_title;
     private TextView dialog_message;
@@ -319,7 +320,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     /*https://juejin.im/entry/5924f28eda2f60005d7725b2*/
-                                    RequestOptions options = new RequestOptions()
+                                    options = new RequestOptions()
                                             .dontAnimate();
                                     Glide.with(Home_Activity.this)
                                             .setDefaultRequestOptions(options)
@@ -338,7 +339,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                             imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    RequestOptions options = new RequestOptions()
+                                    options = new RequestOptions()
                                             .dontAnimate();
                                     Glide.with(Home_Activity.this)
                                             .setDefaultRequestOptions(options)
@@ -594,7 +595,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
         for(int i = 0; i< fireworkView.length; i++) {
             fireworkArray[i] = (ImageView) customDialog.findViewById(fireworkView[i]);
-                    Glide.with(Home_Activity.this)
+            options=new RequestOptions();
+            Glide.with(Home_Activity.this)
+                    .setDefaultRequestOptions(options)
                     .asGif()
                     .load(Uri.parse("https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/image%2Ffirework.gif?alt=media&token=c3d69e19-6be0-415e-86ff-7aeed07f3c51"))
                     .into(fireworkArray[i]);
