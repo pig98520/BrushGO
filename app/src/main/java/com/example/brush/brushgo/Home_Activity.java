@@ -522,12 +522,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 dialog_confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        customDialog.dismiss();
-                        isStart =true;
-                        isRebrush=false;
-                        play.setBackgroundResource(R.drawable.pause_button_512);
-                        background_music.start();
-                        timerStart();
+                        if(!background_music.isPlaying()) {
+                            customDialog.dismiss();
+                            isStart = true;
+                            isRebrush = false;
+                            play.setBackgroundResource(R.drawable.pause_button_512);
+                            background_music.start();
+                            timerStart();
+                        }
+                        else
+                            customDialog.dismiss();
                     }
                 });
                 customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
