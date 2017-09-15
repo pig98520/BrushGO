@@ -15,7 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -132,9 +135,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Toast.makeText(MainActivity.this, "無法使用google帳戶登入",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
+
                 });
     }
 
@@ -157,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
                         Toast.makeText(MainActivity.this,"登入失敗",Toast.LENGTH_LONG).show();
                     }
                 })
@@ -168,11 +169,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null){
-                    startActivity(new Intent(MainActivity.this,Home_Activity.class));
+                   checkGoogleuser();
                 }
             }
         };
 
+    }
+
+    private void checkGoogleuser() {
+        profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());
+        profileRef.child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists())
+                    signupDialog_google();
+                else
+                    startActivity(new Intent(MainActivity.this,Home_Activity.class));
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     private void processControllers() {
@@ -354,6 +373,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 createUser(user_name,user, psw);
             }
         });
+    }
+
+    private void signupDialog_google() {
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_sign_up_google);
+        customDialog.setCancelable(false);
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("使用者條款");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("請按下確認以同意BrushGo存取您的個人資料。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("同意");
+        dialog_cancel=(Button)customDialog.findViewById(R.id.cancel);
+        dialog_cancel.setText("不同意");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                newuser(auth.getCurrentUser().getDisplayName());
+                Intent intent=new Intent();
+                intent.setClass(MainActivity.this,Tutorial_Activity.class);
+                startActivity(intent);
+            }
+        });
+        customDialog.show();
     }
 
     public static boolean isEmailValid(String email) {
