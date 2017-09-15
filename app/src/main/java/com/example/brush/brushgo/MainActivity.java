@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         dialog_title = (TextView) progressDialog.findViewById(R.id.title);
         dialog_title.setText("Loading");
         dialog_message = (TextView) progressDialog.findViewById(R.id.message);
-        dialog_message.setText("載入音樂請稍候...");
+        dialog_message.setText("登入中請稍候...");
         progressDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
         progressDialog.show();
@@ -340,20 +340,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         dialog_message.setText("請輸入姓名以同意BrushGo存取您的資料。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("同意");
+        dialog_name=(EditText)customDialog.findViewById(R.id.name);
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-
         customDialog.show();
 
         dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                customDialog.dismiss();
                 loadingDialog();
                 user_name=dialog_name.getText().toString();
                 nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 createUser(user_name,user, psw);
             }
         });
-        customDialog.show();
     }
 
     public static boolean isEmailValid(String email) {
