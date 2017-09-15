@@ -216,10 +216,60 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
-        setValue();
-        setTooth();
-        startDialog();
+        checkGoogleuser();
         processControl();
+    }
+
+    private void checkGoogleuser() {
+        profileRef.child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists())
+                    signupDialog_google();
+                else {
+                    setValue();
+                    setTooth();
+                    startDialog();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void signupDialog_google() {
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_sign_up_google);
+        customDialog.setCancelable(false);
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("使用者條款");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("請按下確認以同意BrushGo存取您的個人資料。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("同意");
+        dialog_cancel=(Button)customDialog.findViewById(R.id.cancel);
+        dialog_cancel.setText("不同意");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                startActivity(new Intent(Home_Activity.this,Tutorial_Activity.class));
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+                settingRef.setValue(setting);
+
+                DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
+                profileRef.setValue(profile);
+
+                for(int i=0;i<28;i++)
+                    toothRef.child(i+1+"").setValue("g");
+            }
+        });
+        customDialog.show();
     }
 
     private void processView() {
