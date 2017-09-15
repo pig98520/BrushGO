@@ -41,8 +41,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int RC_SIGN_IN=1;
     private GoogleSignInOptions gso;
     private Dialog progressDialog;
+    private Dialog customDialog;
     private TextView dialog_title;
     private TextView dialog_message;
+    private EditText dialog_name;
+    private Button dialog_confirm;
+    private Button dialog_cancel;
     private Button btn_sigin;
     private Button btn_forget;
     private Button btn_signup;
@@ -272,11 +276,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
     }
 
-    private void createUser(final String user,final String psw) {
+    private void createUser(final String user_name, final String user, final String psw) {
         auth.createUserWithEmailAndPassword(user,psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
-                        newuser();
+                        newuser(user_name);
                         progressDialog.dismiss();
                         Intent intent=new Intent();
                         intent.setClass(MainActivity.this,Tutorial_Activity.class);
@@ -310,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         progressDialog.show();
     }
 
-    private void newuser() {
+    private void newuser(String user_name) {
         settingRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
         settingRef.setValue(setting);
@@ -327,30 +331,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void signupDialog() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-        final EditText input=new EditText(this);
-        dialog.setTitle("註冊");
-        dialog.setMessage("請輸入您的姓名以同意註冊");
-        dialog.setView(input);
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_sign_up);
+        customDialog.setCancelable(false);
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("使用者條款");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("請輸入姓名以同意BrushGo存取您的資料。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("同意");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
-        DialogInterface.OnClickListener confirmClick =new DialogInterface.OnClickListener(){
+        customDialog.show();
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 loadingDialog();
-                user_name=input.getText().toString().trim();
+                user_name=dialog_name.getText().toString();
                 nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                createUser(user, psw);
+                createUser(user_name,user, psw);
             }
-        };
-        DialogInterface.OnClickListener cancelClick =new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        };
-        dialog.setNeutralButton("確定",confirmClick);
-        dialog.setNegativeButton("取消",cancelClick);
-        dialog.show();
+        });
+        customDialog.show();
     }
 
     public static boolean isEmailValid(String email) {

@@ -35,7 +35,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -127,11 +130,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private String nowTime;
     private String nowDate;
     private DecimalFormat decimalFormat;
+    private StorageReference storageRef;
+    private String[] musicArray;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
     private Firebase timeRef;
     private Firebase reminderRef;
-    private Firebase musicRef;
     private Firebase recordRef;
     private Firebase toothRef;
     private Firebase profileRef;
@@ -147,7 +151,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private ImageView arrow[]=new ImageView[25];
     private int arrow_id[]=new int[]{
             arrow_1,arrow_2,arrow_3,arrow_4,arrow_5,
-           arrow_6,arrow_7,arrow_8,arrow_9,arrow_10,
+            arrow_6,arrow_7,arrow_8,arrow_9,arrow_10,
             arrow_11,arrow_12,arrow_13,arrow_14,arrow_15,
             arrow_16,arrow_17,arrow_18,arrow_19,arrow_20,
             arrow_21,arrow_22,arrow_23,arrow_24,tongue};
@@ -161,7 +165,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Boolean isRebrush=false;
     private Boolean click_confirm=false;
     private String push_key;
-    private String musicUrl=" ";
     private int musicIndex=(int) (Math.random()*10+1);
     private DrawerLayout drawer;
     private NavigationView navigateionView;
@@ -213,13 +216,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
-        checkGoogleuser();
         setValue();
         setTooth();
         startDialog();
         processControl();
     }
-
 
     private void processView() {
         layout=(ConstraintLayout)findViewById(R.id.constraintLayout);
@@ -236,6 +237,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         background_music=new MediaPlayer();
         finish_music = MediaPlayer.create(Home_Activity.this, R.raw.woo_hoo);
         auth= FirebaseAuth.getInstance();
+        storageRef=FirebaseStorage.getInstance().getReference();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
         settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
@@ -266,29 +268,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
 
-    private void checkGoogleuser() {
-        profileRef.child("name").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()==null) {
-                    Intent intent=new Intent();
-                    intent.setClass(Home_Activity.this,Tutorial_Activity.class);
-                    startActivity(intent);
-
-                    DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
-                    settingRef.setValue(setting);
-
-                    DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
-                    profileRef.setValue(profile);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
 
     private void setValue() {
         timeRef.addValueEventListener(new ValueEventListener() {
@@ -372,17 +351,20 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
+        musicArray=new String[]{
+                "Believer.mp3","Chances.mp3","Clouds.mp3","Don't Look.mp3","Eine Kleine Nachtmusik.mp3",
+                "Golden.mp3","Invisible.mp3","Keith.mp3","Sunflower.mp3","The Place Inside.mp3"
+        };
+        musicIndex=(int)(Math.random()*musicArray.length+1);
         background_music=new MediaPlayer();
-        musicIndex=(int)(Math.random()*10+1);
-        musicRef =new Firebase("https://brushgo-67813.firebaseio.com/music/"+musicIndex); //取得firebase網址 用亂數取得節點網址
+
         if(!isFinish)
             loadingDialog();
-        musicRef.addValueEventListener(new ValueEventListener() {
+        storageRef.child("music").child(musicArray[musicIndex]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                musicUrl=dataSnapshot.getValue(String.class); //取得節點內的資料
+            public void onSuccess(Uri uri) {
                 try {
-                    background_music.setDataSource(musicUrl); //設定media的路徑
+                    background_music.setDataSource(uri.toString());
                     background_music.prepare();
                     progressDialog.dismiss();
                     isFinish =false;
@@ -390,11 +372,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         rebrush(5);
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                progressDialog.dismiss();
             }
         });
     }
@@ -453,10 +432,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     timerPause();
                     play.setBackgroundResource(R.drawable.play_button_512);
                     setMusic();
+                    rebrush(10);
                 }
-                else
-                    setMusic();
-                rebrush(10);
             }
         });
         change_color.setOnClickListener(new View.OnClickListener() {
@@ -682,10 +659,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
             }
             else
-                if(currentTime>defaultTime-aveTime*(i+1)&&currentTime<defaultTime-aveTime*i){
-                    arrow[i].setVisibility(View.VISIBLE);
-                    arrow[i-1].setVisibility(View.INVISIBLE);
-                }
+            if(currentTime>defaultTime-aveTime*(i+1)&&currentTime<defaultTime-aveTime*i){
+                arrow[i].setVisibility(View.VISIBLE);
+                arrow[i-1].setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -769,16 +746,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-/*    private void deleteAccount() {
-        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
+    /*    private void deleteAccount() {
+            FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
 
+                    }
                 }
-            }
-        });
-    }*/
+            });
+        }*/
     @Override
     protected void onStop() {
         super.onStop();
