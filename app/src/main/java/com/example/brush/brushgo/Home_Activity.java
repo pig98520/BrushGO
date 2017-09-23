@@ -131,7 +131,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private String nowDate;
     private DecimalFormat decimalFormat;
     private StorageReference storageRef;
-    private String[] musicArray;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
     private Firebase timeRef;
@@ -163,6 +162,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Boolean isStart =false;
     private Boolean isFinish =false;
     private Boolean isRebrush=false;
+    private Boolean isClean=false;
     private Boolean click_confirm=false;
     private String push_key;
     private int musicIndex=(int) (Math.random()*10+1);
@@ -216,7 +216,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
-        checkGoogleuser();
+        checkGoogleuser(); //檢查是否首次登入
         processControl();
     }
 
@@ -337,80 +337,105 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setTooth() {
-        for(int j=0;j<tooth.length;j++) {
-            final int finalJ = j;
-            toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        if(dataSnapshot.getValue().toString().trim().equals("b"))
-                        {
-                            imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    /*https://juejin.im/entry/5924f28eda2f60005d7725b2*/
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                            .into(tooth[finalJ]);
-                                }
+        if(isClean)
+        {
+            for(int i=0;i<tooth.length;i++) {
+                final int finalI = i;
+                imageRef.child("tooth_clean").child(i % 16 + 1 + "").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        options = new RequestOptions()
+                                .dontAnimate();
+                        Glide.with(Home_Activity.this)
+                                .setDefaultRequestOptions(options)
+                                .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                .into(tooth[finalI]);
+                    }
 
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
 
-                                }
-                            });
+                    }
+                });
+            }
+        }
+        else{
+            for(int j=0;j<tooth.length;j++) {
+                final int finalJ = j;
+                toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            if(dataSnapshot.getValue().toString().trim().equals("b"))
+                            {
+                                imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        /*https://juejin.im/entry/5924f28eda2f60005d7725b2*/
+                                        options = new RequestOptions()
+                                                .dontAnimate();
+                                        Glide.with(Home_Activity.this)
+                                                .setDefaultRequestOptions(options)
+                                                .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                .into(tooth[finalJ]);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        options = new RequestOptions()
+                                                .dontAnimate();
+                                        Glide.with(Home_Activity.this)
+                                                .setDefaultRequestOptions(options)
+                                                .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                .into(tooth[finalJ]);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+
+                                    }
+                                });
+                            }
                         }
                         else
                         {
-                            imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                            .into(tooth[finalJ]);
-                                }
-
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
-
-                                }
-                            });
+                            for(int i=0;i<tooth.length;i++)
+                                toothRef.child(i+1+"").setValue("g");
+                            setTooth();
                         }
                     }
-                    else
-                    {
-                        for(int i=0;i<tooth.length;i++)
-                            toothRef.child(i+1+"").setValue("g");
-                        setTooth();
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
                     }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+                });
+            }
         }
     }
 
 
     private void setMusic() {
-        musicArray=new String[]{
+ /*       musicArray=new String[]{
                 "Believer.mp3","Chances.mp3","Clouds.mp3","Don't Look.mp3","Eine Kleine Nachtmusik.mp3",
                 "Golden.mp3","Invisible.mp3","Keith.mp3","Sunflower.mp3","The Place Inside.mp3"
         };
-        musicIndex=(int)(Math.random()*musicArray.length+1);
+        musicIndex=(int)(Math.random()*musicArray.length+1);*/
+        musicIndex=(int)(Math.random()*10+1);
         background_music=new MediaPlayer();
 
         if(!isFinish)
             loadingDialog();
-        storageRef.child("music").child(musicArray[musicIndex]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageRef.child("music").child(musicIndex+".mp3").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 try {
@@ -525,6 +550,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void rebrush(final long time) {
         isRebrush=true;
+
         rebrushTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -583,6 +609,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onFinish() {
                 isFinish =true;
+                isClean=true;
                 play.setBackgroundResource(R.drawable.play_button_512);
                 timerStop();
                 finishDialog();
@@ -604,7 +631,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         setProgressbar();
         background_music.stop();
         setMusic();
-        tooth_stop();
+        setTooth();
+        reset_arrow();
     }
 
     private void setProgressbar() {
@@ -716,7 +744,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    private void tooth_stop() {
+    private void reset_arrow() {
         arrow[arrow.length-1].setImageResource(R.drawable.tongue);
         vibrator.vibrate(1000);
 
