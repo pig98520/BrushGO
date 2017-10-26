@@ -163,30 +163,35 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
             Intent intent=new Intent();
             intent.setClass(this,Home_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Video)
         {
             Intent intent=new Intent();
             intent.setClass(this,Video_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Setting)
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Logout)
         {
@@ -211,6 +216,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
                     auth.signOut();
                     customDialog.dismiss();
                     startActivity(new Intent(Information_Activity.this,MainActivity.class));
+                    finish();
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {

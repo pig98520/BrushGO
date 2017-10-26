@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private EditText dialog_name;
     private Button dialog_confirm;
     private Button dialog_cancel;
-    private Button btn_sigin;
+    private Button btn_google;
+/*    private Button btn_sigin;
     private Button btn_forget;
     private Button btn_signup;
-    private Button btn_google;
     private EditText edt_id;
-    private EditText edt_psw;
+    private EditText edt_psw;*/
     private String user;
     private String psw;
     private String user_name;
@@ -138,12 +138,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void processViews() {
-        btn_sigin =(Button)findViewById(R.id.btn_signin);
+        btn_google=(Button)findViewById(R.id.btn_google);
+/*        btn_sigin =(Button)findViewById(R.id.btn_signin);
         btn_signup =(Button)findViewById(R.id.btn_signup);
         btn_forget =(Button)findViewById(R.id.btn_forget);
-        btn_google=(Button)findViewById(R.id.btn_google);
         edt_id =(EditText)findViewById(R.id.edt_id);
-        edt_psw =(EditText)findViewById(R.id.edt_psw);
+        edt_psw =(EditText)findViewById(R.id.edt_psw);*/
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com/");
         auth= FirebaseAuth.getInstance();
         // Configure Google Sign In
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void processControllers() {
-        btn_sigin.setOnClickListener(new View.OnClickListener() {
+       /* btn_sigin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 user= edt_id.getText().toString();
                 psw= edt_psw.getText().toString();
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View view) {
                 forgetDialog();
             }
-        });
+        });*/
         btn_google.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 loadingDialog();

@@ -63,11 +63,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Button evening;
     private Switch alarm_switch;
     private Calendar now;
-    private TextView m_alarm;
     private Calendar m_calendar;
     private String m_time;
     private String[] m_array;
-    private TextView e_alarm;
     private Calendar e_calendar;
     private String e_time;
     private String [] e_array;
@@ -138,9 +136,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onDataChange(DataSnapshot m_dataSnapshot) {
                 m_time=m_dataSnapshot.getValue(String.class);
                 if(m_time==null)
-                    m_alarm.setText("AM 尚未設定");
+                    morning.setText("AM 尚未設定");
                 else
-                    m_alarm.setText("AM "+m_time.trim());
+                    morning.setText("AM "+m_time.trim());
             }
 
             @Override
@@ -154,9 +152,9 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onDataChange(DataSnapshot e_dataSnapshot) {
                 e_time=e_dataSnapshot.getValue(String.class);
                 if(e_time==null)
-                    e_alarm.setText("PM 尚未設定");
+                    evening.setText("PM 尚未設定");
                 else
-                    e_alarm.setText("PM "+e_time.trim());
+                    evening.setText("PM "+e_time.trim());
             }
 
             @Override
@@ -210,8 +208,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         alarm_switch=(Switch)findViewById(R.id.alarm_switch);
         morning=(Button) findViewById(R.id.btn_morning);
         evening=(Button) findViewById(R.id.btn_evening);
-        m_alarm=(TextView) findViewById(R.id.txt_morning);
-        e_alarm=(TextView) findViewById(R.id.txt_evening);
         now = Calendar.getInstance();
         e_calendar= Calendar.getInstance();
         m_calendar= Calendar.getInstance();
@@ -257,16 +253,12 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 if(alarm_switch.isChecked())
                 {
                     morning.setVisibility(View.VISIBLE);
-                    m_alarm.setVisibility(View.VISIBLE);
                     evening.setVisibility(View.VISIBLE);
-                    e_alarm.setVisibility(View.VISIBLE);
                 }
                 else
                 {
                     morning.setVisibility(View.INVISIBLE);
-                    m_alarm.setVisibility(View.INVISIBLE);
                     evening.setVisibility(View.INVISIBLE);
-                    e_alarm.setVisibility(View.INVISIBLE);
                     m_time=null;
                     e_time=null;
                     eveningRef.setValue(null);
@@ -339,7 +331,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             m_calendar.set(Calendar.SECOND, 0);
             m_calendar.set(Calendar.MILLISECOND, 0);
             m_time= simpleDateFormat.format(m_calendar.getTime()).trim();
-            m_alarm.setText("AM "+m_time);
+            morning.setText("AM "+m_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
             alarmManager(m_calendar,0);
@@ -360,7 +352,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             e_calendar.set(Calendar.SECOND, 0);
             e_calendar.set(Calendar.MILLISECOND, 0);
             e_time= simpleDateFormat.format(e_calendar.getTime()).trim();
-            e_alarm.setText("PM "+e_time);
+            evening.setText("PM "+e_time);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
             alarmManager(e_calendar,1);
@@ -384,35 +376,41 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
+
         if(id==R.id.Home)
         {
             Intent intent=new Intent();
             intent.setClass(this,Home_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Video)
         {
             Intent intent=new Intent();
             intent.setClass(this,Video_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Setting)
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Logout)
         {
@@ -437,6 +435,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                     auth.signOut();
                     customDialog.dismiss();
                     startActivity(new Intent(Setting_Activity.this,MainActivity.class));
+                    finish();
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {

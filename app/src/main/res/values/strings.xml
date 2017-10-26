@@ -3,7 +3,7 @@
     <string name="BrushGo">BrushGo</string>
     <string name="password">密碼</string>
     <string name="chkContract">我已詳閱、了解並接受BrushGo的服務條款、隱私權與個人保護政策。</string>
-    <string name="signin">登入</string>
+    <string name="signin">登入使用Brush Go</string>
     <string name="signup">註冊</string>
     <string name="forget">忘記密碼?</string>
     <string name="open">開啟</string>

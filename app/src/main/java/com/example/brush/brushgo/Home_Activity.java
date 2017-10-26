@@ -425,11 +425,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
- /*       musicArray=new String[]{
-                "Believer.mp3","Chances.mp3","Clouds.mp3","Don't Look.mp3","Eine Kleine Nachtmusik.mp3",
-                "Golden.mp3","Invisible.mp3","Keith.mp3","Sunflower.mp3","The Place Inside.mp3"
-        };
-        musicIndex=(int)(Math.random()*musicArray.length+1);*/
         musicIndex=(int)(Math.random()*10+1);
         background_music=new MediaPlayer();
 
@@ -476,6 +471,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     background_music.pause();
                     timerPause();
                 }
+
             }
         });
         play.setOnClickListener(new View.OnClickListener(){
@@ -523,6 +519,33 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     layout.setBackgroundResource(colorArray[0]);
             }
         });
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if(isRebrush)
+                    rebrushTimer.cancel();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                if(!background_music.isPlaying()) {
+                    if (isRebrush && !isTimer)
+                        rebrush(5);
+                    else if (isRebrush && isTimer)
+                        rebrush(10);
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     private void startDialog() {
@@ -532,7 +555,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("刷牙前請先使用牙線及牙間刷做簡單清潔。");
+        dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("已清潔，開始刷牙。");
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
@@ -755,6 +778,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         else
             countdown.setText("0"+defaultTime/60+"："+defaultTime%60);
     }
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
@@ -764,30 +789,35 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             Intent intent=new Intent();
             intent.setClass(this,Home_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Video)
         {
             Intent intent=new Intent();
             intent.setClass(this,Video_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Setting)
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
+            finish();
         }
         else if(id==R.id.Logout)
         {
@@ -812,6 +842,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     auth.signOut();
                     customDialog.dismiss();
                     startActivity(new Intent(Home_Activity.this,MainActivity.class));
+                    finish();
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {

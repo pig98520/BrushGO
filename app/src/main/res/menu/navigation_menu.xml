@@ -5,10 +5,10 @@
         android:title="首頁"
         android:icon="@mipmap/ic_home_black_24dp"/>
     <item android:id="@+id/Video"
-        android:title="影片"
+        android:title="口腔清潔影片"
         android:icon="@mipmap/ic_video_library_black_24dp"/>
     <item android:id="@+id/Information"
-        android:title="相關資訊"
+        android:title="衛教相關資訊"
         android:icon="@mipmap/ic_info_black_24dp"/>
     <item android:id="@+id/Tutorial"
         android:title="使用教學"
