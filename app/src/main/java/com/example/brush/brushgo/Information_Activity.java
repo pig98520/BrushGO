@@ -121,7 +121,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         recyclerView.setAdapter(adapter);
 
     }
-    static class infoViewHolder extends RecyclerView.ViewHolder {
+    public static class infoViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView title;
         TextView content;
