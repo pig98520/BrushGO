@@ -8,31 +8,37 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by swlab on 2017/5/5.
  */
 
-public class Video_Activity extends YouTubeBaseActivity implements NavigationView.OnNavigationItemSelectedListener,YouTubePlayer.OnInitializedListener {
-    private static final String API_KEY="AIzaSyAdQd34nlmp9TvVmrwWQyDIJDSke6mT_Q8";
-    private String VIDEO_ID="lnHIgRhJctc";
-    private YouTubePlayerView youTubePlayerView;
+public class Video_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Boolean isdoubleClick=false;
+    private RecyclerView recyclerView;
 
     private Dialog customDialog;
     private Button dialog_confirm;
@@ -74,14 +80,82 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
     }
 
     private void processView() {
-        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
+        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_video);
         navigateionView.setNavigationItemSelectedListener(Video_Activity.this);
-        youTubePlayerView=(YouTubePlayerView)findViewById(R.id.youtube_player);
-        youTubePlayerView.initialize(API_KEY,this);
         menu=(Button) findViewById(R.id.btn_menu);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setupRecyclerView();
     }
+
+    private void setupRecyclerView() {
+        DatabaseReference dbRef=FirebaseDatabase.getInstance().getReference("video");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    DB_Video info=snapshot.getValue(DB_Video.class);
+                    Log.i("Photo's Title:", info.getTitle());
+                    Log.i("Photo's Content:", info.getContent());
+                    Log.i("Photo's Url:", info.getImageUrl());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Photo", "failed: " + databaseError.getMessage());
+            }
+        });
+
+        FirebaseRecyclerAdapter<DB_Video,infoViewHolder> adapter=new FirebaseRecyclerAdapter<DB_Video, infoViewHolder>(DB_Video.class,R.layout.video_list,infoViewHolder.class,dbRef) {
+            @Override
+            protected void populateViewHolder(infoViewHolder viewHolder, DB_Video model, int position) {
+                viewHolder.setList(model);
+            }
+        };
+        recyclerView.setAdapter(adapter);
+
+    }
+    public static class infoViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView title;
+        TextView content;
+
+        public infoViewHolder(View itemView) {
+            super(itemView);
+            image = (ImageView) itemView.findViewById(R.id.imageView);
+            title = (TextView) itemView.findViewById(R.id.txt_title);
+            content = (TextView) itemView.findViewById(R.id.txt_content);
+        }
+
+        public void setList(final DB_Video video) {
+            title.setText(video.getTitle());
+            content.setText("影片來源: "+video.getContent());
+            Glide.with(image.getContext())
+                    .load(video.getImageUrl())
+                    .into(image);
+/*            content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("TAGGG",video.getVideo_id());
+                }
+            });*/
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putString("video_id",video.getVideo_id());
+                    Intent intent = new Intent(itemView.getContext(),Video_Youtube_Activity.class);
+                    intent.putExtras(bundle);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
+    }
+
 
     private void processControl() {
         menu.setOnClickListener(new View.OnClickListener() {
@@ -92,76 +166,6 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
         });
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
-        youTubePlayer.setPlaybackEventListener(playbackEventListener);
-        if(!b)
-            youTubePlayer.cueVideo(VIDEO_ID);
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(this,"Failured to Initialize!",Toast.LENGTH_LONG).show();
-    }
-    private YouTubePlayer.PlaybackEventListener playbackEventListener=new YouTubePlayer.PlaybackEventListener() {
-        @Override
-        public void onPlaying() {
-
-        }
-
-        @Override
-        public void onPaused() {
-
-        }
-
-        @Override
-        public void onStopped() {
-
-        }
-
-        @Override
-        public void onBuffering(boolean b) {
-
-        }
-
-        @Override
-        public void onSeekTo(int i) {
-
-        }
-    };
-
-    private YouTubePlayer.PlayerStateChangeListener playerStateChangeListener=new YouTubePlayer.PlayerStateChangeListener() {
-        @Override
-        public void onLoading() {
-
-        }
-
-        @Override
-        public void onLoaded(String s) {
-
-        }
-
-        @Override
-        public void onAdStarted() {
-
-        }
-
-        @Override
-        public void onVideoStarted() {
-
-        }
-
-        @Override
-        public void onVideoEnded() {
-
-        }
-
-        @Override
-        public void onError(YouTubePlayer.ErrorReason errorReason) {
-
-        }
-    } ;
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
@@ -209,7 +213,7 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
             dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
@@ -237,4 +241,4 @@ public class Video_Activity extends YouTubeBaseActivity implements NavigationVie
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    }
+}

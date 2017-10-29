@@ -115,7 +115,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         FirebaseRecyclerAdapter<DB_Information,infoViewHolder> adapter=new FirebaseRecyclerAdapter<DB_Information, infoViewHolder>(DB_Information.class,R.layout.information_list,infoViewHolder.class,dbRef) {
             @Override
             protected void populateViewHolder(infoViewHolder viewHolder, DB_Information model, int position) {
-                viewHolder.setPhoto(model);
+                viewHolder.setList(model);
             }
         };
         recyclerView.setAdapter(adapter);
@@ -133,13 +133,13 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
             content = (TextView) itemView.findViewById(R.id.txt_content);
         }
 
-        public void setPhoto(DB_Information lerisure) {
-            title.setText(lerisure.getTitle());
-/*            content.setText(lerisure.getContent());*/
-            content.setText(Html.fromHtml("<a href="+lerisure.getContent()+">觀看文章</a> "));
+        public void setList(DB_Information information) {
+            title.setText(information.getTitle());
+/*            content.setText(information.getContent());*/
+            content.setText(Html.fromHtml("<a href="+information.getContent()+">觀看文章</a> "));
             content.setMovementMethod(LinkMovementMethod.getInstance());
             Glide.with(image.getContext())
-                    .load(lerisure.getImageUrl())
+                    .load(information.getImageUrl())
                     .into(image);
         }
     }
@@ -201,7 +201,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
             dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);

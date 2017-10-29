@@ -75,7 +75,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private void processView() {
-        NavigationView navigationView=(NavigationView) findViewById(R.id.nav_information);
+        NavigationView navigationView=(NavigationView) findViewById(R.id.nav_tutorial);
         navigationView.setNavigationItemSelectedListener(Tutorial_Activity.this);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
@@ -203,7 +203,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
             dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);

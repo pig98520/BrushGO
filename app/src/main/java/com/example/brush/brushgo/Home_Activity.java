@@ -163,6 +163,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Boolean isFinish =false;
     private Boolean isRebrush=false;
     private Boolean isClean=false;
+    private Boolean isLogout=false;
     private Boolean click_confirm=false;
     private String push_key;
     private int musicIndex=(int) (Math.random()*10+1);
@@ -457,7 +458,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_message = (TextView) progressDialog.findViewById(R.id.message);
         dialog_message.setText("載入音樂請稍候...");
         progressDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-
         progressDialog.show();
     }
 
@@ -534,9 +534,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDrawerClosed(View drawerView) {
                 if(!background_music.isPlaying()) {
-                    if (isRebrush && !isTimer)
+                    if (isRebrush && !isTimer&&!isLogout)
                         rebrush(5);
-                    else if (isRebrush && isTimer)
+                    else if (isRebrush && isTimer&&!isLogout)
                         rebrush(10);
                 }
             }
@@ -821,19 +821,19 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         }
         else if(id==R.id.Logout)
         {
+            isLogout=true;
             customDialog =new Dialog(this,R.style.DialogCustom);
             customDialog.setContentView(R.layout.custom_dialog_two);
             customDialog.setCancelable(false);
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
             dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
             dialog_cancel.setText("取消");
             customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-
             customDialog.show();
 
             dialog_confirm.setOnClickListener(new View.OnClickListener() {
@@ -849,6 +849,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 @Override
                 public void onClick(View v) {
                     customDialog.dismiss();
+                    isLogout=false;
+                    if(!background_music.isPlaying()) {
+                        if (isRebrush && !isTimer&&!isLogout)
+                            rebrush(5);
+                        else if (isRebrush && isTimer&&!isLogout)
+                            rebrush(10);
+                    }
                 }
             });
         }

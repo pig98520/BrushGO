@@ -1073,7 +1073,7 @@
             app:srcCompat="@drawable/tongue"
             app:layout_constraintHorizontal_bias="0.51" />
 
-        <TextView
+        <de.morrox.fontinator.FontTextView
             android:id="@+id/txt_countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -1084,8 +1084,9 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:visibility="visible"
+            app:font="digital-7.ttf"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -200,7 +200,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void processView() {
-        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
+        NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_setting);
         navigateionView.setNavigationItemSelectedListener(Setting_Activity.this);
         auth= FirebaseAuth.getInstance();
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
@@ -420,7 +420,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
             dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後無法使用部分提醒功能");
+            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);

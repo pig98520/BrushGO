@@ -32,6 +32,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Video_Activity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Video_Youtube_Activity"
+            android:screenOrientation="landscape"/>
         <activity android:name=".Information_Activity"
             android:screenOrientation="portrait"/>
         <activity android:name=".Tutorial_Activity"
