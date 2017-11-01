@@ -136,7 +136,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onDataChange(DataSnapshot m_dataSnapshot) {
                 m_time=m_dataSnapshot.getValue(String.class);
                 if(m_time==null)
-                    morning.setText("AM 尚未設定");
+                    morning.setText("  AM 尚未設定");
                 else
                     morning.setText("AM "+m_time.trim());
             }
@@ -152,7 +152,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             public void onDataChange(DataSnapshot e_dataSnapshot) {
                 e_time=e_dataSnapshot.getValue(String.class);
                 if(e_time==null)
-                    evening.setText("PM 尚未設定");
+                    evening.setText("  PM 尚未設定");
                 else
                     evening.setText("PM "+e_time.trim());
             }
