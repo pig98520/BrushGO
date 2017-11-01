@@ -137,12 +137,6 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
             Glide.with(image.getContext())
                     .load(video.getImageUrl())
                     .into(image);
-/*            content.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("TAGGG",video.getVideo_id());
-                }
-            });*/
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
