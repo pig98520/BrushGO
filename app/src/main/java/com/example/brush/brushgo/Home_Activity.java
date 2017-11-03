@@ -363,22 +363,54 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         else{
             for(int j=0;j<tooth.length;j++) {
                 final int finalJ = j;
-                toothRef.child(j+1+"").addValueEventListener(new ValueEventListener() {
+                toothRef.child(j+1+"").child("in").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             if(dataSnapshot.getValue().toString().trim().equals("b"))
                             {
-                                imageRef.child("tooth_dirty").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                toothRef.child(finalJ+1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        /*https://juejin.im/entry/5924f28eda2f60005d7725b2*/
-                                        options = new RequestOptions()
-                                                .dontAnimate();
-                                        Glide.with(Home_Activity.this)
-                                                .setDefaultRequestOptions(options)
-                                                .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                                .into(tooth[finalJ]);
+                                        if(dataSnapshot.getValue().toString().trim().equals("b"))
+                                        {
+                                            /*兩者都B*/
+                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_all").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    options = new RequestOptions()
+                                                            .dontAnimate();
+                                                    Glide.with(Home_Activity.this)
+                                                            .setDefaultRequestOptions(options)
+                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .into(tooth[finalJ]);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            /*內B*/
+                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_in").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    options = new RequestOptions()
+                                                            .dontAnimate();
+                                                    Glide.with(Home_Activity.this)
+                                                            .setDefaultRequestOptions(options)
+                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .into(tooth[finalJ]);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
@@ -389,15 +421,45 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                             }
                             else
                             {
-                                imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                toothRef.child(finalJ+1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        options = new RequestOptions()
-                                                .dontAnimate();
-                                        Glide.with(Home_Activity.this)
-                                                .setDefaultRequestOptions(options)
-                                                .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                                .into(tooth[finalJ]);
+                                        if(dataSnapshot.getValue().toString().trim().equals("g")){
+                                            imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    options = new RequestOptions()
+                                                            .dontAnimate();
+                                                    Glide.with(Home_Activity.this)
+                                                            .setDefaultRequestOptions(options)
+                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .into(tooth[finalJ]);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_out").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    options = new RequestOptions()
+                                                            .dontAnimate();
+                                                    Glide.with(Home_Activity.this)
+                                                            .setDefaultRequestOptions(options)
+                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .into(tooth[finalJ]);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
@@ -409,8 +471,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         }
                         else
                         {
-                            for(int i=0;i<tooth.length;i++)
-                                toothRef.child(i+1+"").setValue("g");
+                            for(int i=0;i<tooth.length;i++) {
+                                toothRef.child(i + 1 + "").child("in").setValue("g");
+                                toothRef.child(i + 1 + "").child("out").setValue("g");
+                            }
                             setTooth();
                         }
                     }
@@ -471,7 +535,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     background_music.pause();
                     timerPause();
                 }
-
             }
         });
         play.setOnClickListener(new View.OnClickListener(){
@@ -538,6 +601,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         rebrush(5);
                     else if (isRebrush && isTimer&&!isLogout)
                         rebrush(10);
+                    else if(!isFinish)
+                        setMusic();
                 }
             }
 
@@ -550,14 +615,16 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void startDialog() {
         customDialog =new Dialog(this,R.style.DialogCustom);
-        customDialog.setContentView(R.layout.custom_dialog_one);
+        customDialog.setContentView(R.layout.custom_dialog_two);
         customDialog.setCancelable(false);
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
         dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
-        dialog_confirm.setText("已清潔，開始刷牙。");
+        dialog_confirm.setText("開始刷牙");
+        dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
+        dialog_cancel.setText("其他功能");
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
 
         customDialog.show();
@@ -567,6 +634,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 customDialog.dismiss();
                 setMusic();
+            }
+        });
+        dialog_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                drawer.openDrawer(GravityCompat.START);
             }
         });
     }
@@ -884,6 +958,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             finish_music.pause();
         if(isRebrush){
             rebrushTimer.cancel();
+            customDialog.dismiss();
         }
     }
 
@@ -894,5 +969,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             rebrush(10);
         if(isRebrush&&!isTimer) //關閉前正在倒數,且音樂尚未開始
             rebrush(5);
+        if(isRebrush&&isTimer)
+            rebrush(10);
     }
 }

@@ -46,7 +46,6 @@ import java.util.Calendar;
  */
 
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
     private Button menu;
     private RadioButton twominutes;
     private RadioButton threeminutes;
