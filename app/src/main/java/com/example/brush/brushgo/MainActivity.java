@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void newuser(String user_name) {
         settingRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
-        DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+        DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null,null,null);
         settingRef.setValue(setting);
 
         profileRef=myFirebaseRef.child("profile").child(auth.getCurrentUser().getUid().trim());

@@ -246,7 +246,7 @@
             app:layout_constraintVertical_bias="0.015" />
 
         <Button
-            android:id="@+id/btn_evening"
+            android:id="@+id/btn_a"
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_marginBottom="8dp"
@@ -254,17 +254,16 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/alarm"
-            android:text="PM"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.963"
+            app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.581" />
 
         <Button
-            android:id="@+id/btn_morning"
+            android:id="@+id/btn_b"
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_marginBottom="8dp"
@@ -272,17 +271,50 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/alarm"
-            android:text="AM"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.581" />
+            app:layout_constraintVertical_bias="0.682" />
+
+        <Button
+            android:id="@+id/btn_c"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/alarm"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.788" />
+
+        <Button
+            android:id="@+id/btn_d"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/alarm"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.884" />
 
         <Switch
-            android:id="@+id/alarm_switch"
+            android:id="@+id/switch_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -294,11 +326,68 @@
             android:textOff="off"
             android:textOn="on"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.341"
+            app:layout_constraintHorizontal_bias="0.621"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.475" />
+            app:layout_constraintVertical_bias="0.58000004" />
+
+        <Switch
+            android:id="@+id/switch_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:textOff="off"
+            android:textOn="on"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.621"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.66999996" />
+
+        <Switch
+            android:id="@+id/switch_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:textOff="off"
+            android:textOn="on"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.621"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.78" />
+
+        <Switch
+            android:id="@+id/switch_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:textOff="off"
+            android:textOn="on"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.621"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.87" />
 
     </android.support.constraint.ConstraintLayout>
 

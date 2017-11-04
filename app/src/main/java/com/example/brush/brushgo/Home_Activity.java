@@ -219,6 +219,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         processView();
         checkGoogleuser(); //檢查是否首次登入
         processControl();
+        setMusic();
     }
 
     private void checkGoogleuser() {
@@ -230,7 +231,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 else {
                     setValue();
                     setTooth();
-                    startDialog();
                 }
             }
 
@@ -260,7 +260,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 customDialog.dismiss();
                 startActivity(new Intent(Home_Activity.this,Tutorial_Activity.class));
-                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null);
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null,null,null);
                 settingRef.setValue(setting);
 
                 DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
@@ -502,9 +502,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     background_music.setDataSource(uri.toString());
                     background_music.prepare();
                     progressDialog.dismiss();
+                    if(!isTimer)
+                        startDialog();
                     isFinish =false;
-                    if(!isStart)
-                        rebrush(5);
+                    if(!isStart&&isTimer)
+                        rebrush(10);
                 } catch (IOException e) {
                     Toast.makeText(Home_Activity.this,"讀取不到音樂",Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -601,8 +603,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                         rebrush(5);
                     else if (isRebrush && isTimer&&!isLogout)
                         rebrush(10);
-                    else if(!isFinish)
-                        setMusic();
                 }
             }
 
@@ -633,7 +633,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 customDialog.dismiss();
-                setMusic();
+                rebrush(5);
             }
         });
         dialog_cancel.setOnClickListener(new View.OnClickListener() {
@@ -863,35 +863,30 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             Intent intent=new Intent();
             intent.setClass(this,Home_Activity.class);
             startActivity(intent);
-            finish();
         }
         else if(id==R.id.Video)
         {
             Intent intent=new Intent();
             intent.setClass(this,Video_Activity.class);
             startActivity(intent);
-            finish();
         }
         else if(id==R.id.Information)
         {
             Intent intent=new Intent();
             intent.setClass(this,Information_Activity.class);
             startActivity(intent);
-            finish();
         }
         else if(id==R.id.Tutorial)
         {
             Intent intent=new Intent();
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
-            finish();
         }
         else if(id==R.id.Setting)
         {
             Intent intent=new Intent();
             intent.setClass(this,Setting_Activity.class);
             startActivity(intent);
-            finish();
         }
         else if(id==R.id.Logout)
         {
@@ -915,8 +910,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 public void onClick(View v) {
                     auth.signOut();
                     customDialog.dismiss();
-                    startActivity(new Intent(Home_Activity.this,MainActivity.class));
-                    finish();
+                    Intent intent=new Intent(Home_Activity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {

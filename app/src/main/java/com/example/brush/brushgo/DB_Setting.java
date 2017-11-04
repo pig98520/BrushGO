@@ -7,20 +7,25 @@ public class DB_Setting {
     private String user;
     private int time;
     private int reminder;
-    private String morning;
-    private String evening;
+    private String alarm_a;
+    private String alarm_b;
+    private String alarm_c;
+    private String alarm_d;
 
     public DB_Setting() {
 
     }
 
-    public DB_Setting(String user, int time, int reminder, String morning, String evening) {
+    public DB_Setting(String user, int time, int reminder, String alarm_a, String alarm_b, String alarm_c, String alarm_d) {
         this.user = user;
         this.time = time;
         this.reminder = reminder;
-        this.morning = morning;
-        this.evening = evening;
+        this.alarm_a = alarm_a;
+        this.alarm_b = alarm_b;
+        this.alarm_c = alarm_c;
+        this.alarm_d = alarm_d;
     }
+
     public String getUser() {
         return user;
     }
@@ -45,20 +50,35 @@ public class DB_Setting {
         this.reminder = reminder;
     }
 
-    public String getMorning() {
-        return morning;
+    public String getAlarm_a() {
+        return alarm_a;
     }
 
-    public void setMorning(String morning) {
-        this.morning = morning;
+    public void setAlarm_a(String alarm_a) {
+        this.alarm_a = alarm_a;
     }
 
-    public String getEvening() {
-        return evening;
+    public String getAlarm_b() {
+        return alarm_b;
     }
 
-    public void setEvening(String evening) {
-        this.evening = evening;
+    public void setAlarm_b(String alarm_b) {
+        this.alarm_b = alarm_b;
     }
 
+    public String getAlarm_c() {
+        return alarm_c;
+    }
+
+    public void setAlarm_c(String alarm_c) {
+        this.alarm_c = alarm_c;
+    }
+
+    public String getAlarm_d() {
+        return alarm_d;
+    }
+
+    public void setAlarm_d(String alarm_d) {
+        this.alarm_d = alarm_d;
+    }
 }

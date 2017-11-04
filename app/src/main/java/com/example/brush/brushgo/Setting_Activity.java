@@ -58,16 +58,31 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private DrawerLayout drawer;
     private int time;
     private int reminder;
-    private Button morning;
-    private Button evening;
-    private Switch alarm_switch;
+    private Button alarm_a;
+    private Button alarm_b;
+    private Button alarm_c;
+    private Button alarm_d;
+    private Button[] alarms=new Button[4];
+    private Switch switch_a;
+    private Switch switch_b;
+    private Switch switch_c;
+    private Switch switch_d;
+    private Switch[] switches=new Switch[4];
     private Calendar now;
-    private Calendar m_calendar;
-    private String m_time;
-    private String[] m_array;
-    private Calendar e_calendar;
-    private String e_time;
-    private String [] e_array;
+    private Calendar calendar_a;
+    private Calendar calendar_b;
+    private Calendar calendar_c;
+    private Calendar calendar_d;
+    private Calendar[] calendars=new Calendar[4];
+    private String time_a;
+    private String time_b;
+    private String time_c;
+    private String time_d;
+    private String [] times=new String[]{time_a,time_b,time_c,time_d};
+    private String[] time_a_array;
+    private String [] time_b_array;
+    private String[] time_c_array;
+    private String [] time_d_array;
     private SimpleDateFormat simpleDateFormat;
     private DecimalFormat decimalFormat;
     private AlarmManager manager;
@@ -75,8 +90,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private PendingIntent pendingIntent;
     private FirebaseAuth auth;
     private Firebase myFirebaseRef;
-    private Firebase morningRef;
-    private Firebase eveningRef;
+    private Firebase alarm_Ref_a;
+    private Firebase alarm_Ref_b;
+    private Firebase alarm_Ref_c;
+    private Firebase alarm_Ref_d;
+    private Firebase[] alarm_refs={alarm_Ref_a,alarm_Ref_b,alarm_Ref_c,alarm_Ref_d};
     private Firebase timeRef;
     private Firebase reminderRef;
     private Boolean isdoubleClick=false;
@@ -124,43 +142,29 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     }
 
     private void setValue() {
-        morningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/morning");
-        eveningRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/evening");
+        for(int i=0;i<alarm_refs.length;i++)
+            alarm_refs[i]=new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/alarm/"+i);
+
         timeRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/time");
         reminderRef = new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/reminder");
+        for(int i=0;i<alarm_refs.length;i++) {
+            final int finalI = i;
+            alarm_refs[i].addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    times[finalI] = dataSnapshot.getValue(String.class);
+                    if (times[finalI] == null)
+                        alarms[finalI].setText("    尚未設定");
+                    else
+                        alarms[finalI].setText("     " + times[finalI].trim());
+                }
 
-        morningRef.addValueEventListener(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onDataChange(DataSnapshot m_dataSnapshot) {
-                m_time=m_dataSnapshot.getValue(String.class);
-                if(m_time==null)
-                    morning.setText("  AM 尚未設定");
-                else
-                    morning.setText("AM "+m_time.trim());
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-        eveningRef.addValueEventListener(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onDataChange(DataSnapshot e_dataSnapshot) {
-                e_time=e_dataSnapshot.getValue(String.class);
-                if(e_time==null)
-                    evening.setText("  PM 尚未設定");
-                else
-                    evening.setText("PM "+e_time.trim());
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+                }
+            });
+        }
         timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot t_dataSnapshot) {
@@ -204,12 +208,21 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         auth= FirebaseAuth.getInstance();
         myFirebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         menu=(Button) findViewById(R.id.btn_menu);
-        alarm_switch=(Switch)findViewById(R.id.alarm_switch);
-        morning=(Button) findViewById(R.id.btn_morning);
-        evening=(Button) findViewById(R.id.btn_evening);
+        switch_a =(Switch)findViewById(R.id.switch_1);
+        switch_b =(Switch)findViewById(R.id.switch_2);
+        switch_c =(Switch)findViewById(R.id.switch_3);
+        switch_d =(Switch)findViewById(R.id.switch_4);
+        switches= new Switch[]{switch_a, switch_b, switch_c, switch_d};
+        alarm_a =(Button) findViewById(R.id.btn_a);
+        alarm_b =(Button) findViewById(R.id.btn_b);
+        alarm_c =(Button) findViewById(R.id.btn_c);
+        alarm_d =(Button) findViewById(R.id.btn_d);
+        alarms=new Button[]{alarm_a,alarm_b,alarm_c,alarm_d};
         now = Calendar.getInstance();
-        e_calendar= Calendar.getInstance();
-        m_calendar= Calendar.getInstance();
+        calendar_a=Calendar.getInstance();
+        calendar_b=Calendar.getInstance();
+        calendar_c=Calendar.getInstance();
+        calendar_d=Calendar.getInstance();
         simpleDateFormat = new SimpleDateFormat("HH:mm");
         simpleDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
         decimalFormat=new DecimalFormat("00");
@@ -233,42 +246,35 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 drawer.openDrawer(GravityCompat.START);
             }
         });
-        morning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(1);
-            }
-        });
-        evening.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(2);
-            }
-        });
-        alarm_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(alarm_switch.isChecked())
-                {
-                    morning.setVisibility(View.VISIBLE);
-                    evening.setVisibility(View.VISIBLE);
+        for(int i=0;i<alarms.length;i++)
+        {
+            final int finalI = i;
+            alarms[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog(finalI);
                 }
-                else
-                {
-                    morning.setVisibility(View.INVISIBLE);
-                    evening.setVisibility(View.INVISIBLE);
-                    m_time=null;
-                    e_time=null;
-                    eveningRef.setValue(null);
-                    morningRef.setValue(null);
-                    for(int i=0;i<2;i++) {
-                        pendingIntent = PendingIntent.getBroadcast(Setting_Activity.this, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            });
+        }
+
+        for(int i=0;i<switches.length;i++)
+        {
+            final int finalI = i;
+            switches[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(switches[finalI].isChecked())
+                        alarms[finalI].setClickable(true);
+                    else{
+                        alarms[finalI].setClickable(false);
+                        times[finalI]=null;
+                        alarm_refs[finalI].setValue(null);
+                        pendingIntent = PendingIntent.getBroadcast(Setting_Activity.this, finalI, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         manager.cancel(pendingIntent);
                     }
                 }
-            }
-        });
+            });
+        }
         rg_reminder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -299,64 +305,115 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
 
     protected Dialog onCreateDialog(int id){
-        if(id==1) {
-            if(m_time!=null) {
-                m_array = m_time.split(":");
-                return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener, Integer.parseInt(m_array[0]), Integer.parseInt(m_array[1]), true);
+        if(id==0) {
+            if(time_a !=null) {
+                time_a_array = time_a.split(":");
+                return new TimePickerDialog(Setting_Activity.this, timePicker_a, Integer.parseInt(time_a_array[0]), Integer.parseInt(time_a_array[1]), true);
             }
             else
-                return new TimePickerDialog(Setting_Activity.this, morningTimePickerListener,0,0, true);
+                return new TimePickerDialog(Setting_Activity.this, timePicker_a,0,0, true);
         }
-        if(id==2) {
-            if(e_time!=null) {
-                e_array = e_time.split(":");
-                return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener, Integer.parseInt(e_array[0]), Integer.parseInt(e_array[1]), true);
+        if(id==1) {
+            if(time_b !=null) {
+                time_b_array = time_b.split(":");
+                return new TimePickerDialog(Setting_Activity.this, timePicker_b, Integer.parseInt(time_b_array[0]), Integer.parseInt(time_b_array[1]), true);
             }
             else
-                return new TimePickerDialog(Setting_Activity.this, eveningTimePickerListener, 0,0, true);
+                return new TimePickerDialog(Setting_Activity.this, timePicker_b, 0,0, true);
+        }
+        if(id==2){
+            if(time_c !=null) {
+                time_c_array = time_c.split(":");
+                return new TimePickerDialog(Setting_Activity.this, timePicker_c, Integer.parseInt(time_c_array[0]), Integer.parseInt(time_c_array[1]), true);
+            }
+            else
+                return new TimePickerDialog(Setting_Activity.this, timePicker_c, 0,0, true);
+
+        }
+        if(id==3){
+            if(time_d !=null) {
+                time_d_array = time_d.split(":");
+                return new TimePickerDialog(Setting_Activity.this, timePicker_d, Integer.parseInt(time_d_array[0]), Integer.parseInt(time_d_array[1]), true);
+            }
+            else
+                return new TimePickerDialog(Setting_Activity.this, timePicker_d, 0,0, true);
+
         }
         return null;
     }
 
-    protected TimePickerDialog.OnTimeSetListener morningTimePickerListener =new TimePickerDialog.OnTimeSetListener(){
+    protected TimePickerDialog.OnTimeSetListener timePicker_a =new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            m_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
-            if(hourOfDay>12)
-                hourOfDay-=12;
-            m_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            m_calendar.set(Calendar.MINUTE, minute);
-            m_calendar.set(Calendar.SECOND, 0);
-            m_calendar.set(Calendar.MILLISECOND, 0);
-            m_time= simpleDateFormat.format(m_calendar.getTime()).trim();
-            morning.setText("AM "+m_time);
+            calendar_a.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            calendar_a.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar_a.set(Calendar.MINUTE, minute);
+            calendar_a.set(Calendar.SECOND, 0);
+            calendar_a.set(Calendar.MILLISECOND, 0);
+            time_a = simpleDateFormat.format(calendar_a.getTime()).trim();
+            alarm_a.setText("      "+ time_a);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            alarmManager(m_calendar,0);
-            morningRef.setValue(m_time);
-            Toast.makeText(Setting_Activity.this,m_calendar.getTime()+"",Toast.LENGTH_LONG).show();
+            alarmManager(calendar_a,0);
+            alarm_refs[0].setValue(time_a);
+            Toast.makeText(Setting_Activity.this, calendar_a.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
-    protected TimePickerDialog.OnTimeSetListener eveningTimePickerListener =new TimePickerDialog.OnTimeSetListener(){
+    protected TimePickerDialog.OnTimeSetListener timePicker_b =new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            e_calendar.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
-            if(hourOfDay<12)
-                hourOfDay+=12;
-            e_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            e_calendar.set(Calendar.MINUTE, minute);
-            e_calendar.set(Calendar.SECOND, 0);
-            e_calendar.set(Calendar.MILLISECOND, 0);
-            e_time= simpleDateFormat.format(e_calendar.getTime()).trim();
-            evening.setText("PM "+e_time);
+            calendar_b.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            calendar_b.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar_b.set(Calendar.MINUTE, minute);
+            calendar_b.set(Calendar.SECOND, 0);
+            calendar_b.set(Calendar.MILLISECOND, 0);
+            time_b = simpleDateFormat.format(calendar_b.getTime()).trim();
+            alarm_b.setText("     "+ time_b);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            alarmManager(e_calendar,1);
-            eveningRef.setValue(e_time);
-            Toast.makeText(Setting_Activity.this,e_calendar.getTime()+"",Toast.LENGTH_LONG).show();
+            alarmManager(calendar_b,1);
+            alarm_refs[1].setValue(time_b);
+            Toast.makeText(Setting_Activity.this, calendar_b.getTime()+"",Toast.LENGTH_LONG).show();
+        }
+    };
+
+    protected TimePickerDialog.OnTimeSetListener timePicker_c =new TimePickerDialog.OnTimeSetListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar_c.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            calendar_c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar_c.set(Calendar.MINUTE, minute);
+            calendar_c.set(Calendar.SECOND, 0);
+            calendar_c.set(Calendar.MILLISECOND, 0);
+            time_c = simpleDateFormat.format(calendar_c.getTime()).trim();
+            alarm_c.setText("     "+ time_c);
+            view.setCurrentHour(hourOfDay);
+            view.setCurrentMinute(minute);
+            alarmManager(calendar_c,0);
+            alarm_refs[2].setValue(time_c);
+            Toast.makeText(Setting_Activity.this, calendar_c.getTime()+"",Toast.LENGTH_LONG).show();
+        }
+    };
+    protected TimePickerDialog.OnTimeSetListener timePicker_d =new TimePickerDialog.OnTimeSetListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar_d.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            calendar_d.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar_d.set(Calendar.MINUTE, minute);
+            calendar_d.set(Calendar.SECOND, 0);
+            calendar_d.set(Calendar.MILLISECOND, 0);
+            time_d = simpleDateFormat.format(calendar_d.getTime()).trim();
+            alarm_d.setText("      "+ time_d);
+            view.setCurrentHour(hourOfDay);
+            view.setCurrentMinute(minute);
+            alarmManager(calendar_d,0);
+            alarm_refs[3].setValue(time_d);
+            Toast.makeText(Setting_Activity.this, calendar_d.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
