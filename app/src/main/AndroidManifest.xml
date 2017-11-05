@@ -40,6 +40,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Interdental_Activity"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".AlarmNotificationReceiver"></receiver>
         <receiver android:name=".AlarmReminderReceiver"></receiver>

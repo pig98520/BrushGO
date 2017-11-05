@@ -181,8 +181,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private TextView dialog_message;
     private Button dialog_confirm;
     private Button dialog_cancel;
+    private Button dialog_middle;
     private ImageView[] fireworkArray =new ImageView[8];
-    private int[] fireworkView =new int[]{R.id.imageView1,R.id.imageView2,R.id.imageView3,R.id.imageView4,
+    private int[] fireworkView =new int[]{
+            R.id.imageView1,R.id.imageView2,R.id.imageView3,R.id.imageView4,
             R.id.imageView5,R.id.imageView6,R.id.imageView7,R.id.imageView8};
 
 
@@ -317,8 +319,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         intent =new Intent(Home_Activity.this,AlarmNotificationReceiver.class);
         vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
     }
-
-
 
     private void setValue() {
         timeRef.addValueEventListener(new ValueEventListener() {
@@ -615,7 +615,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
     private void startDialog() {
         customDialog =new Dialog(this,R.style.DialogCustom);
-        customDialog.setContentView(R.layout.custom_dialog_two);
+        customDialog.setContentView(R.layout.custom_dialog_three);
         customDialog.setCancelable(false);
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
@@ -623,6 +623,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("開始刷牙");
+        dialog_middle=(Button)customDialog.findViewById(R.id.middle);
+        dialog_middle.setText("牙縫狀況");
         dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
         dialog_cancel.setText("其他功能");
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
@@ -634,6 +636,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 customDialog.dismiss();
                 rebrush(5);
+            }
+        });
+        dialog_middle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                startActivity(new Intent(Home_Activity.this,Interdental_Activity.class));
             }
         });
         dialog_cancel.setOnClickListener(new View.OnClickListener() {
