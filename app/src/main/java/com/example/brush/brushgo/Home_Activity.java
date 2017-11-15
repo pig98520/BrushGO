@@ -130,7 +130,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private String nowTime;
     private String nowDate;
     private DecimalFormat decimalFormat;
-    private StorageReference storageRef;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
     private Firebase timeRef;
@@ -139,7 +138,12 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase toothRef;
     private Firebase profileRef;
     private Firebase settingRef;
-    private Firebase imageRef;
+    private StorageReference storageRef;
+    private String[] tooth_image=new String[]{
+            "tooth_1","tooth_2","tooth_3","tooth_4",
+            "tooth_5","tooth_6","tooth_7","tooth_8",
+            "tooth_9","tooth_10","tooth_11","tooth_12",
+            "tooth_13","tooth_14","tooth_15","tooth_16"};
     private int[] timeArray=new int[]{120,180,240};
     private ImageView tooth[]=new ImageView[32];
     private int tooth_id[]=new int[]{
@@ -298,7 +302,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timeRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
         reminderRef=firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("reminder");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
-        imageRef=firebaseRef.child("image");
+        storageRef=FirebaseStorage.getInstance().getReference();
 
         decimalFormat= new DecimalFormat("00");
         nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -340,7 +344,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void setTooth() {
         if(isClean)
         {
-            for(int i=0;i<tooth.length;i++) {
+            /*for(int i=0;i<tooth.length;i++) {
                 final int finalI = i;
                 imageRef.child("tooth_clean").child(i % 16 + 1 + "").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -356,6 +360,20 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
 
+                    }
+                });
+            }*/
+            for(int i=0;i<tooth.length;i++){
+                final int finalI = i;
+                storageRef.child("tooth").child(tooth_image[i%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        options = new RequestOptions()
+                                .dontAnimate();
+                        Glide.with(Home_Activity.this)
+                                .setDefaultRequestOptions(options)
+                                .load(uri)
+                                .into(tooth[finalI]);
                     }
                 });
             }
@@ -375,39 +393,29 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                         if(dataSnapshot.getValue().toString().trim().equals("b"))
                                         {
                                             /*兩者都B*/
-                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_all").addValueEventListener(new ValueEventListener() {
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                public void onSuccess(Uri uri) {
                                                     options = new RequestOptions()
                                                             .dontAnimate();
                                                     Glide.with(Home_Activity.this)
                                                             .setDefaultRequestOptions(options)
-                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .load(uri)
                                                             .into(tooth[finalJ]);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(FirebaseError firebaseError) {
-
                                                 }
                                             });
                                         }
                                         else{
                                             /*內B*/
-                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_in").addValueEventListener(new ValueEventListener() {
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_in.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                public void onSuccess(Uri uri) {
                                                     options = new RequestOptions()
                                                             .dontAnimate();
                                                     Glide.with(Home_Activity.this)
                                                             .setDefaultRequestOptions(options)
-                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .load(uri)
                                                             .into(tooth[finalJ]);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(FirebaseError firebaseError) {
-
                                                 }
                                             });
                                         }
@@ -425,38 +433,30 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if(dataSnapshot.getValue().toString().trim().equals("g")){
-                                            imageRef.child("tooth_clean").child(finalJ%16+1+"").addValueEventListener(new ValueEventListener() {
+                                            /*兩者都G*/
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                public void onSuccess(Uri uri) {
                                                     options = new RequestOptions()
                                                             .dontAnimate();
                                                     Glide.with(Home_Activity.this)
                                                             .setDefaultRequestOptions(options)
-                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .load(uri)
                                                             .into(tooth[finalJ]);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(FirebaseError firebaseError) {
-
                                                 }
                                             });
                                         }
                                         else{
-                                            imageRef.child("tooth_dirty").child(finalJ%16+1+"_out").addValueEventListener(new ValueEventListener() {
+                                            /*外B*/
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_o.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                public void onSuccess(Uri uri) {
                                                     options = new RequestOptions()
                                                             .dontAnimate();
                                                     Glide.with(Home_Activity.this)
                                                             .setDefaultRequestOptions(options)
-                                                            .load(Uri.parse(dataSnapshot.getValue().toString()))
+                                                            .load(uri)
                                                             .into(tooth[finalJ]);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(FirebaseError firebaseError) {
-
                                                 }
                                             });
                                         }

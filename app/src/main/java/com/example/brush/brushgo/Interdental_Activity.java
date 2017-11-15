@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -31,6 +32,7 @@ public class Interdental_Activity extends AppCompatActivity {
     private boolean isValue=false;
     private FirebaseAuth auth;
     private DatabaseReference dbRef;
+    private Button btn_back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +43,11 @@ public class Interdental_Activity extends AppCompatActivity {
         processView();
         processControl();
         checkValue();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Interdental_Activity.this,Home_Activity.class));
     }
 
     private void checkValue() {
@@ -102,15 +109,16 @@ public class Interdental_Activity extends AppCompatActivity {
         auth=FirebaseAuth.getInstance();
         for(int i=0;i<btn_interdental.length;i++)
             btn_interdental[i]=(Button)findViewById(btn_interdental_id[i]);
+        btn_back=(Button)findViewById(R.id.btn_back);
     }
 
 
     private void processControl() {
-
-    }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(Interdental_Activity.this,Home_Activity.class));
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Interdental_Activity.this,Home_Activity.class));
+            }
+        });
     }
 }
