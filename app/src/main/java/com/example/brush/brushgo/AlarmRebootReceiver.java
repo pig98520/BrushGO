@@ -36,7 +36,8 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
     private Firebase alarm_b_Ref;
     private Firebase alarm_c_Ref;
     private Firebase alarm_d_Ref;
-    private Firebase[] alarm_refs ={alarm_a_Ref,alarm_b_Ref,alarm_c_Ref,alarm_d_Ref};
+    private Firebase alarm_e_Ref;
+    private Firebase[] alarm_refs ={alarm_a_Ref,alarm_b_Ref,alarm_c_Ref,alarm_d_Ref,alarm_e_Ref};
     private Firebase reminderRef;
     private Firebase lastBrushtimeRef;
     private SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
@@ -45,7 +46,8 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
     private Date b_time;
     private Date c_time;
     private Date d_time;
-    private Date[] times={a_time,b_time,c_time,d_time};
+    private Date e_time;
+    private Date[] times={a_time,b_time,c_time,d_time,e_time};
     private Long currentTimemillisecond;
     private int reminderTime;
 
@@ -55,7 +57,7 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
         Firebase.setAndroidContext(context);
         alarmManager= (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         auth= FirebaseAuth.getInstance();
-        for(int i=0;i<4;i++)
+        for(int i=0;i<alarm_refs.length;i++)
             alarm_refs[i]=new Firebase("https://brushgo-67813.firebaseio.com/setting/"+auth.getCurrentUser().getUid()+"/alarm/"+i);
 
 
@@ -64,7 +66,7 @@ public class AlarmRebootReceiver extends BroadcastReceiver {
         alarmIntent =new Intent(context,AlarmNotificationReceiver.class);
         calendar=Calendar.getInstance();
 
-        for(int i=0;i<4;i++)
+        for(int i=0;i<alarm_refs.length;i++)
         {
             final int finalI = i;
             alarm_refs[i].addValueEventListener(new ValueEventListener() {

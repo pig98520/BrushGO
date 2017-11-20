@@ -62,23 +62,27 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Button alarm_b;
     private Button alarm_c;
     private Button alarm_d;
-    private Button[] alarms=new Button[4];
+    private Button alarm_e;
+    private Button[] alarms=new Button[5];
     private Switch switch_a;
     private Switch switch_b;
     private Switch switch_c;
     private Switch switch_d;
-    private Switch[] switches=new Switch[4];
+    private Switch switch_e;
+    private Switch[] switches=new Switch[5];
     private Calendar now;
     private Calendar calendar_a;
     private Calendar calendar_b;
     private Calendar calendar_c;
     private Calendar calendar_d;
-    private Calendar[] calendars=new Calendar[4];
+    private Calendar calendar_e;
+    private Calendar[] calendars=new Calendar[5];
     private String time_a;
     private String time_b;
     private String time_c;
     private String time_d;
-    private String [] times=new String[]{time_a,time_b,time_c,time_d};
+    private String time_e;
+    private String [] times=new String[]{time_a,time_b,time_c,time_d,time_e};
     private String[] time_a_array;
     private String [] time_b_array;
     private String[] time_c_array;
@@ -94,7 +98,8 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     private Firebase alarm_Ref_b;
     private Firebase alarm_Ref_c;
     private Firebase alarm_Ref_d;
-    private Firebase[] alarm_refs={alarm_Ref_a,alarm_Ref_b,alarm_Ref_c,alarm_Ref_d};
+    private Firebase alarm_Ref_e;
+    private Firebase[] alarm_refs={alarm_Ref_a,alarm_Ref_b,alarm_Ref_c,alarm_Ref_d,alarm_Ref_e};
     private Firebase timeRef;
     private Firebase reminderRef;
     private Boolean isdoubleClick=false;
@@ -212,17 +217,20 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         switch_b =(Switch)findViewById(R.id.switch_2);
         switch_c =(Switch)findViewById(R.id.switch_3);
         switch_d =(Switch)findViewById(R.id.switch_4);
-        switches= new Switch[]{switch_a, switch_b, switch_c, switch_d};
+        switch_e =(Switch)findViewById(R.id.switch_5);
+        switches= new Switch[]{switch_a, switch_b, switch_c, switch_d,switch_e};
         alarm_a =(Button) findViewById(R.id.btn_a);
         alarm_b =(Button) findViewById(R.id.btn_b);
         alarm_c =(Button) findViewById(R.id.btn_c);
         alarm_d =(Button) findViewById(R.id.btn_d);
-        alarms=new Button[]{alarm_a,alarm_b,alarm_c,alarm_d};
+        alarm_e =(Button) findViewById(R.id.btn_e);
+        alarms=new Button[]{alarm_a,alarm_b,alarm_c,alarm_d,alarm_e};
         now = Calendar.getInstance();
         calendar_a=Calendar.getInstance();
         calendar_b=Calendar.getInstance();
         calendar_c=Calendar.getInstance();
         calendar_d=Calendar.getInstance();
+        calendar_e=Calendar.getInstance();
         simpleDateFormat = new SimpleDateFormat("HH:mm");
         simpleDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
         decimalFormat=new DecimalFormat("00");
@@ -339,6 +347,15 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
                 return new TimePickerDialog(Setting_Activity.this, timePicker_d, 0,0, true);
 
         }
+        if(id==4){
+            if(time_d !=null) {
+                time_d_array = time_d.split(":");
+                return new TimePickerDialog(Setting_Activity.this, timePicker_e, Integer.parseInt(time_d_array[0]), Integer.parseInt(time_d_array[1]), true);
+            }
+            else
+                return new TimePickerDialog(Setting_Activity.this, timePicker_e, 0,0, true);
+
+        }
         return null;
     }
 
@@ -398,6 +415,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             Toast.makeText(Setting_Activity.this, calendar_c.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
+
     protected TimePickerDialog.OnTimeSetListener timePicker_d =new TimePickerDialog.OnTimeSetListener(){
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
@@ -414,6 +432,25 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             alarmManager(calendar_d,0);
             alarm_refs[3].setValue(time_d);
             Toast.makeText(Setting_Activity.this, calendar_d.getTime()+"",Toast.LENGTH_LONG).show();
+        }
+    };
+
+    protected TimePickerDialog.OnTimeSetListener timePicker_e =new TimePickerDialog.OnTimeSetListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar_e.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            calendar_e.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar_e.set(Calendar.MINUTE, minute);
+            calendar_e.set(Calendar.SECOND, 0);
+            calendar_e.set(Calendar.MILLISECOND, 0);
+            time_e = simpleDateFormat.format(calendar_e.getTime()).trim();
+            alarm_e.setText("      "+ time_e);
+            view.setCurrentHour(hourOfDay);
+            view.setCurrentMinute(minute);
+            alarmManager(calendar_e,0);
+            alarm_refs[4].setValue(time_e);
+            Toast.makeText(Setting_Activity.this, calendar_e.getTime()+"",Toast.LENGTH_LONG).show();
         }
     };
 
@@ -460,6 +497,11 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
             finish();
+        }
+        else if(id==R.id.Tooth_Condition){
+            Intent intent=new Intent();
+            intent.setClass(this,Tooth_Condition_Activity.class);
+            startActivity(intent);
         }
         else if(id==R.id.Setting)
         {

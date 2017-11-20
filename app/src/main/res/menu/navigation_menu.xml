@@ -3,20 +3,23 @@
     <item
         android:id="@+id/Home"
         android:title="首頁"
-        android:icon="@mipmap/ic_home_black_24dp"/>
+        android:icon="@drawable/menu_home"/>
     <item android:id="@+id/Video"
         android:title="口腔清潔影片"
-        android:icon="@mipmap/ic_video_library_black_24dp"/>
+        android:icon="@drawable/menu_video"/>
     <item android:id="@+id/Information"
         android:title="衛教相關資訊"
-        android:icon="@mipmap/ic_info_black_24dp"/>
+        android:icon="@drawable/menu_information"/>
     <item android:id="@+id/Tutorial"
         android:title="使用教學"
-        android:icon="@mipmap/ic_question_answer_black_24dp"/>
+        android:icon="@drawable/menu_tutorial"/>
+    <item android:id="@+id/Tooth_Condition"
+        android:title="牙齒狀況"
+        android:icon="@drawable/menu_condition"/>
     <item android:id="@+id/Setting"
         android:title="設定"
-        android:icon="@mipmap/ic_settings_black_24dp"/>
+        android:icon="@drawable/menu_setting"/>
     <item android:id="@+id/Logout"
         android:title="登出"
-        android:icon="@mipmap/ic_person_outline_black_24dp"/>
+        android:icon="@drawable/menu_logout"/>
 </menu>

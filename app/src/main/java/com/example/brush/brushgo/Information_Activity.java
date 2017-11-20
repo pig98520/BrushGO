@@ -80,7 +80,7 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
         processView();
         processControl();
     }
-
+    
     private void processView() {
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_information);
         navigateionView.setNavigationItemSelectedListener(Information_Activity.this);
@@ -185,6 +185,11 @@ public class Information_Activity extends AppCompatActivity implements Navigatio
             intent.setClass(this,Tutorial_Activity.class);
             startActivity(intent);
             finish();
+        }
+        else if(id==R.id.Tooth_Condition){
+            Intent intent=new Intent();
+            intent.setClass(this,Tooth_Condition_Activity.class);
+            startActivity(intent);
         }
         else if(id==R.id.Setting)
         {

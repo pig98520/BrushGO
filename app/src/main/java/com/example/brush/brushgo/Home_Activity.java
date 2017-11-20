@@ -344,25 +344,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private void setTooth() {
         if(isClean)
         {
-            /*for(int i=0;i<tooth.length;i++) {
-                final int finalI = i;
-                imageRef.child("tooth_clean").child(i % 16 + 1 + "").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        options = new RequestOptions()
-                                .dontAnimate();
-                        Glide.with(Home_Activity.this)
-                                .setDefaultRequestOptions(options)
-                                .load(Uri.parse(dataSnapshot.getValue().toString()))
-                                .into(tooth[finalI]);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                });
-            }*/
             for(int i=0;i<tooth.length;i++){
                 final int finalI = i;
                 storageRef.child("tooth").child(tooth_image[i%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -642,7 +623,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 customDialog.dismiss();
-                startActivity(new Intent(Home_Activity.this,Interdental_Activity.class));
+                startActivity(new Intent(Home_Activity.this,Tooth_Condition_Activity.class));
             }
         });
         dialog_cancel.setOnClickListener(new View.OnClickListener() {
@@ -889,6 +870,11 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         {
             Intent intent=new Intent();
             intent.setClass(this,Tutorial_Activity.class);
+            startActivity(intent);
+        }
+        else if(id==R.id.Tooth_Condition){
+            Intent intent=new Intent();
+            intent.setClass(this,Tooth_Condition_Activity.class);
             startActivity(intent);
         }
         else if(id==R.id.Setting)

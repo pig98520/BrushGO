@@ -192,6 +192,11 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
             startActivity(intent);
             finish();
         }
+        else if(id==R.id.Tooth_Condition){
+            Intent intent=new Intent();
+            intent.setClass(this,Tooth_Condition_Activity.class);
+            startActivity(intent);
+        }
         else if(id==R.id.Setting)
         {
             Intent intent=new Intent();
