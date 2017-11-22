@@ -2,6 +2,7 @@ package com.example.brush.brushgo;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,7 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static com.example.brush.brushgo.R.id.Home;
 
 /**
  * Created by swlab on 2017/5/5.
@@ -29,11 +39,16 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Tutorial_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth auth;
+    private Firebase firebaseRef;
+    private Firebase touchedRef;
+    private StorageReference storageReference;
+    private String nowTime;
     private Boolean isdoubleClick=false;
     private Tutorial_Adapter customAdapter;
     private ViewPager viewPager;
-    private int[] sliderView=new int[]{R.id.slider_1,R.id.slider_2,R.id.slider_3,R.id.slider_4};
+    private int[] sliderView=new int[]{R.id.slider_1,R.id.slider_2,R.id.slider_3,R.id.slider_4,R.id.slider_5};
     private ImageView[] slider=new ImageView[sliderView.length];
+    private String [] imageUrl=new String[sliderView.length];
     private Dialog customDialog;
     private Button dialog_confirm;
     private Button dialog_cancel;
@@ -69,8 +84,26 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tutorial);
+        setImageUrl();
         processView();
         processControl();
+    }
+
+    private void setImageUrl() {
+        storageReference= FirebaseStorage.getInstance().getReference();
+        customAdapter=new Tutorial_Adapter(Tutorial_Activity.this);
+        viewPager=(ViewPager)findViewById(R.id.viewPager);
+        viewPager.setAdapter(customAdapter);
+        for(int i=0;i<imageUrl.length;i++) {
+            final int finalI = i;
+            storageReference.child("tutorial").child("tutorial_" +i+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    imageUrl[finalI]=uri.toString();
+                    customAdapter.setImageUrl(uri.toString(),finalI);
+                }
+            });
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -78,10 +111,10 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView=(NavigationView) findViewById(R.id.nav_tutorial);
         navigationView.setNavigationItemSelectedListener(Tutorial_Activity.this);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         auth= FirebaseAuth.getInstance();
-        viewPager=(ViewPager)findViewById(R.id.viewPager);
-        customAdapter=new Tutorial_Adapter(this);
-        viewPager.setAdapter(customAdapter);
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid());
         for(int i=0;i<slider.length;i++)
             slider[i]=(ImageView)findViewById(sliderView[i]);
     }
@@ -160,45 +193,40 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
 
-        if(id==R.id.Home)
+        if(id== Home)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Home_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Home_Activity.class));
             finish();
+            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Video_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Video_Activity.class));
             finish();
+            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Information_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Information_Activity.class));
             finish();
+            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Tutorial_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tutorial_Activity.class));
             finish();
+            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
-            Intent intent=new Intent();
-            intent.setClass(this,Tooth_Condition_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tooth_Condition_Activity.class));
+            finish();
+            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Setting_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Setting_Activity.class));
             finish();
+            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {

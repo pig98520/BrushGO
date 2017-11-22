@@ -138,6 +138,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase toothRef;
     private Firebase profileRef;
     private Firebase settingRef;
+    private Firebase touchedRef;
     private StorageReference storageRef;
     private String[] tooth_image=new String[]{
             "tooth_1","tooth_2","tooth_3","tooth_4",
@@ -302,6 +303,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timeRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
         reminderRef=firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("reminder");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid());
         storageRef=FirebaseStorage.getInstance().getReference();
 
         decimalFormat= new DecimalFormat("00");
@@ -850,38 +852,38 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
         if(id== Home)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Home_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Home_Activity.class));
+            finish();
+            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Video_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Video_Activity.class));
+            finish();
+            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Information_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Information_Activity.class));
+            finish();
+            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Tutorial_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tutorial_Activity.class));
+            finish();
+            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
-            Intent intent=new Intent();
-            intent.setClass(this,Tooth_Condition_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tooth_Condition_Activity.class));
+            finish();
+            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Setting_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Setting_Activity.class));
+            finish();
+            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {

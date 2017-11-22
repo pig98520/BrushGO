@@ -32,6 +32,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static com.example.brush.brushgo.R.id.Home;
 import static com.example.brush.brushgo.R.id.imageView_1;
 import static com.example.brush.brushgo.R.id.imageView_10;
 import static com.example.brush.brushgo.R.id.imageView_11;
@@ -80,13 +84,14 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
     private Firebase firebaseRef;
     private Firebase toothRef;
     private Firebase interdentalRef;
+    private Firebase touchedRef;
+    private String nowTime;
 
     private Dialog customDialog;
     private Button dialog_confirm;
     private Button dialog_cancel;
     private TextView dialog_title;
     private TextView dialog_message;
-
 
     private RequestOptions options;
     private String[] tooth_image=new String[]{
@@ -161,6 +166,8 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         toothRef=firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
         interdentalRef=firebaseRef.child("interdental").child(auth.getUid());
+        touchedRef=firebaseRef.child("touched").child(auth.getUid());
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 
     private void processControl() {
@@ -339,45 +346,40 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
 
-        if(id==R.id.Home)
+        if(id== Home)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Home_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Home_Activity.class));
             finish();
+            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Video_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Video_Activity.class));
             finish();
+            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Information_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Information_Activity.class));
             finish();
+            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Tutorial_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tutorial_Activity.class));
             finish();
+            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
-            Intent intent=new Intent();
-            intent.setClass(this,Tooth_Condition_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Tooth_Condition_Activity.class));
+            finish();
+            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
-            Intent intent=new Intent();
-            intent.setClass(this,Setting_Activity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,Setting_Activity.class));
             finish();
+            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {
