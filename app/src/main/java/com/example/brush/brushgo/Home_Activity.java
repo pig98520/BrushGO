@@ -132,13 +132,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private DecimalFormat decimalFormat;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
+    private Firebase touchedRef;
     private Firebase timeRef;
     private Firebase reminderRef;
     private Firebase recordRef;
     private Firebase toothRef;
     private Firebase profileRef;
     private Firebase settingRef;
-    private Firebase touchedRef;
     private StorageReference storageRef;
     private String[] tooth_image=new String[]{
             "tooth_1","tooth_2","tooth_3","tooth_4",
@@ -224,9 +224,19 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         processView();
+        recordTouched();
         checkGoogleuser(); //檢查是否首次登入
         processControl();
         setMusic();
+    }
+
+    private void recordTouched() {
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        auth= FirebaseAuth.getInstance();
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid()).child("home");
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        DB_recordTouched touched=new DB_recordTouched(touchedRef,nowTime);
+        touched.pushValue();
     }
 
     private void checkGoogleuser() {
@@ -303,7 +313,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timeRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("time");
         reminderRef=firebaseRef.child("setting").child(auth.getCurrentUser().getUid()).child("reminder");
         recordRef =firebaseRef.child("record").child(auth.getCurrentUser().getUid());
-        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid());
         storageRef=FirebaseStorage.getInstance().getReference();
 
         decimalFormat= new DecimalFormat("00");
@@ -854,36 +863,30 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         {
             startActivity(new Intent(this,Home_Activity.class));
             finish();
-            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
             startActivity(new Intent(this,Video_Activity.class));
             finish();
-            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
             startActivity(new Intent(this,Information_Activity.class));
             finish();
-            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
             startActivity(new Intent(this,Tutorial_Activity.class));
             finish();
-            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
             startActivity(new Intent(this,Tooth_Condition_Activity.class));
             finish();
-            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
             startActivity(new Intent(this,Setting_Activity.class));
             finish();
-            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {

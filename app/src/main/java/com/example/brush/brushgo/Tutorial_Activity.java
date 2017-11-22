@@ -85,8 +85,18 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tutorial);
         setImageUrl();
+        recordTouched();
         processView();
         processControl();
+    }
+
+    private void recordTouched() {
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        auth= FirebaseAuth.getInstance();
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid()).child("tutorial");
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        DB_recordTouched touched=new DB_recordTouched(touchedRef,nowTime);
+        touched.pushValue();
     }
 
     private void setImageUrl() {
@@ -111,10 +121,6 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView=(NavigationView) findViewById(R.id.nav_tutorial);
         navigationView.setNavigationItemSelectedListener(Tutorial_Activity.this);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
-        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        auth= FirebaseAuth.getInstance();
-        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
-        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid());
         for(int i=0;i<slider.length;i++)
             slider[i]=(ImageView)findViewById(sliderView[i]);
     }
@@ -197,36 +203,30 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         {
             startActivity(new Intent(this,Home_Activity.class));
             finish();
-            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
             startActivity(new Intent(this,Video_Activity.class));
             finish();
-            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
             startActivity(new Intent(this,Information_Activity.class));
             finish();
-            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
             startActivity(new Intent(this,Tutorial_Activity.class));
             finish();
-            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
             startActivity(new Intent(this,Tooth_Condition_Activity.class));
             finish();
-            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
             startActivity(new Intent(this,Setting_Activity.class));
             finish();
-            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {
@@ -264,4 +264,5 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

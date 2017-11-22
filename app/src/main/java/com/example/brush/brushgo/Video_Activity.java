@@ -84,8 +84,18 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video);
+        recordTouched();
         processView();
         processControl();
+    }
+
+    private void recordTouched() {
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        auth= FirebaseAuth.getInstance();
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid()).child("video");
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        DB_recordTouched touched=new DB_recordTouched(touchedRef,nowTime);
+        touched.pushValue();
     }
 
     private void processView() {
@@ -95,7 +105,6 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
-        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid());
         nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
@@ -180,36 +189,30 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
         {
             startActivity(new Intent(this,Home_Activity.class));
             finish();
-            touchedRef.child("home").push().setValue(nowTime);
         }
         else if(id==R.id.Video)
         {
             startActivity(new Intent(this,Video_Activity.class));
             finish();
-            touchedRef.child("video").push().setValue(nowTime);
         }
         else if(id==R.id.Information)
         {
             startActivity(new Intent(this,Information_Activity.class));
             finish();
-            touchedRef.child("information").push().setValue(nowTime);
         }
         else if(id==R.id.Tutorial)
         {
             startActivity(new Intent(this,Tutorial_Activity.class));
             finish();
-            touchedRef.child("tutorial").push().setValue(nowTime);
         }
         else if(id==R.id.Tooth_Condition){
             startActivity(new Intent(this,Tooth_Condition_Activity.class));
             finish();
-            touchedRef.child("condition").push().setValue(nowTime);
         }
         else if(id==R.id.Setting)
         {
             startActivity(new Intent(this,Setting_Activity.class));
             finish();
-            touchedRef.child("setting").push().setValue(nowTime);
         }
         else if(id==R.id.Logout)
         {

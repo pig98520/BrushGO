@@ -8,12 +8,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by pig98520 on 2017/11/5.
@@ -30,7 +29,9 @@ public class Interdental_Activity extends AppCompatActivity {
             R.id.interdental_26,R.id.interdental_27,R.id.interdental_28,R.id.interdental_29,R.id.interdental_30};
     private boolean isValue=false;
     private FirebaseAuth auth;
-    private DatabaseReference dbRef;
+    private Firebase firebaseRef;
+    private Firebase touchedRef;
+    private String nowTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,20 +39,32 @@ public class Interdental_Activity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.interdental);
+        recordTouched();
         processView();
         processControl();
         checkValue();
     }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(Interdental_Activity.this,Home_Activity.class));
     }
 
+    private void recordTouched() {
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        auth= FirebaseAuth.getInstance();
+        touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid()).child("home");
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        DB_recordTouched touched=new DB_recordTouched(touchedRef,nowTime);
+        touched.pushValue();
+    }
+
     private void checkValue() {
-        dbRef.child("interdental").child(auth.getUid()).child("1").addValueEventListener(new ValueEventListener() {
+        firebaseRef.child("interdental").child(auth.getUid()).child("1").addValueEventListener(new com.firebase.client.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     isValue = true;
                     setInterdental();
@@ -63,7 +76,7 @@ public class Interdental_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(FirebaseError firebaseError) {
 
             }
         });
@@ -73,9 +86,9 @@ public class Interdental_Activity extends AppCompatActivity {
         if(isValue){
             for(int i=0;i<btn_interdental.length;i++){
                 final int finalI = i;
-                dbRef.child("interdental").child(auth.getUid()).child(i+1+"").addValueEventListener(new ValueEventListener() {
+                firebaseRef.child("interdental").child(auth.getUid()).child(i+1+"").addValueEventListener(new com.firebase.client.ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getValue().equals("g")){
                             btn_interdental[finalI].setBackgroundResource(R.drawable.transparent_mark);
                             condition_interdental[finalI]=true;
@@ -87,7 +100,7 @@ public class Interdental_Activity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(FirebaseError firebaseError) {
 
                     }
                 });
@@ -95,7 +108,7 @@ public class Interdental_Activity extends AppCompatActivity {
         }
         else{
             for(int i=0;i<btn_interdental.length;i++){
-                dbRef.child("interdental").child(auth.getUid()).child(i+1+"").setValue("g");
+                firebaseRef.child("interdental").child(auth.getUid()).child(i+1+"").setValue("g");
             }
             isValue=true;
             setInterdental();
@@ -103,7 +116,7 @@ public class Interdental_Activity extends AppCompatActivity {
     }
 
     private void processView() {
-        dbRef= FirebaseDatabase.getInstance().getReference();
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
         auth=FirebaseAuth.getInstance();
         for(int i=0;i<btn_interdental.length;i++)
             btn_interdental[i]=(Button)findViewById(btn_interdental_id[i]);
