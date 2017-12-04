@@ -377,35 +377,27 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                            if(dataSnapshot.getValue().toString().trim().equals("b"))
-                            {
-                                toothRef.child(finalJ+1+"").child("out").addValueEventListener(new ValueEventListener() {
+                            if(dataSnapshot.getValue().toString().equals("b")){
+                                toothRef.child(finalJ +1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.getValue().toString().trim().equals("b"))
-                                        {
-                                            /*兩者都B*/
-                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        //內B外G
+                                        if(dataSnapshot.getValue().toString().equals("g")){
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_i.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
-                                                    options = new RequestOptions()
-                                                            .dontAnimate();
                                                     Glide.with(Home_Activity.this)
-                                                            .setDefaultRequestOptions(options)
                                                             .load(uri)
                                                             .into(tooth[finalJ]);
                                                 }
                                             });
                                         }
-                                        else{
-                                            /*內B*/
-                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_in.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        else if(dataSnapshot.getValue().toString().equals("b")){
+                                            //內外皆B
+                                            storageRef.child("tooth").child(tooth_image[finalJ%16]+"_.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
-                                                    options = new RequestOptions()
-                                                            .dontAnimate();
                                                     Glide.with(Home_Activity.this)
-                                                            .setDefaultRequestOptions(options)
                                                             .load(uri)
                                                             .into(tooth[finalJ]);
                                                 }
@@ -419,34 +411,28 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                     }
                                 });
                             }
-                            else
-                            {
-                                toothRef.child(finalJ+1+"").child("out").addValueEventListener(new ValueEventListener() {
+
+                            if(dataSnapshot.getValue().toString().equals("g")){
+                                toothRef.child(finalJ +1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.getValue().toString().trim().equals("g")){
-                                            /*兩者都G*/
+                                        if(dataSnapshot.getValue().toString().equals("g")){
+                                            //內外都G
                                             storageRef.child("tooth").child(tooth_image[finalJ%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
-                                                    options = new RequestOptions()
-                                                            .dontAnimate();
                                                     Glide.with(Home_Activity.this)
-                                                            .setDefaultRequestOptions(options)
                                                             .load(uri)
                                                             .into(tooth[finalJ]);
                                                 }
                                             });
                                         }
-                                        else{
-                                            /*外B*/
+                                        else if(dataSnapshot.getValue().toString().equals("b")){
+                                            //內G外B
                                             storageRef.child("tooth").child(tooth_image[finalJ%16]+"_o.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
-                                                    options = new RequestOptions()
-                                                            .dontAnimate();
                                                     Glide.with(Home_Activity.this)
-                                                            .setDefaultRequestOptions(options)
                                                             .load(uri)
                                                             .into(tooth[finalJ]);
                                                 }
@@ -461,8 +447,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 });
                             }
                         }
-                        else
-                        {
+                        else{
                             for(int i=0;i<tooth.length;i++) {
                                 toothRef.child(i + 1 + "").child("in").setValue("g");
                                 toothRef.child(i + 1 + "").child("out").setValue("g");
