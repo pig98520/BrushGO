@@ -732,7 +732,18 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("恭喜完成");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("已經刷完牙囉，可以開始漱口了。");
+        recordRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dialog_message.setText("您已經使用BrushGo "+(dataSnapshot.getChildrenCount()+1)+" 天囉,繼續加油~");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
         for(int i = 0; i< fireworkView.length; i++) {
