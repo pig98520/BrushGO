@@ -40,9 +40,16 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
+    private Firebase profileRef;
+    private Firebase settingRef;
+    private Firebase toothRef;
     private Firebase touchedRef;
     private StorageReference storageReference;
     private String nowTime;
+    private String nowDate;
+    private int[] timeArray=new int[]{120,180,240};
+    private Bundle bundle;
+    private boolean isNew=false;
     private Boolean isdoubleClick=false;
     private Tutorial_Adapter customAdapter;
     private ViewPager viewPager;
@@ -85,16 +92,12 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tutorial);
         setImageUrl();
-        recordTouched();
         processView();
         processControl();
     }
 
     private void recordTouched() {
-        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
-        auth= FirebaseAuth.getInstance();
         touchedRef =firebaseRef.child("touched").child(auth.getCurrentUser().getUid()).child("tutorial");
-        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         DB_recordTouched touched=new DB_recordTouched(touchedRef,nowTime);
         touched.pushValue();
     }
@@ -120,6 +123,20 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private void processView() {
         NavigationView navigationView=(NavigationView) findViewById(R.id.nav_tutorial);
         navigationView.setNavigationItemSelectedListener(Tutorial_Activity.this);
+        firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
+        auth= FirebaseAuth.getInstance();
+        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
+        settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
+        toothRef = firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
+        nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        bundle=this.getIntent().getExtras();
+        isNew=bundle.getBoolean("isNew");
+        if(isNew)
+            signupDialog_google();
+        else
+            recordTouched();
+
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         for(int i=0;i<slider.length;i++)
             slider[i]=(ImageView)findViewById(sliderView[i]);
@@ -161,6 +178,40 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
                 }
             });
         }
+    }
+
+    private void signupDialog_google() {
+        customDialog =new Dialog(this,R.style.DialogCustom);
+        customDialog.setContentView(R.layout.custom_dialog_sign_up_google);
+        customDialog.setCancelable(false);
+        dialog_title = (TextView) customDialog.findViewById(R.id.title);
+        dialog_title.setText("使用者條款");
+        dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("請按下確認以同意BrushGo存取您的個人資料。");
+        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("同意");
+        dialog_cancel=(Button)customDialog.findViewById(R.id.cancel);
+        dialog_cancel.setText("不同意");
+        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
+
+        dialog_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null,null,null);
+                settingRef.setValue(setting);
+
+                DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
+                profileRef.setValue(profile);
+
+                for(int i=0;i<32;i++) {
+                    toothRef.child(i + 1 + "").child("in").setValue("g");
+                    toothRef.child(i + 1 + "").child("out").setValue("g");
+                }
+            }
+        });
+        customDialog.show();
     }
 
     private void finisnDialog() {

@@ -145,7 +145,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             "tooth_5","tooth_6","tooth_7","tooth_8",
             "tooth_9","tooth_10","tooth_11","tooth_12",
             "tooth_13","tooth_14","tooth_15","tooth_16"};
-    private int[] timeArray=new int[]{120,180,240};
     private ImageView tooth[]=new ImageView[32];
     private int tooth_id[]=new int[]{
             imageView_1,imageView_2,imageView_3,imageView_4,imageView_5,imageView_6,imageView_7, imageView_8,
@@ -227,7 +226,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         recordTouched();
         checkGoogleuser(); //檢查是否首次登入
         processControl();
-        setMusic();
     }
 
     private void recordTouched() {
@@ -240,13 +238,20 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void checkGoogleuser() {
-        profileRef.child("name").addValueEventListener(new ValueEventListener() {
+        touchedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists())
-                    signupDialog_google();
-                else {
+                if(dataSnapshot.getChildrenCount()==1){
+                    Intent intent = new Intent();
+                    intent.setClass(Home_Activity.this, Tutorial_Activity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isNew",true);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                else{
                     setValue();
+                    setMusic();
                     setTooth();
                 }
             }
@@ -256,38 +261,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
             }
         });
-    }
-
-    private void signupDialog_google() {
-        customDialog =new Dialog(this,R.style.DialogCustom);
-        customDialog.setContentView(R.layout.custom_dialog_sign_up_google);
-        customDialog.setCancelable(false);
-        dialog_title = (TextView) customDialog.findViewById(R.id.title);
-        dialog_title.setText("使用者條款");
-        dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("請按下確認以同意BrushGo存取您的個人資料。");
-        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
-        dialog_confirm.setText("同意");
-        dialog_cancel=(Button)customDialog.findViewById(R.id.cancel);
-        dialog_cancel.setText("不同意");
-        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-
-        dialog_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customDialog.dismiss();
-                startActivity(new Intent(Home_Activity.this,Tutorial_Activity.class));
-                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null,null,null);
-                settingRef.setValue(setting);
-
-                DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
-                profileRef.setValue(profile);
-
-                for(int i=0;i<28;i++)
-                    toothRef.child(i+1+"").setValue("g");
-            }
-        });
-        customDialog.show();
     }
 
     private void processView() {
@@ -339,12 +312,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                defaultTime=dataSnapshot.getValue(int.class);
-                currentTime=defaultTime;
-                timer.setText(defaultTime+"");
-                countdown.setText(decimalFormat.format(defaultTime/60)+" : "+decimalFormat.format(defaultTime%60));
+                if(dataSnapshot.exists()) {
+                    defaultTime = dataSnapshot.getValue(int.class);
+                    currentTime = defaultTime;
+                    timer.setText(defaultTime + "");
+                    countdown.setText(decimalFormat.format(defaultTime / 60) + " : " + decimalFormat.format(defaultTime % 60));
+                }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
@@ -1008,43 +982,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
             }
         }
-
-/*        if(i%6==5){
-            if(i/2==0){
-                i+=1;
-                for(int j=0;j<(8*i)+8;j++){
-                    final int finalJ = j;
-                    storageRef.child("tooth").child(tooth_image[j%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            options = new RequestOptions()
-                                    .dontAnimate();
-                            Glide.with(Home_Activity.this)
-                                    .setDefaultRequestOptions(options)
-                                    .load(uri)
-                                    .into(tooth[finalJ]);
-                        }
-                    });
-                }
-            }
-            else{
-                i-=1;
-                for(int j=0;j<(8*i)+8;j++){
-                    final int finalJ = j;
-                    storageRef.child("tooth").child(tooth_image[j%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            options = new RequestOptions()
-                                    .dontAnimate();
-                            Glide.with(Home_Activity.this)
-                                    .setDefaultRequestOptions(options)
-                                    .load(uri)
-                                    .into(tooth[finalJ]);
-                        }
-                    });
-                }
-            }
-        }*/
     }
 
     private void reset_arrow() {
