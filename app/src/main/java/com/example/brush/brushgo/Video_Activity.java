@@ -185,7 +185,6 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Video_Activity.this,Home_Activity.class));
-                finish();
             }
         });
     }
@@ -197,31 +196,25 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
         if(id== Home)
         {
             startActivity(new Intent(this,Home_Activity.class));
-            finish();
         }
         else if(id==R.id.Video)
         {
             startActivity(new Intent(this,Video_Activity.class));
-            finish();
         }
         else if(id==R.id.Information)
         {
             startActivity(new Intent(this,Information_Activity.class));
-            finish();
         }
         else if(id==R.id.Tutorial)
         {
             startActivity(new Intent(this,Tutorial_Activity.class));
-            finish();
         }
         else if(id==R.id.Tooth_Condition){
             startActivity(new Intent(this,Tooth_Condition_Activity.class));
-            finish();
         }
         else if(id==R.id.Setting)
         {
             startActivity(new Intent(this,Setting_Activity.class));
-            finish();
         }
         else if(id==R.id.Logout)
         {
@@ -246,7 +239,6 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
                     auth.signOut();
                     customDialog.dismiss();
                     startActivity(new Intent(Video_Activity.this,MainActivity.class));
-                    finish();
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {
