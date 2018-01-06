@@ -41,6 +41,7 @@ import static com.example.brush.brushgo.R.id.Home;
 
 public class Video_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
+    private Button brush;
     private DrawerLayout drawer;
     private FirebaseAuth auth;
     private Firebase firebaseRef;
@@ -102,6 +103,7 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
         NavigationView navigateionView=(NavigationView) findViewById(R.id.nav_video);
         navigateionView.setNavigationItemSelectedListener(Video_Activity.this);
         menu=(Button) findViewById(R.id.btn_menu);
+        brush=(Button)findViewById(R.id.btn_brush);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         auth= FirebaseAuth.getInstance();
         firebaseRef=new Firebase("https://brushgo-67813.firebaseio.com/");
@@ -177,6 +179,13 @@ public class Video_Activity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
+            }
+        });
+        brush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Video_Activity.this,Home_Activity.class));
+                finish();
             }
         });
     }

@@ -50,6 +50,7 @@ import static com.example.brush.brushgo.R.id.Home;
 
 public class Setting_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button menu;
+    private Button brush;
     private RadioButton twominutes;
     private RadioButton threeminutes;
     private RadioButton fourminutes;
@@ -228,6 +229,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
         auth= FirebaseAuth.getInstance();
         firebaseRef = new Firebase("https://brushgo-67813.firebaseio.com");
         menu=(Button) findViewById(R.id.btn_menu);
+        brush=(Button)findViewById(R.id.btn_brush);
         switch_a =(Switch)findViewById(R.id.switch_1);
         switch_b =(Switch)findViewById(R.id.switch_2);
         switch_c =(Switch)findViewById(R.id.switch_3);
@@ -268,6 +270,13 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
+            }
+        });
+        brush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Setting_Activity.this,Home_Activity.class));
+                finish();
             }
         });
         for(int i=0;i<alarms.length;i++)
@@ -387,7 +396,6 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             time_a = simpleDateFormat.format(calendar_a.getTime()).trim();
             alarm_a.setText("      "+ time_a);
             view.setCurrentHour(hourOfDay);
-            view.setCurrentMinute(minute);
             alarmManager(calendar_a,0);
             alarm_refs[0].setValue(time_a);
             Toast.makeText(Setting_Activity.this, calendar_a.getTime()+"",Toast.LENGTH_LONG).show();
@@ -472,6 +480,10 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
+        if(id==0)
+            intent.putExtra("contentText","午餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
+        else if(id==1)
+            intent.putExtra("contentText","晚餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, pendingIntent.FLAG_UPDATE_CURRENT);
         if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE,1); //如果時間早於現在就加一天

@@ -75,6 +75,7 @@ import static com.example.brush.brushgo.R.id.imageView_9;
 
 public class Tooth_Condition_Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private Button menu;
+    private Button brush;
     private Switch switcher;
     private boolean isTooth=true;
     private DrawerLayout drawer;
@@ -86,7 +87,6 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
     private Firebase interdentalRef;
     private Firebase touchedRef;
     private String nowTime;
-    private Button btn_home;
 
     private Dialog customDialog;
     private Button dialog_confirm;
@@ -167,6 +167,7 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
         navigateionView.setNavigationItemSelectedListener(Tooth_Condition_Activity.this);
         auth= FirebaseAuth.getInstance();
         menu=(Button)findViewById(R.id.btn_menu);
+        brush=(Button)findViewById(R.id.btn_brush);
         switcher=(Switch)findViewById(R.id.switcher);
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         for(int i=0;i<tooth.length;i++)
@@ -178,7 +179,6 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
         toothRef=firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
         interdentalRef=firebaseRef.child("interdental").child(auth.getUid());
         nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        btn_home=(Button)findViewById(R.id.btn_home);
     }
 
     private void processControl() {
@@ -186,6 +186,13 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
+            }
+        });
+        brush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Tooth_Condition_Activity.this,Home_Activity.class));
+                finish();
             }
         });
         switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -199,12 +206,6 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
                     isTooth=true;
                     setTooth();
                 }
-            }
-        });
-        btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Tooth_Condition_Activity.this,Home_Activity.class));
             }
         });
     }

@@ -130,8 +130,9 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
         toothRef = firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
         nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        bundle=this.getIntent().getExtras();
-        isNew=bundle.getBoolean("isNew");
+        bundle = this.getIntent().getExtras();
+        if(bundle!=null)
+            isNew = bundle.getBoolean("isNew");
         if(isNew)
             signupDialog_google();
         else
@@ -199,7 +200,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             public void onClick(View v) {
                 customDialog.dismiss();
 
-                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],3,null,null,null,null);
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],1,null,null,null,null);
                 settingRef.setValue(setting);
 
                 DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/Home"
-        android:title="首頁"
+        android:title="刷牙趣"
         android:icon="@drawable/menu_home"/>
     <item android:id="@+id/Video"
         android:title="口腔清潔影片"

@@ -40,8 +40,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Setting_Activity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Interdental_Activity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".Tooth_Condition_Activity"
             android:screenOrientation="portrait"/>
 
