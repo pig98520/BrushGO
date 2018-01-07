@@ -480,9 +480,15 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void alarmManager(Calendar calendarTime,int id) {
         if(id==0)
-            intent.putExtra("contentText","午餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
+            intent.putExtra("contentText","早安~起床後別忘記打開BrushGo刷刷牙喔~");
         else if(id==1)
+            intent.putExtra("contentText","早餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
+        else if(id==2)
+            intent.putExtra("contentText","午餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
+        else if(id==3)
             intent.putExtra("contentText","晚餐時間到囉~祝您用餐愉快,同時別忘了用完餐後要記得刷刷牙維持口腔清潔唷:)");
+        else if(id==4)
+            intent.putExtra("contentText","睡前小叮嚀,睡覺之前別忘記打開BrushGo刷刷牙喔~");
         pendingIntent = PendingIntent.getBroadcast(this, id, intent, pendingIntent.FLAG_UPDATE_CURRENT);
         if(calendarTime.before(now)) {
             calendarTime.add(Calendar.DATE,1); //如果時間早於現在就加一天
