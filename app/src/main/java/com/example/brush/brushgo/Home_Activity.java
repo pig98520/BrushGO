@@ -45,7 +45,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.example.brush.brushgo.R.id.Home;
 import static com.example.brush.brushgo.R.id.arrow_1;
 import static com.example.brush.brushgo.R.id.arrow_10;
 import static com.example.brush.brushgo.R.id.arrow_11;
@@ -136,10 +135,10 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     private Firebase timeRef;
     private Firebase reminderRef;
     private Firebase recordRef;
-    private Firebase toothRef;
     private Firebase profileRef;
     private Firebase settingRef;
     private StorageReference storageRef;
+    private Firebase toothRef;
     private String[] tooth_image=new String[]{
             "tooth_1","tooth_2","tooth_3","tooth_4",
             "tooth_5","tooth_6","tooth_7","tooth_8",
@@ -437,6 +436,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 });
             }
         }
+/*        Set_Tooth_Thread tooth_thr=new Set_Tooth_Thread(this,isClean);
+        tooth_thr.start();
+        try {
+            tooth_thr.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
 
@@ -545,6 +551,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onDrawerOpened(View drawerView) {
                 if(isRebrush)
                     rebrushTimer.cancel();
+                else
+                    rebrush(10);
             }
 
             @Override
@@ -571,7 +579,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔。");
+        dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔，並於牙縫清潔後按下開始刷牙。");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("開始刷牙");
         dialog_middle=(Button)customDialog.findViewById(R.id.middle);
@@ -591,6 +599,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 play.setBackgroundResource(R.drawable.pause_button_512);
                 background_music.start();
                 timerStart();
+                if(isRebrush)
+                    rebrushTimer.cancel();
             }
         });
         dialog_middle.setOnClickListener(new View.OnClickListener() {
@@ -1000,8 +1010,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
-
-        if(id== Home)
+        if(id== R.id.Home)
         {
             startActivity(new Intent(this,Home_Activity.class));
         }
@@ -1097,6 +1106,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
+
         if(!isRebrush&&isTimer) //關閉前未通知,且音樂進行到一半
             rebrush(10);
         if(isRebrush&&!isTimer) //關閉前正在倒數,且音樂尚未開始

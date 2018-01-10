@@ -200,7 +200,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             public void onClick(View v) {
                 customDialog.dismiss();
 
-                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],1,null,null,null,null);
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],1,null,null,null,null,null);
                 settingRef.setValue(setting);
 
                 DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);
