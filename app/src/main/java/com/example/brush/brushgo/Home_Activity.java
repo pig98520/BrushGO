@@ -20,6 +20,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -551,8 +552,13 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             public void onDrawerOpened(View drawerView) {
                 if(isRebrush)
                     rebrushTimer.cancel();
-                else
-                    rebrush(10);
+                if(background_music.isPlaying()){
+                    play.setBackgroundResource(R.drawable.play_button_512);
+                    background_music.pause();
+                    timerPause();
+                    isRebrush=true;
+                }
+
             }
 
             @Override
@@ -579,7 +585,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("貼心提醒");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("刷牙前請先使用牙線及牙間刷進行牙縫清潔，並於牙縫清潔後按下開始刷牙。");
+        String message = "<font color=#000000>刷牙前請先使用牙線及牙間刷進行牙縫清潔，</font> <font color=#ff0000>並於牙縫清潔後按下開始刷牙。</font>";
+        dialog_message.setText(Html.fromHtml(message));
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("開始刷牙");
         dialog_middle=(Button)customDialog.findViewById(R.id.middle);
@@ -797,7 +804,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
             click_confirm=false;
         }
     }
-
 
     private void tooth_start() {
         currentTime = (Integer.parseInt(timer.getText().toString().trim()));
@@ -1109,9 +1115,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
         if(!isRebrush&&isTimer) //關閉前未通知,且音樂進行到一半
             rebrush(10);
-        if(isRebrush&&!isTimer) //關閉前正在倒數,且音樂尚未開始
+        else if(isRebrush&&!isTimer) //關閉前正在倒數,且音樂尚未開始
             rebrush(5);
-        if(isRebrush&&isTimer)
+        else if(isRebrush&&isTimer)
             rebrush(10);
     }
 }
