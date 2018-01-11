@@ -831,170 +831,135 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 arrow[i-1].setVisibility(View.INVISIBLE);
             }
         }
-        int[] part={7,8,9,10,12,18,19,20,21,24};
+        int[][] part={
+                {1,2,3,4,5},
+                {7,8,9,10,11},
+                {13,14,15,16,17},
+                {19,20,21,22,23}};
+
+
+        ImageView[][][] tooth_group={
+                {{tooth[0],tooth[1],tooth[2]},
+                {tooth[3],tooth[4],tooth[5]},
+                {tooth[6],tooth[7],tooth[8],tooth[9]},
+                {tooth[10],tooth[11],tooth[12]},
+                {tooth[13],tooth[14],tooth[15]}},
+
+                {{tooth[13],tooth[14],tooth[15]},
+                {tooth[10],tooth[11],tooth[12]},
+                {tooth[6],tooth[7],tooth[8],tooth[9]},
+                {tooth[3],tooth[4],tooth[5]},
+                {tooth[0],tooth[1],tooth[2]}},
+
+                {{tooth[29],tooth[30],tooth[31]},
+                {tooth[26],tooth[27],tooth[28]},
+                {tooth[22],tooth[23],tooth[24],tooth[25]},
+                {tooth[19],tooth[20],tooth[21]},
+                {tooth[16],tooth[17],tooth[18]}},
+
+                {{tooth[16],tooth[17],tooth[18]},
+                {tooth[19],tooth[20],tooth[21]},
+                {tooth[22],tooth[23],tooth[24],tooth[25]},
+                {tooth[26],tooth[27],tooth[28]},
+                {tooth[29],tooth[30],tooth[31]}}
+        };
+
         for(int j=0;j<part.length;j++){
-            if(currentTime==defaultTime-aveTime*part[j]){
-                switch(part[j]){
-                    case 7:
-                        for(int l=0;l<=2;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
+            for(int k=0;k<part[j].length;k++){
+                if(currentTime==defaultTime-aveTime*part[j][k]){
+                    for(int l=0;l<tooth_group[j][k].length;l++)
+                        for(int m=0;m<tooth.length;m++){
+                            if(tooth_group[j][k][l]==tooth[m]) {
+                                final int finalM = m;
+                                final int finalJ = j;
+                                toothRef.child(m + 1 + "").child("in").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue().equals("b")) {
+                                            toothRef.child(finalM + 1 + "").child("out").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.getValue().equals("b")) {
+                                                        //內外皆B
+                                                        if (finalJ % 2 == 0) { //跑外圈
+                                                            storageRef.child("tooth").child(tooth_image[finalM % 16] + "_i.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    Glide.with(Home_Activity.this)
+                                                                            .load(uri)
+                                                                            .into(tooth[finalM]);
+                                                                }
+                                                            });
+                                                        } else { //跑內圈
+                                                            storageRef.child("tooth").child(tooth_image[finalM % 16] + ".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    Glide.with(Home_Activity.this)
+                                                                            .load(uri)
+                                                                            .into(tooth[finalM]);
+                                                                }
+                                                            });
+                                                        }
+                                                    } else {
+                                                        //內B外G
+                                                        if (finalJ % 2 == 0) { //跑外圈
+
+                                                        } else { //跑內圈
+                                                            storageRef.child("tooth").child(tooth_image[finalM % 16] + ".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    Glide.with(Home_Activity.this)
+                                                                            .load(uri)
+                                                                            .into(tooth[finalM]);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        } else {
+                                            toothRef.child(finalM + 1 + "").child("out").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.getValue().equals("b")) {
+                                                        //內G外B
+                                                        if (finalJ % 2 == 0) { //跑外圈
+
+                                                        } else { //跑內圈
+                                                            storageRef.child("tooth").child(tooth_image[finalM % 16] + ".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    Glide.with(Home_Activity.this)
+                                                                            .load(uri)
+                                                                            .into(tooth[finalM]);
+                                                                }
+                                                            });
+                                                        }
+                                                    } else {
+                                                        //內外皆G
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+
+                                    }
+                                });
                         }
-                        break;
-                    case 8:
-                        for(int l=3;l<=5;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 9:
-                        for(int l=6;l<=9;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 10:
-                        for(int l=10;l<=12;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 12:
-                        for(int l=13;l<=15;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 18:
-                        for(int l=29;l<=31;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 19:
-                        for(int l=26;l<=28;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 20:
-                        for(int l=22;l<=25;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 21:
-                        for(int l=19;l<=21;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
-                    case 24:
-                        for(int l=16;l<=18;l++){
-                            final int finalL = l;
-                            storageRef.child("tooth").child(tooth_image[l%16]+".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    options = new RequestOptions()
-                                            .dontAnimate();
-                                    Glide.with(Home_Activity.this)
-                                            .setDefaultRequestOptions(options)
-                                            .load(uri)
-                                            .into(tooth[finalL]);
-                                }
-                            });
-                        }
-                        break;
+                    }
                 }
             }
         }
