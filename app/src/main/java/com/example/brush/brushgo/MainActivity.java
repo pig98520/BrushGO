@@ -1,12 +1,13 @@
 package com.example.brush.brushgo;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,16 +24,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -204,13 +201,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });*/
         btn_google.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                if(isNetworkAvailable()){
                 loadingDialog();
                 signIn();
+                }
+                else
+                    Toast.makeText(MainActivity.this,"請確認您的裝置有連接至網路",Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void forgetDialog() {
+/*    private void forgetDialog() {
             AlertDialog.Builder forgetDialog=new AlertDialog.Builder(this);
             forgetDialog.setTitle("忘記密碼");
             forgetDialog.setMessage("是否發送忘記密碼E-mail聯絡客服?\n\n"+"若無安裝郵件軟體，請寫信到brushgoapp@gmail.com");
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             forgetDialog.setNeutralButton("是",confirmClick);
             forgetDialog.setNegativeButton("否",cancelClick);
             forgetDialog.show();
-    }
+    }*/
 
     protected void onStart(){
         super.onStart();
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void login(final String user, final String psw){
+/*    private void login(final String user, final String psw){
         auth.signInWithEmailAndPassword(user, psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
@@ -272,9 +273,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         Toast.makeText(MainActivity.this,"請檢查帳號和密碼。", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
+    }*/
 
-    private void createUser(final String user_name, final String user, final String psw) {
+/*    private void createUser(final String user_name, final String user, final String psw) {
         auth.createUserWithEmailAndPassword(user,psw)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     public void onSuccess(AuthResult authResult) {
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Toast.makeText(MainActivity.this,"註冊失敗，請檢查帳號是否已存在。", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
+    }*/
 
     private void loadingDialog() {
         progressDialog =new Dialog(this,R.style.DialogCustom);
@@ -328,30 +329,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void signupDialog() {
-        customDialog =new Dialog(this,R.style.DialogCustom);
-        customDialog.setContentView(R.layout.custom_dialog_sign_up);
-        customDialog.setCancelable(false);
-        dialog_title = (TextView) customDialog.findViewById(R.id.title);
-        dialog_title.setText("使用者條款");
-        dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("請輸入姓名以同意BrushGo存取您的資料。");
-        dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
-        dialog_confirm.setText("同意");
-        dialog_name=(EditText)customDialog.findViewById(R.id.name);
-        customDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded);
-        customDialog.show();
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        dialog_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customDialog.dismiss();
-                loadingDialog();
-                user_name=dialog_name.getText().toString();
-                nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                createUser(user_name,user, psw);
-            }
-        });
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static boolean isEmailValid(String email) {

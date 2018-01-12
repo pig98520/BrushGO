@@ -43,6 +43,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private Firebase profileRef;
     private Firebase settingRef;
     private Firebase toothRef;
+    private Firebase interdentalRef;
     private Firebase touchedRef;
     private StorageReference storageReference;
     private String nowTime;
@@ -50,10 +51,11 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private int[] timeArray=new int[]{120,180,240};
     private Bundle bundle;
     private boolean isNew=false;
+    private CountDownTimer tipsTimer;
     private Boolean isdoubleClick=false;
     private Tutorial_Adapter customAdapter;
     private ViewPager viewPager;
-    private int[] sliderView=new int[]{R.id.slider_1,R.id.slider_2,R.id.slider_3,R.id.slider_4,R.id.slider_5};
+    private int[] sliderView=new int[]{R.id.slider_1,R.id.slider_2,R.id.slider_3,R.id.slider_4,R.id.slider_5,R.id.slider_6,R.id.slider_7};
     private ImageView[] slider=new ImageView[sliderView.length];
     private String [] imageUrl=new String[sliderView.length];
     private Dialog customDialog;
@@ -129,14 +131,16 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         profileRef=firebaseRef.child("profile").child(auth.getCurrentUser().getUid());
         settingRef = firebaseRef.child("setting").child(auth.getCurrentUser().getUid());
         toothRef = firebaseRef.child("tooth").child(auth.getCurrentUser().getUid());
+        interdentalRef=firebaseRef.child("interdental").child(auth.getCurrentUser().getUid());
         nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         bundle = this.getIntent().getExtras();
         if(bundle!=null)
             isNew = bundle.getBoolean("isNew");
         if(isNew)
             signupDialog_google();
-        else
+        else {
             recordTouched();
+        }
 
         drawer=(DrawerLayout)findViewById(R.id.drawerLayout);
         for(int i=0;i<slider.length;i++)
@@ -199,7 +203,6 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View v) {
                 customDialog.dismiss();
-
                 DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],1,null,null,null,null,null);
                 settingRef.setValue(setting);
 
@@ -209,6 +212,9 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
                 for(int i=0;i<32;i++) {
                     toothRef.child(i + 1 + "").child("in").setValue("g");
                     toothRef.child(i + 1 + "").child("out").setValue("g");
+                }
+                for(int i=0;i<30;i++){
+                    interdentalRef.child(i+1+"").setValue("g");
                 }
             }
         });
@@ -316,5 +322,4 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

@@ -1026,9 +1026,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 public void onClick(View v) {
                     auth.signOut();
                     customDialog.dismiss();
-                    Intent intent=new Intent(Home_Activity.this,MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    startActivity(new Intent(Home_Activity.this,MainActivity.class));
                 }
             });
             dialog_cancel.setOnClickListener(new View.OnClickListener() {

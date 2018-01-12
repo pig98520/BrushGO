@@ -18,11 +18,13 @@ import com.bumptech.glide.Glide;
 
 public class Tutorial_Adapter extends PagerAdapter{
     private String[] imageUrl=
-            {"https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_0.png?alt=media&token=cc09d7a7-10e5-4eaf-a028-a71501fa54c3",
-                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_1.png?alt=media&token=106a8205-a1b3-487a-9662-5e3212460b9d",
-                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_2.png?alt=media&token=0fe91140-2301-46ab-9ab2-f22f367f4499",
-                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_3.png?alt=media&token=8a124fee-18fc-429c-8a0e-99632a1ed499",
-                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2Ftutorial_4.png?alt=media&token=0853e679-8ce5-44b6-8e26-601cd3868118"};
+            {"https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F0.png?alt=media&token=d029581c-19e5-464e-9b60-ae6437843df8",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F1.png?alt=media&token=a6a05a32-26e7-41f7-80d5-9f77854942b9",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F2.png?alt=media&token=54041a71-8600-47a7-bf94-f1e9015d7616",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F3.png?alt=media&token=f4bfe148-cc12-4a24-9edd-5895bb79e957",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F4.png?alt=media&token=03975a80-ca9a-4b25-acd7-e4c9f2048019",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F5.png?alt=media&token=a3c24703-0a29-48ec-850e-a7faa430d3d5",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F6.png?alt=media&token=c175f274-3cac-4be1-a70d-7b1793421b2a"};
     private LayoutInflater layoutInflater;
     private Context context;
 

@@ -287,8 +287,7 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
                                 });
                             }
                         }
-                        else
-                        {
+                        else{
                             for(int i=0;i<tooth.length;i++) {
                                 toothRef.child(i + 1 + "").child("in").setValue("g");
                                 toothRef.child(i + 1 + "").child("out").setValue("g");
