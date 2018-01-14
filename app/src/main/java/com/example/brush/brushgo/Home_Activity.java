@@ -386,7 +386,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                 });
                             }
 
-                            if(dataSnapshot.getValue().toString().equals("g")){
+                            else if(dataSnapshot.getValue().toString().equals("g")){
                                 toothRef.child(finalJ +1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -730,7 +730,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         recordRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dialog_message.setText("您已經使用BrushGo "+(dataSnapshot.getChildrenCount()+1)+" 次囉,繼續加油~");
+                dialog_message.setText("您已經使用BrushGo "+(dataSnapshot.getChildrenCount())+" 次囉,繼續加油~");
             }
 
             @Override

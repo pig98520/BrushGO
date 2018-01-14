@@ -30,9 +30,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG =" MainActivity" ;
     private static final int RC_SIGN_IN=1;
@@ -313,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         progressDialog.show();
     }
 
-    private void newuser(String user_name) {
+    /*private void newuser(String user_name) {
         settingRef = myFirebaseRef.child("setting").child(auth.getCurrentUser().getUid().trim());
         DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),180,1,null,null,null,null,null);
         settingRef.setValue(setting);
@@ -327,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         {
             toothRef.child(i+1+"").setValue("g");
         }
-    }
+    }*/
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -337,12 +334,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static boolean isEmailValid(String email) {
+/*    public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    }
+    }*/
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

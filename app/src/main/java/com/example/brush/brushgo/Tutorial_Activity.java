@@ -48,10 +48,8 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private StorageReference storageReference;
     private String nowTime;
     private String nowDate;
-    private int[] timeArray=new int[]{120,180,240};
     private Bundle bundle;
     private boolean isNew=false;
-    private CountDownTimer tipsTimer;
     private Boolean isdoubleClick=false;
     private Tutorial_Adapter customAdapter;
     private ViewPager viewPager;
@@ -203,7 +201,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View v) {
                 customDialog.dismiss();
-                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),timeArray[(int) (Math.random()*3)],1,null,null,null,null,null);
+                DB_Setting setting = new DB_Setting(auth.getCurrentUser().getEmail(),180,1,null,null,null,null,null);
                 settingRef.setValue(setting);
 
                 DB_Profile profile=new DB_Profile(auth.getCurrentUser().getDisplayName(),nowDate,null,null,null);

@@ -252,7 +252,7 @@ public class Tooth_Condition_Activity extends AppCompatActivity implements Navig
                                 });
                             }
 
-                            if(dataSnapshot.getValue().toString().equals("g")){
+                            else if(dataSnapshot.getValue().toString().equals("g")){
                                 toothRef.child(finalJ +1+"").child("out").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
