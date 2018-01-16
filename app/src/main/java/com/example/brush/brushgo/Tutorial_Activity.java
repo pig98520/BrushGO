@@ -61,6 +61,7 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
     private Button dialog_cancel;
     private TextView dialog_title;
     private TextView dialog_message;
+    private TextView dialog_link;
 
     @Override
     public void onBackPressed() {
@@ -188,9 +189,19 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         customDialog.setContentView(R.layout.custom_dialog_sign_up_google);
         customDialog.setCancelable(false);
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
-        dialog_title.setText("使用者條款");
-        dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("請按下確認以同意BrushGo存取您的個人資料。");
+        dialog_title.setText("BrushGo研究同意書");
+        dialog_message=(TextView)customDialog.findViewById(R.id.message);
+        dialog_message.setText("親愛的受訪者您好:\n\n"+
+                                "我們誠摯地邀請您參與此次\n" +
+                                "『口腔衛生促進』研究，若\n"+
+                                "您同意參與此次計畫，且允\n" +
+                                "許我們取用您使用BrushGo\n" +
+                                "期間的相關紀錄請填寫問卷\n" +
+                                "後按下同意按鈕，而您所提\n"+
+                                "供的一切資料僅供學術研究\n" +
+                                "使用。\n\n"+
+                                "BrushGo開發團隊 敬上");
+
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("同意");
         dialog_cancel=(Button)customDialog.findViewById(R.id.cancel);
@@ -225,8 +236,8 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
         customDialog.setCancelable(false);
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("教學結束");
-        dialog_message = (TextView) customDialog.findViewById(R.id.message);
-        dialog_message.setText("馬上使用BrushGo刷牙吧！");
+        dialog_link = (TextView) customDialog.findViewById(R.id.message);
+        dialog_link.setText("馬上使用BrushGo刷牙吧！");
         dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
         dialog_confirm.setText("開始刷牙");
         dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
@@ -291,8 +302,8 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
             customDialog.setCancelable(false);
             dialog_title = (TextView) customDialog.findViewById(R.id.title);
             dialog_title.setText("確定要登出?");
-            dialog_message = (TextView) customDialog.findViewById(R.id.message);
-            dialog_message.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
+            dialog_link = (TextView) customDialog.findViewById(R.id.message);
+            dialog_link.setText("登出後將無法準確紀錄您刷牙的狀況，但您仍會收到BrushGo的提醒。");
             dialog_confirm = (Button) customDialog.findViewById(R.id.confirm);
             dialog_confirm.setText("登出");
             dialog_cancel=(Button) customDialog.findViewById(R.id.cancel);
