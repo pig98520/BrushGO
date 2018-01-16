@@ -727,6 +727,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
         dialog_title = (TextView) customDialog.findViewById(R.id.title);
         dialog_title.setText("恭喜完成");
         dialog_message = (TextView) customDialog.findViewById(R.id.message);
+        dialog_message.setText("您已經使用BrushGo  次囉,繼續加油~");
+        dialog_confirm=(Button) customDialog.findViewById(R.id.confirm);
+        dialog_confirm.setText("確認");
         recordRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -929,8 +932,6 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                                     if (dataSnapshot.getValue().equals("b")) {
                                                         //內G外B
                                                         if (finalJ % 2 == 0) { //跑外圈
-
-                                                        } else { //跑內圈
                                                             storageRef.child("tooth").child(tooth_image[finalM % 16] + ".png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
                                                                 public void onSuccess(Uri uri) {
@@ -939,6 +940,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                                                                             .into(tooth[finalM]);
                                                                 }
                                                             });
+                                                        } else { //跑內圈
+
                                                         }
                                                     } else {
                                                         //內外皆G

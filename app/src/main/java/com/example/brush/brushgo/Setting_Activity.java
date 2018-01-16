@@ -433,7 +433,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             alarm_c.setText("     "+ time_c);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            alarmManager(calendar_c,0);
+            alarmManager(calendar_c,2);
             alarm_refs[2].setValue(time_c);
             Toast.makeText(Setting_Activity.this, calendar_c.getTime()+"",Toast.LENGTH_LONG).show();
         }
@@ -452,7 +452,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             alarm_d.setText("      "+ time_d);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            alarmManager(calendar_d,0);
+            alarmManager(calendar_d,3);
             alarm_refs[3].setValue(time_d);
             Toast.makeText(Setting_Activity.this, calendar_d.getTime()+"",Toast.LENGTH_LONG).show();
         }
@@ -471,7 +471,7 @@ public class Setting_Activity extends AppCompatActivity implements NavigationVie
             alarm_e.setText("      "+ time_e);
             view.setCurrentHour(hourOfDay);
             view.setCurrentMinute(minute);
-            alarmManager(calendar_e,0);
+            alarmManager(calendar_e,4);
             alarm_refs[4].setValue(time_e);
             Toast.makeText(Setting_Activity.this, calendar_e.getTime()+"",Toast.LENGTH_LONG).show();
         }
