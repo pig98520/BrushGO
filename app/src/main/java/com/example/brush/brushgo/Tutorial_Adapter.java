@@ -20,7 +20,7 @@ public class Tutorial_Adapter extends PagerAdapter{
     private String[] imageUrl=
             {"https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F0.png?alt=media&token=d029581c-19e5-464e-9b60-ae6437843df8",
                     "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F1.png?alt=media&token=a6a05a32-26e7-41f7-80d5-9f77854942b9",
-                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F2.png?alt=media&token=54041a71-8600-47a7-bf94-f1e9015d7616",
+                    "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F2.png?alt=media&token=7e84cb70-a8bc-46dd-b043-d2e4fc97b30a",
                     "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F3.png?alt=media&token=f4bfe148-cc12-4a24-9edd-5895bb79e957",
                     "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F4.png?alt=media&token=03975a80-ca9a-4b25-acd7-e4c9f2048019",
                     "https://firebasestorage.googleapis.com/v0/b/brushgo-67813.appspot.com/o/tutorial%2F5.png?alt=media&token=a3c24703-0a29-48ec-850e-a7faa430d3d5",
