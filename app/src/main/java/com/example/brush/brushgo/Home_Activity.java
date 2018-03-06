@@ -448,7 +448,7 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
 
 
     private void setMusic() {
-        musicIndex=(int)(Math.random()*10+1);
+        musicIndex=(int)(Math.random()*13+1);
         background_music=new MediaPlayer();
 
         if(!isFinish)
@@ -508,7 +508,8 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 }
                 else {
                     isStart=true;
-                    rebrushTimer.cancel();
+                    if(isRebrush)
+                        rebrushTimer.cancel();
                     play.setBackgroundResource(R.drawable.pause_button_512);
                     background_music.start();
                     timerStart();
@@ -765,7 +766,9 @@ public class Home_Activity extends AppCompatActivity implements NavigationView.O
                 if(finish_music.isPlaying())
                     finish_music.stop();
                 customDialog.dismiss();
-                Toast.makeText(Home_Activity.this,"資料已儲存",Toast.LENGTH_LONG).show();
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
             }
         });
     }

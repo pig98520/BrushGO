@@ -227,6 +227,12 @@ public class Tutorial_Activity extends AppCompatActivity implements NavigationVi
                 }
             }
         });
+        dialog_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         customDialog.show();
     }
 
